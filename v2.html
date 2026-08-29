@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LikeAds — Put your business on the biggest screens in Benin</title>
+<meta name="description" content="The self-serve advertising platform that lets local businesses book digital billboard space instantly, funded by mobile money.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink: #0B0B0C;
+    --ink-2: #141412;
+    --paper: #F0ECE3;
+    --paper-2: #E7DFCF;
+    --text-onink: #F5F3EE;
+    --muted-onink: rgba(245,243,238,0.6);
+    --faint-onink: rgba(245,243,238,0.38);
+    --text-onpaper: #17140F;
+    --muted-onpaper: rgba(23,20,15,0.62);
+    --line-onink: rgba(245,243,238,0.14);
+    --line-onink-soft: rgba(245,243,238,0.08);
+    --line-onpaper: rgba(23,20,15,0.14);
+    --amber: #E8A93A;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-padding-top: 84px; }
+  body{
+    background: var(--ink);
+    color: var(--text-onink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-tight{ font-family: 'Inter Tight', 'Inter', sans-serif; letter-spacing: -0.02em; }
+  .tracked{ letter-spacing: 0.10em; }
+
+  ::selection{ background: var(--amber); color: #1a1305; }
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .section-ink{ background: var(--ink); color: var(--text-onink); }
+  .section-paper{ background: var(--paper); color: var(--text-onpaper); }
+  .muted-onink{ color: var(--muted-onink); }
+  .faint-onink{ color: var(--faint-onink); }
+  .muted-onpaper{ color: var(--muted-onpaper); }
+  .line-onink{ border-color: var(--line-onink); }
+  .line-onpaper{ border-color: var(--line-onpaper); }
+
+  /* ---------- nav ---------- */
+  .nav-shell{ background: transparent; border-bottom: 1px solid transparent; transition: background-color .25s ease, border-color .25s ease; }
+  .nav-shell.scrolled{ background: rgba(11,11,12,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom-color: var(--line-onink); }
+  .nav-link{ color: var(--muted-onink); transition: color .2s ease; }
+  .nav-link:hover{ color: var(--text-onink); }
+
+  .logo-mark{ width: 26px; height: 26px; position: relative; flex-shrink: 0; }
+  .logo-mark svg{ width: 100%; height: 100%; }
+
+  /* ---------- pill buttons ---------- */
+  .pill-white{
+    background: #fff; color: #0B0B0C; font-weight: 600;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .pill-white:hover{ background: #EDEDED; transform: translateY(-1px); }
+  .pill-white:active{ transform: translateY(0); }
+
+  .pill-black{
+    background: #0B0B0C; color: #F5F3EE; font-weight: 600;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .pill-black:hover{ background: #232320; transform: translateY(-1px); }
+
+  .pill-outline-ink{
+    border: 1px solid var(--line-onink); color: var(--text-onink);
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .pill-outline-ink:hover{ border-color: rgba(245,243,238,0.4); background: rgba(245,243,238,0.05); }
+
+  .pill-outline-paper{
+    border: 1px solid var(--line-onpaper); color: var(--text-onpaper);
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .pill-outline-paper:hover{ border-color: rgba(23,20,15,0.4); background: rgba(23,20,15,0.05); }
+
+  .arrow-nudge{ transition: transform .2s ease; display: inline-block; }
+  a:hover .arrow-nudge, button:hover .arrow-nudge{ transform: translate(2px,-2px); }
+
+  /* ---------- input pill ---------- */
+  .input-pill{
+    background: rgba(245,243,238,0.06);
+    border: 1px solid var(--line-onink);
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .input-pill:focus-within{ border-color: rgba(245,243,238,0.5); background: rgba(245,243,238,0.09); }
+  .input-pill input{ background: transparent; color: var(--text-onink); outline: none; }
+  .input-pill input::placeholder{ color: var(--faint-onink); }
+
+  .input-pill-paper{
+    background: rgba(23,20,15,0.04);
+    border: 1px solid var(--line-onpaper);
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .input-pill-paper:focus-within{ border-color: rgba(23,20,15,0.4); background: rgba(23,20,15,0.06); }
+  .input-pill-paper input{ background: transparent; color: var(--text-onpaper); outline: none; }
+  .input-pill-paper input::placeholder{ color: rgba(23,20,15,0.4); }
+
+  /* ---------- reveal ---------- */
+  .reveal{ opacity: 0; transform: translateY(14px); transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity: 1; transform: none; transition: none; }
+    *{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+  }
+
+  /* ---------- hero video background + overlapping mockup stack ---------- */
+  .hero-video-wrap{
+    position: absolute; inset: 0; overflow: hidden;
+    background: linear-gradient(180deg, #1a1917 0%, #0B0B0C 70%); /* fallback while video loads / if it fails */
+  }
+  .hero-video-wrap video{
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center 40%;
+    opacity: 0.5; /* keeps the headline legible over the footage */
+    filter: saturate(0.85) brightness(0.9);
+  }
+  /* darken for text contrast, top and centre */
+  .hero-video-scrim{
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 15%, rgba(11,11,12,0.55), transparent 60%),
+      linear-gradient(180deg, rgba(11,11,12,0.35) 0%, rgba(11,11,12,0.15) 35%, rgba(11,11,12,0.55) 70%);
+  }
+  /* smooth fade into the ink section that follows */
+  .hero-video-fade{
+    position: absolute; left: 0; right: 0; bottom: 0; height: 45%;
+    background: linear-gradient(180deg, transparent, var(--ink) 92%);
+  }
+
+  .mock-card{
+    border-radius: 18px; border: 1px solid var(--line-onink-soft);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
+    background: linear-gradient(160deg,#17181c,#0c0d10);
+  }
+  .mock-card-side{
+    display:flex; flex-direction:column; justify-content:flex-end; padding:20px;
+    background: repeating-linear-gradient(135deg, rgba(245,243,238,0.03) 0px, rgba(245,243,238,0.03) 10px, transparent 10px, transparent 20px), linear-gradient(160deg,#1c1d22,#0c0d10);
+    border: 1px dashed var(--line-onink);
+  }
+
+  /* ---------- billboard live-screen mockup (center card content) ---------- */
+  .billboard-screen{
+    position: relative; border-radius: 14px; overflow: hidden;
+    aspect-ratio: 16/11; background: #050710; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .ad-slide{
+    position: absolute; inset: 0; padding: 22px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    opacity: 0; animation: adcycle 9s infinite;
+  }
+  .ad-slide.s1{ background: radial-gradient(circle at 25% 20%, rgba(232,169,58,0.30), #0b0f19 70%); animation-delay: 0s; }
+  .ad-slide.s2{ background: radial-gradient(circle at 75% 30%, rgba(232,169,58,0.22), #0b0f19 70%); animation-delay: 3s; }
+  .ad-slide.s3{ background: radial-gradient(circle at 50% 80%, rgba(232,169,58,0.26), #0b0f19 70%); animation-delay: 6s; }
+  @keyframes adcycle{ 0%{opacity:0;} 3%{opacity:1;} 30%{opacity:1;} 36%{opacity:0;} 100%{opacity:0;} }
+
+  .scanline{
+    position: absolute; left:0; right:0; height: 40%;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation: sweep 5s linear infinite; pointer-events: none;
+  }
+  @keyframes sweep{ 0%{ top:-40%; } 100%{ top:100%; } }
+
+  .live-dot{
+    width:7px; height:7px; border-radius:50%; background:#E8A93A;
+    box-shadow: 0 0 8px 1px rgba(232,169,58,0.7);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  .ticker-bar{
+    position: absolute; left:0; right:0; bottom:0;
+    background: rgba(5,7,16,0.85); backdrop-filter: blur(6px);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- bento feature card ---------- */
+  .bento-card{
+    background: var(--ink); border: 1px solid rgba(245,243,238,0.08);
+    transition: border-color .25s ease, transform .25s ease;
+  }
+  .bento-card:hover{ border-color: rgba(245,243,238,0.24); transform: translateY(-3px); }
+
+  /* ---------- how it works list ---------- */
+  .step-row{ border-top: 1px solid var(--line-onink); }
+  .step-row:last-child{ border-bottom: 1px solid var(--line-onink); }
+
+  /* ---------- accordion ---------- */
+  .accordion-item{ border-top: 1px solid var(--line-onink); }
+  .accordion-item:last-child{ border-bottom: 1px solid var(--line-onink); }
+  .accordion-panel{ max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .accordion-btn .plus-icon{ transition: transform .3s ease; }
+  .accordion-item.open .plus-icon{ transform: rotate(45deg); }
+
+  /* ---------- mobile menu ---------- */
+  #mobile-menu{ max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  #mobile-menu.open{ max-height: 340px; }
+
+  .success-check{ animation: pop .4s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes pop{ 0%{ transform: scale(0); opacity:0; } 70%{ transform: scale(1.15); opacity:1; } 100%{ transform: scale(1); } }
+
+  /* floating chip on partner card */
+  .float-chip{
+    background: var(--paper); color: var(--text-onpaper);
+    box-shadow: 0 12px 28px -10px rgba(0,0,0,0.35);
+  }
+
+
+    /* ---------- three-card looping hero row ---------- */
+  .loop-card{ border-radius: 18px; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55); }
+  .loop-screen{
+    position: relative; overflow: hidden; border-radius: 18px;
+    border: 1px solid var(--line-onink-soft); background: #050710;
+  }
+  .loop-slide{
+    position: absolute; inset: 0; padding: 20px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    opacity: 0; animation-name: loopfade; animation-timing-function: ease-in-out; animation-iteration-count: infinite;
+  }
+  @keyframes loopfade{ 0%{opacity:0;} 6%{opacity:1;} 40%{opacity:1;} 46%{opacity:0;} 100%{opacity:0;} }
+
+    /* ---------- coverflow hero row: ~3 cards visible, center scales up ---------- */
+  .coverflow-viewport{
+    width: 100%; overflow: hidden;
+    /* no mask — edges crop cleanly, full-bleed, like Squarespace's version */
+  }
+    .coverflow-track{ display: flex; align-items: center; gap: 16px; width: max-content; transition: transform .5s cubic-bezier(.65,0,.35,1); }
+  .coverflow-card{
+    position: relative; width: clamp(300px, 42vw, 620px); aspect-ratio: 16/10; flex-shrink: 0;
+    border-radius: 14px; overflow: hidden;
+    transform: scale(0.84);
+    transition: transform .5s cubic-bezier(.65,0,.35,1), height .5s cubic-bezier(.65,0,.35,1);
+    will-change: transform;
+  }
+    .coverflow-card:not(.is-center){ aspect-ratio: 16/9.7; align-self: center; }
+  .coverflow-card.is-center{ border-radius: 14px; transform: scale(1.14); z-index: 5; }
+  .coverflow-card img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .coverflow-card .slide-overlay{
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 32%, transparent 75%);
+  }
+  .coverflow-card .slide-label{ position: absolute; left: 0; right: 0; bottom: 0; padding: 20px; }
+  
+</style>
+</head>
+
+<body>
+
+<!-- ============ NAV ============ -->
+<header id="site-header" class="nav-shell fixed top-0 inset-x-0 z-50">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="flex items-center justify-between h-16">
+
+      <a href="#top" class="flex items-center gap-2.5 shrink-0">
+        <span class="logo-mark">
+          <svg viewBox="0 0 26 26" fill="none">
+            <rect x="1" y="4" width="24" height="15" rx="3" stroke="#F5F3EE" stroke-width="1.6"/>
+            <rect x="9" y="22" width="8" height="1.6" rx="0.8" fill="#F5F3EE"/>
+            <circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/>
+          </svg>
+        </span>
+        <span class="font-tight font-semibold text-[16.5px]">LikeAds</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-[13px] tracked uppercase">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#partners" class="nav-link">Screen Partners</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+      </nav>
+
+      <div class="hidden md:flex items-center gap-6">
+        <a href="#" class="text-[13px] tracked uppercase nav-link">Log In</a>
+        <a href="#waitlist" class="pill-white rounded-full px-5 py-2.5 text-[13px]">Get Early Access</a>
+      </div>
+
+      <button id="menu-toggle" class="md:hidden p-2 -mr-2" aria-label="Toggle menu" aria-expanded="false">
+        <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="md:hidden">
+      <nav class="flex flex-col gap-1 pb-5 text-[15px]">
+        <a href="#features" class="nav-link py-2.5 border-t line-onink">Features</a>
+        <a href="#how-it-works" class="nav-link py-2.5 border-t line-onink">How It Works</a>
+        <a href="#partners" class="nav-link py-2.5 border-t line-onink">Screen Partners</a>
+        <a href="#pricing" class="nav-link py-2.5 border-t line-onink">Pricing</a>
+        <a href="#waitlist" class="pill-white rounded-full px-5 py-2.5 text-center mt-3">Get Early Access</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="section-ink relative overflow-hidden">
+  <div class="relative pt-[178px] pb-6 sm:pb-10">
+
+    <!-- video background: replace src with your own footage (screen network / city at night works well) -->
+    <div class="hero-video-wrap">
+      <video id="hero-video" autoplay muted loop playsinline
+             poster="">
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-scrim"></div>
+      <div class="hero-video-fade"></div>
+    </div>
+
+    <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
+      <h1 class="reveal font-tight font-normal text-[38px] leading-[1.08] sm:text-[52px] lg:text-[58px]">
+        Put your business on<br class="hidden sm:block"> the biggest screens.
+      </h1>
+
+      <div class="reveal mt-9 flex flex-col items-center gap-4">
+        <a href="#waitlist" class="pill-white rounded-full px-7 py-3.5 text-[14.5px]">Get Early Access</a>
+        <p class="muted-onink text-[13.5px]">No long-term contracts · Launch via mobile money in minutes</p>
+      </div>
+    </div>
+    <!-- coverflow hero row: 3 visible, center scales up as images pass through -->
+    <div class="reveal relative z-10 mt-10 sm:mt-14 coverflow-viewport">
+      <div class="coverflow-track" id="coverflow-track">
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
+          </div>
+        </div>
+
+        <!-- duplicate set — required for a seamless loop -->
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
+          </div>
+        </div>
+
+                <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
+          </div>
+        </div>
+
+        <!-- third set — keeps a full row visible ahead of the loop at all times -->
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="section-ink py-16 sm:py-20 border-t line-onink text-center">
+  <div class="max-w-3xl mx-auto px-5 sm:px-8">
+    <p class="reveal text-[13.5px] muted-onink mb-10">Built for advertisers and screen owners.</p>
+    <div class="grid grid-cols-3 gap-6 sm:gap-10">
+      <div class="reveal">
+        <div class="font-tight font-semibold text-[34px] sm:text-[48px] leading-none">0 CFA</div>
+        <div class="muted-onink text-[12px] sm:text-[13.5px] mt-3">Cost to integrate a screen network</div>
+      </div>
+      <div class="reveal">
+        <div class="font-tight font-semibold text-[34px] sm:text-[48px] leading-none">1-click</div>
+        <div class="muted-onink text-[12px] sm:text-[13.5px] mt-3">Manual approval before any ad airs</div>
+      </div>
+      <div class="reveal">
+        <div class="font-tight font-semibold text-[34px] sm:text-[48px] leading-none">3 min</div>
+        <div class="muted-onink text-[12px] sm:text-[13.5px] mt-3">Typical time to launch a campaign</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES BENTO ============ -->
+<section id="features" class="section-paper py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal max-w-xl mb-14">
+      <div class="text-[12px] tracked uppercase muted-onpaper mb-3">Platform</div>
+      <h2 class="font-tight font-normal text-[30px] sm:text-[38px]">Everything you need to launch a campaign.</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+
+      <div class="reveal bento-card rounded-2xl p-7 flex flex-col justify-between min-h-[260px]">
+        <div>
+          <div class="text-[12px] tracked uppercase faint-onink mb-3">Screen Map</div>
+          <p class="text-[14.5px] muted-onink leading-relaxed max-w-xs">Browse every live screen across Cotonou and major regional hubs on one interactive map, and pick the locations that match your audience.</p>
+        </div>
+        <div class="flex items-center justify-between mt-8">
+          <div class="flex gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--amber)]"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white/25"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white/25"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white/25"></span>
+          </div>
+          <i data-lucide="arrow-up-right" class="w-4 h-4 arrow-nudge text-white/60"></i>
+        </div>
+      </div>
+
+      <div class="reveal bento-card rounded-2xl p-7 flex flex-col justify-between min-h-[260px]">
+        <div>
+          <div class="text-[12px] tracked uppercase faint-onink mb-3">Smart Scheduling</div>
+          <p class="text-[14.5px] muted-onink leading-relaxed max-w-xs">Run a single weekend promo or own peak morning traffic. You choose the exact hours, and only pay for the slots you book.</p>
+        </div>
+        <div class="mt-8">
+          <div class="h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div class="h-full rounded-full bg-[var(--amber)]" style="width:64%"></div>
+          </div>
+          <div class="flex justify-between text-[10px] tracked uppercase faint-onink mt-2">
+            <span>6AM</span><span>9AM</span><span>9PM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal bento-card rounded-2xl p-7 flex flex-col justify-between min-h-[260px]">
+        <div>
+          <div class="text-[12px] tracked uppercase faint-onink mb-3">Mobile Money Checkout</div>
+          <p class="text-[14.5px] muted-onink leading-relaxed max-w-xs">Fund your campaign the moment you launch it — no invoices, no waiting on a media buyer to get back to you.</p>
+        </div>
+        <div class="flex gap-2 mt-8">
+          <span class="text-[11px] font-medium px-3 py-1.5 rounded-full border line-onink muted-onink">MTN MoMo</span>
+          <span class="text-[11px] font-medium px-3 py-1.5 rounded-full border line-onink muted-onink">Moov Money</span>
+          <span class="text-[11px] font-medium px-3 py-1.5 rounded-full border line-onink muted-onink">Wave</span>
+        </div>
+      </div>
+
+      <div class="reveal bento-card rounded-2xl p-7 flex flex-col justify-between min-h-[260px]">
+        <div>
+          <div class="text-[12px] tracked uppercase faint-onink mb-3">Creative Review</div>
+          <p class="text-[14.5px] muted-onink leading-relaxed max-w-xs">Every ad is checked before it airs, so screen owners keep full control of what plays on their hardware.</p>
+        </div>
+        <div class="space-y-2 mt-8">
+          <div class="flex items-center gap-2 text-[12.5px] muted-onink"><i data-lucide="check" class="w-3.5 h-3.5 text-[var(--amber)]"></i> Image or video uploaded</div>
+          <div class="flex items-center gap-2 text-[12.5px] muted-onink"><i data-lucide="check" class="w-3.5 h-3.5 text-[var(--amber)]"></i> Reviewed by the screen owner</div>
+          <div class="flex items-center gap-2 text-[12.5px] faint-onink"><i data-lucide="circle" class="w-3.5 h-3.5"></i> Live on screen</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how-it-works" class="section-ink py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal max-w-xl mb-16">
+      <div class="text-[12px] tracked uppercase faint-onink mb-3">The process</div>
+      <h2 class="font-tight font-normal text-[30px] sm:text-[38px]">Three steps between you and your first screen.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3">
+      <div class="reveal step-row md:border-t md:border-b-0 py-8 md:py-10 md:pr-8">
+        <span class="text-[12px] tracked uppercase faint-onink">01</span>
+        <h3 class="font-tight font-semibold text-[19px] mt-4 mb-2.5">Choose your screen</h3>
+        <p class="muted-onink text-[14.5px] leading-relaxed">Browse the interactive map of premium digital screens across Cotonou and major regional hubs, and select the exact locations that match your target audience.</p>
+      </div>
+      <div class="reveal step-row md:border-t md:border-b-0 py-8 md:py-10 md:px-8 md:border-l line-onink">
+        <span class="text-[12px] tracked uppercase faint-onink">02</span>
+        <h3 class="font-tight font-semibold text-[19px] mt-4 mb-2.5">Set your budget</h3>
+        <p class="muted-onink text-[14.5px] leading-relaxed">Control exactly when your ad plays. Pick peak traffic hours or run a short three-day weekend promotion — you only pay for the time slots you want.</p>
+      </div>
+      <div class="reveal step-row md:border-t md:border-b-0 py-8 md:py-10 md:pl-8 md:border-l line-onink">
+        <span class="text-[12px] tracked uppercase faint-onink">03</span>
+        <h3 class="font-tight font-semibold text-[19px] mt-4 mb-2.5">Launch via mobile money</h3>
+        <p class="muted-onink text-[14.5px] leading-relaxed">Upload your image or video ad directly through the dashboard, then fund your campaign instantly using MTN MoMo, Moov Money, or Wave.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARTNER PORTAL ============ -->
+<section id="partners" class="section-paper py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+      <div>
+        <div class="reveal text-[12px] tracked uppercase muted-onpaper mb-4">For media networks</div>
+        <h2 class="reveal font-tight font-normal text-[28px] sm:text-[36px] leading-[1.1] mb-5">
+          Own an LED screen network? Maximize your unsold airtime.
+        </h2>
+        <p class="reveal muted-onpaper text-[15.5px] leading-relaxed mb-10 max-w-lg">
+          Don't let your premium digital displays run blank intervals. LikeAds acts as your automated sales assistant, seamlessly funneling programmatic ad budgets from local small-and-medium enterprises directly into your empty loop slots.
+        </p>
+
+        <div class="reveal space-y-6 mb-10">
+          <div class="flex items-start gap-3.5">
+            <i data-lucide="check-circle-2" class="w-5 h-5 mt-0.5 shrink-0 text-[var(--text-onpaper)]"></i>
+            <div>
+              <div class="font-medium text-[14.5px] mb-1">100% brand safety</div>
+              <div class="muted-onpaper text-[14px] leading-relaxed">You maintain total creative control. No ad goes live on your physical hardware without a 1-click manual approval from your internal management dashboard.</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3.5">
+            <i data-lucide="check-circle-2" class="w-5 h-5 mt-0.5 shrink-0 text-[var(--text-onpaper)]"></i>
+            <div>
+              <div class="font-medium text-[14.5px] mb-1">Zero financial risk</div>
+              <div class="muted-onpaper text-[14px] leading-relaxed">We operate on a pure revenue-share model. The platform is entirely free for your network to integrate — we only make money when we bring new advertisers to your screens.</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#waitlist" class="reveal pill-black inline-flex items-center gap-2 rounded-full px-5 py-3 text-[14px]">
+          Partner with us
+          <i data-lucide="arrow-up-right" class="w-4 h-4 arrow-nudge"></i>
+        </a>
+      </div>
+
+      <!-- dark ui-mockup card with floating chips -->
+      <div class="reveal relative">
+        <div class="bg-[var(--ink)] rounded-2xl p-8 border border-[rgba(245,243,238,0.08)]">
+          <div class="text-[12px] tracked uppercase faint-onink mb-8">Unsold airtime, before / after</div>
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between text-[12.5px] mb-2">
+                <span class="muted-onink">Before LikeAds</span>
+                <span class="faint-onink">38% filled</span>
+              </div>
+              <div class="h-2 rounded-full bg-white/8 overflow-hidden">
+                <div class="h-full rounded-full bg-white/25" style="width:38%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-[12.5px] mb-2">
+                <span class="muted-onink">With LikeAds</span>
+                <span class="text-[var(--amber)]">94% filled</span>
+              </div>
+              <div class="h-2 rounded-full bg-white/8 overflow-hidden">
+                <div class="h-full rounded-full bg-[var(--amber)]" style="width:94%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="float-chip hidden sm:flex absolute -left-6 top-10 items-center gap-2 rounded-xl px-4 py-3 text-[12.5px] font-medium">
+          <i data-lucide="check" class="w-3.5 h-3.5"></i> Slot filled — Pharmacie du Phare
+        </div>
+        <div class="float-chip hidden sm:flex absolute -right-4 -bottom-6 flex-col rounded-xl px-4 py-3">
+          <span class="text-[10px] tracked uppercase muted-onpaper">Payout, this week</span>
+          <span class="font-tight font-semibold text-[18px]">86,000 CFA</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing" class="section-ink py-24 md:py-28 text-center">
+  <div class="max-w-2xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-[12px] tracked uppercase faint-onink mb-4">Pricing</div>
+    <h2 class="reveal font-tight font-normal text-[28px] sm:text-[36px] mb-4">Pay for the slots you use. Nothing else.</h2>
+    <p class="reveal muted-onink text-[15.5px] leading-relaxed">
+      Campaigns start from a single day on a single screen. Founding rates go to early access members before public launch.
+    </p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section-ink pb-24 md:pb-32">
+  <div class="max-w-3xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-[12px] tracked uppercase faint-onink mb-6">Questions</div>
+
+    <div id="accordion">
+      <div class="accordion-item">
+        <button class="accordion-btn w-full flex items-center justify-between py-6 text-left">
+          <span class="font-tight font-semibold text-[17px] sm:text-[19px]">How do screen owners get paid?</span>
+          <i data-lucide="plus" class="plus-icon w-5 h-5 shrink-0 ml-4"></i>
+        </button>
+        <div class="accordion-panel">
+          <p class="muted-onink text-[14.5px] leading-relaxed pb-6 pr-8">LikeAds runs on a pure revenue-share model. Every time an advertiser books a slot on your network, your share is calculated automatically and paid out on a regular schedule — no invoicing required on your end.</p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn w-full flex items-center justify-between py-6 text-left">
+          <span class="font-tight font-semibold text-[17px] sm:text-[19px]">What can I advertise?</span>
+          <i data-lucide="plus" class="plus-icon w-5 h-5 shrink-0 ml-4"></i>
+        </button>
+        <div class="accordion-panel">
+          <p class="muted-onink text-[14.5px] leading-relaxed pb-6 pr-8">Any local business with an image or short video ad — restaurants, pharmacies, salons, retail, and events. Every submission goes through the screen owner's own review before it airs, so nothing goes live without their approval.</p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn w-full flex items-center justify-between py-6 text-left">
+          <span class="font-tight font-semibold text-[17px] sm:text-[19px]">How fast can I launch a campaign?</span>
+          <i data-lucide="plus" class="plus-icon w-5 h-5 shrink-0 ml-4"></i>
+        </button>
+        <div class="accordion-panel">
+          <p class="muted-onink text-[14.5px] leading-relaxed pb-6 pr-8">Most campaigns go from sign-up to funded in about three minutes — pick a screen, set your hours, upload your ad, and pay with mobile money. Your ad appears once the screen owner approves it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER / WAITLIST ============ -->
+<footer id="waitlist" class="section-ink border-t line-onink pt-24 pb-10">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+
+    <div class="reveal text-center max-w-lg mx-auto mb-24">
+      <h2 class="font-tight font-normal text-[28px] sm:text-[36px] mb-4">Be first on the network.</h2>
+      <p class="muted-onink text-[15px] mb-8">Join advertisers and screen partners getting early access before we launch in Cotonou.</p>
+
+      <form id="footer-form" class="max-w-md mx-auto" novalidate>
+        <div class="input-pill flex-1 rounded-full pl-5 pr-1.5 py-1.5 flex items-center gap-2">
+          <input type="email" required placeholder="you@yourbusiness.com" class="w-full text-[14.5px]" aria-label="Email address">
+          <button type="submit" class="pill-white rounded-full px-5 py-2.5 text-[13.5px] whitespace-nowrap shrink-0">
+            Join the Waitlist
+          </button>
+        </div>
+        <div class="footer-success hidden mt-4 flex items-center justify-center gap-2.5 text-[14px]">
+          <span class="success-check w-5 h-5 rounded-full bg-[var(--amber)] grid place-items-center">
+            <i data-lucide="check" class="w-3.5 h-3.5 text-[#1a1305]"></i>
+          </span>
+          Thank you for joining!
+        </div>
+      </form>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 pb-16 border-b line-onink text-[13.5px]">
+      <div>
+        <div class="tracked uppercase text-[11px] faint-onink mb-4">Product</div>
+        <div class="flex flex-col gap-2.5 muted-onink">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#how-it-works" class="nav-link">How It Works</a>
+          <a href="#pricing" class="nav-link">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div class="tracked uppercase text-[11px] faint-onink mb-4">Partners</div>
+        <div class="flex flex-col gap-2.5 muted-onink">
+          <a href="#partners" class="nav-link">Screen Partners</a>
+          <a href="#waitlist" class="nav-link">Revenue Share</a>
+        </div>
+      </div>
+      <div>
+        <div class="tracked uppercase text-[11px] faint-onink mb-4">Company</div>
+        <div class="flex flex-col gap-2.5 muted-onink">
+          <a href="#" class="nav-link">About</a>
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="tracked uppercase text-[11px] faint-onink mb-4">Follow</div>
+        <div class="flex flex-col gap-2.5 muted-onink">
+          <a href="#" class="nav-link">Instagram</a>
+          <a href="#" class="nav-link">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8">
+      <div class="flex items-center gap-2.5">
+        <span class="logo-mark scale-90">
+          <svg viewBox="0 0 26 26" fill="none">
+            <rect x="1" y="4" width="24" height="15" rx="3" stroke="#F5F3EE" stroke-width="1.6"/>
+            <rect x="9" y="22" width="8" height="1.6" rx="0.8" fill="#F5F3EE"/>
+            <circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/>
+          </svg>
+        </span>
+        <span class="font-tight font-semibold text-[15px]">LikeAds</span>
+      </div>
+
+      <nav class="flex items-center gap-6 text-[13px] muted-onink">
+        <a href="#" class="nav-link">Privacy</a>
+        <a href="#" class="nav-link">Terms</a>
+        <a href="#" class="nav-link">Contact</a>
+      </nav>
+
+      <span class="faint-onink text-[12.5px]">© 2026 LikeAds Technologies. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script>
+  lucide.createIcons();
+
+  // hero video: play back slower for a gentle slow-motion feel, and
+  // fail quietly to the gradient background if the source can't load
+  const heroVideo = document.getElementById('hero-video');
+  if (heroVideo) {
+    heroVideo.playbackRate = 0.5;
+    heroVideo.addEventListener('loadedmetadata', () => { heroVideo.playbackRate = 0.5; });
+    heroVideo.addEventListener('error', () => { heroVideo.style.display = 'none'; });
+  }
+
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 8));
+
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuIcon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+    lucide.createIcons();
+  });
+  document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuIcon.setAttribute('data-lucide', 'menu');
+      lucide.createIcons();
+    });
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('in'), (i % 6) * 60);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  function wireWaitlistForm(formId, successSelector) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = form.querySelector('input[type="email"]');
+      if (!input.checkValidity()) { input.focus(); return; }
+      form.querySelector('.input-pill').classList.add('opacity-40', 'pointer-events-none');
+      form.querySelector(successSelector).classList.remove('hidden');
+      input.value = '';
+      lucide.createIcons();
+    });
+  }
+  wireWaitlistForm('footer-form', '.footer-success');
+
+  document.querySelectorAll('.accordion-item').forEach(item => {
+    const btn = item.querySelector('.accordion-btn');
+    const panel = item.querySelector('.accordion-panel');
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.accordion-item.open').forEach(openItem => {
+        if (openItem !== item) {
+          openItem.classList.remove('open');
+          openItem.querySelector('.accordion-panel').style.maxHeight = null;
+        }
+      });
+      item.classList.toggle('open', !isOpen);
+      panel.style.maxHeight = !isOpen ? panel.scrollHeight + 'px' : null;
+    });
+  });
+
+  const tickerEl = document.getElementById('ticker-count');
+  if (tickerEl) {
+    let impressions = 12482;
+    setInterval(() => {
+      impressions += Math.floor(Math.random() * 4) + 1;
+      tickerEl.textContent = impressions.toLocaleString('en-US');
+    }, 2200);
+  }
+
+
+    // coverflow: cards snap one at a time into the centered position —
+  // a sharp step, not a continuous drift
+  const cfTrack = document.getElementById('coverflow-track');
+  if (cfTrack) {
+    const cfViewport = cfTrack.parentElement;
+        const cards = Array.from(cfTrack.querySelectorAll('.coverflow-card'));
+    const uniqueCount = cards.length / 3; // three identical sets in a row
+    let index = uniqueCount; // start in the MIDDLE set, so a full row is already visible on the left
+
+    function goTo(i, animate = true) {
+      const card = cards[i];
+      const gap = 16;
+      const step = card.offsetWidth + gap;
+      const centerOffset = (cfViewport.offsetWidth - card.offsetWidth) / 2;
+      cfTrack.style.transition = animate ? '' : 'none';
+      cfTrack.style.transform = `translateX(${centerOffset - i * step}px)`;
+      cards.forEach((c, ci) => c.classList.toggle('is-center', ci === i));
+      if (!animate) cfTrack.offsetHeight; // force reflow so the "none" transition actually applies
+    }
+
+        goTo(index, false);
+
+    let cfTimer = null;
+    function step() {
+      index++;
+      goTo(index, true);
+      if (index >= uniqueCount * 2) {
+        setTimeout(() => { index -= uniqueCount; goTo(index, false); }, 520);
+      }
+    }
+    function startAutoplay() {
+      if (cfTimer) return; // already running
+      cfTimer = setInterval(step, 2600);
+    }
+    function stopAutoplay() {
+      clearInterval(cfTimer);
+      cfTimer = null;
+    }
+
+    startAutoplay();
+    cfViewport.addEventListener('mouseenter', stopAutoplay);
+    cfViewport.addEventListener('mouseleave', startAutoplay);
+
+    window.addEventListener('resize', () => goTo(index, false));
+    
+  }
+  
+</script>
+
+</body>
+</html>
