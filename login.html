@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log into LikeAds</title>
+<meta name="description" content="Log into your LikeAds account to manage campaigns or your screen network.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink: #0B0B0C;
+    --paper: #F0ECE3;
+    --text-onpaper: #17140F;
+    --muted-onpaper: rgba(23,20,15,0.62);
+    --faint-onpaper: rgba(23,20,15,0.38);
+    --line-onpaper: rgba(23,20,15,0.14);
+    --line-onpaper-strong: rgba(23,20,15,0.22);
+    --amber: #E8A93A;
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    background: var(--paper);
+    color: var(--text-onpaper);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-tight{ font-family: 'Inter Tight', 'Inter', sans-serif; letter-spacing: -0.02em; }
+  .tracked{ letter-spacing: 0.10em; }
+  ::selection{ background: var(--amber); color: #1a1305; }
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px;
+  }
+
+  .top-link{ color: var(--muted-onpaper); transition: color .2s ease; }
+  .top-link:hover{ color: var(--text-onpaper); }
+
+  .logo-mark{ width: 30px; height: 30px; }
+
+  /* ---------- underline inputs ---------- */
+  .field-label{
+    font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--faint-onpaper); display: block; margin-bottom: 8px;
+  }
+  .field-input{
+    width: 100%; background: transparent; border: none; border-bottom: 1.5px solid var(--line-onpaper-strong);
+    padding: 8px 0; font-size: 15px; color: var(--text-onpaper); outline: none;
+    transition: border-color .2s ease;
+  }
+  .field-input::placeholder{ color: var(--faint-onpaper); }
+  .field-input:focus{ border-bottom-color: var(--amber); }
+
+  .eye-btn{ color: var(--faint-onpaper); transition: color .2s ease; }
+  .eye-btn:hover{ color: var(--text-onpaper); }
+
+  /* ---------- log in button ---------- */
+  .btn-login{
+    width: 100%; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 14.5px;
+    background: rgba(23,20,15,0.08); color: var(--faint-onpaper);
+    cursor: not-allowed; transition: background-color .2s ease, color .2s ease, transform .15s ease;
+  }
+  .btn-login.is-ready{
+    background: var(--ink); color: #F5F3EE; cursor: pointer;
+  }
+  .btn-login.is-ready:hover{ background: #232320; transform: translateY(-1px); }
+  .btn-login.is-ready:active{ transform: translateY(0); }
+
+  /* ---------- social buttons ---------- */
+  .btn-social{
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 13px; border-radius: 12px; border: 1.5px solid var(--line-onpaper-strong);
+    background: transparent; font-weight: 600; font-size: 14.5px; color: var(--text-onpaper);
+    transition: border-color .2s ease, background-color .2s ease, transform .15s ease;
+  }
+  .btn-social:hover{ border-color: var(--text-onpaper); background: rgba(23,20,15,0.03); transform: translateY(-1px); }
+  .btn-social:active{ transform: translateY(0); }
+  .btn-social svg{ width: 20px; height: 20px; flex-shrink: 0; }
+
+  /* ---------- OR divider ---------- */
+  .or-divider{ position: relative; }
+  .or-divider .line{ position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line-onpaper); }
+  .or-divider .badge{
+    position: relative; background: var(--paper); font-size: 11px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--faint-onpaper); padding: 6px 0; text-align: center;
+  }
+  .or-divider-mobile{ display: flex; align-items: center; gap: 14px; color: var(--faint-onpaper); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+  .or-divider-mobile .line{ flex: 1; height: 1px; background: var(--line-onpaper); }
+</style>
+</head>
+
+<body>
+
+<div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="flex items-center justify-between py-6 sm:py-8">
+    <a href="index.html" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium">
+      <i data-lucide="chevron-left" class="w-4 h-4"></i> Back
+    </a>
+    <a href="signup.html" class="top-link text-[13px] tracked uppercase font-medium">Create Account</a>
+  </header>
+
+  <!-- ============ LOGIN CARD ============ -->
+  <main class="max-w-2xl mx-auto pt-8 sm:pt-14 pb-20">
+
+    <div class="flex flex-col items-center text-center mb-10">
+      <span class="logo-mark mb-5">
+        <svg viewBox="0 0 26 26" fill="none">
+          <rect x="1" y="4" width="24" height="15" rx="3" stroke="#17140F" stroke-width="1.6"/>
+          <rect x="9" y="22" width="8" height="1.6" rx="0.8" fill="#17140F"/>
+          <circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/>
+        </svg>
+      </span>
+      <h1 class="font-tight font-semibold text-[28px] sm:text-[32px]">Log into LikeAds</h1>
+    </div>
+
+    <form id="login-form" class="grid sm:grid-cols-[1fr_auto_1fr] gap-8 sm:gap-10" novalidate>
+
+      <!-- email / password -->
+      <div class="space-y-6">
+        <div>
+          <label class="field-label" for="email">Email address</label>
+          <input id="email" type="email" class="field-input" placeholder="name@example.com" autocomplete="email" required>
+        </div>
+        <div>
+          <label class="field-label" for="password">Password</label>
+          <div class="relative flex items-center">
+            <input id="password" type="password" class="field-input pr-8" placeholder="Password" autocomplete="current-password" required>
+            <button type="button" id="toggle-password" class="eye-btn absolute right-0" aria-label="Show password">
+              <i data-lucide="eye" class="w-4.5 h-4.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="login-btn" class="btn-login mt-2" disabled>Log In</button>
+      </div>
+
+      <!-- OR divider (desktop: vertical, mobile: horizontal) -->
+      <div class="hidden sm:block or-divider">
+        <div class="line"></div>
+        <div class="h-full flex items-center justify-center">
+          <span class="badge">Or</span>
+        </div>
+      </div>
+      <div class="or-divider-mobile sm:hidden -my-1">
+        <span class="line"></span> Or <span class="line"></span>
+      </div>
+
+      <!-- social auth -->
+      <div class="flex flex-col justify-center gap-3">
+        <button type="button" class="btn-social">
+          <svg viewBox="0 0 20 20"><path fill="#4285F4" d="M19.6 10.23c0-.68-.06-1.32-.17-1.94H10v3.68h5.4a4.6 4.6 0 0 1-2 3.02v2.5h3.23c1.9-1.75 2.97-4.33 2.97-7.26z"/><path fill="#34A853" d="M10 20c2.7 0 4.96-.9 6.62-2.44l-3.23-2.5c-.9.6-2.04.96-3.39.96-2.6 0-4.8-1.76-5.6-4.12H1.06v2.58A10 10 0 0 0 10 20z"/><path fill="#FBBC05" d="M4.4 11.9a6 6 0 0 1 0-3.8V5.52H1.06a10 10 0 0 0 0 8.96l3.34-2.58z"/><path fill="#EA4335" d="M10 3.98c1.47 0 2.79.5 3.82 1.5l2.87-2.87C14.95.99 12.7 0 10 0A10 10 0 0 0 1.06 5.52L4.4 8.1C5.2 5.74 7.4 3.98 10 3.98z"/></svg>
+          Continue with Google
+        </button>
+        <button type="button" class="btn-social">
+          <svg viewBox="0 0 24 24"><path fill="#111111" d="M16.36 1.43c.1 1.03-.29 2.03-.9 2.75-.62.73-1.63 1.3-2.63 1.22-.12-1 .36-2.04.94-2.7.65-.75 1.75-1.3 2.6-1.27zM19.9 17.2c-.5 1.15-.74 1.67-1.38 2.68-.9 1.43-2.16 3.21-3.73 3.22-1.4.02-1.76-.9-3.66-.9-1.9 0-2.3.88-3.7.92-1.55.05-2.73-1.55-3.63-2.97-1.98-3.05-2.2-6.63-.97-8.54.87-1.36 2.24-2.16 3.53-2.16 1.32 0 2.15.9 3.24.9 1.06 0 1.7-.9 3.24-.9 1.06 0 2.18.58 2.98 1.58-2.62 1.44-2.2 5.2.08 6.17z"/></svg>
+          Continue with Apple
+        </button>
+        <button type="button" class="btn-social">
+          <svg viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12a12 12 0 1 0-13.88 11.86v-8.39H7.08V12h3.04V9.36c0-3 1.79-4.66 4.53-4.66 1.31 0 2.68.24 2.68.24v2.95h-1.51c-1.49 0-1.95.92-1.95 1.87V12h3.32l-.53 3.47h-2.79v8.39A12 12 0 0 0 24 12z"/></svg>
+          Continue with Facebook
+        </button>
+      </div>
+
+    </form>
+
+    <div class="mt-12 text-center">
+      <a href="#" class="top-link text-[12px] tracked uppercase font-medium">Can't log in?</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  // toggle password visibility
+  const pwInput = document.getElementById('password');
+  const pwToggle = document.getElementById('toggle-password');
+  pwToggle.addEventListener('click', () => {
+    const isHidden = pwInput.type === 'password';
+    pwInput.type = isHidden ? 'text' : 'password';
+    pwToggle.innerHTML = isHidden
+      ? '<i data-lucide="eye-off" class="w-4.5 h-4.5"></i>'
+      : '<i data-lucide="eye" class="w-4.5 h-4.5"></i>';
+    pwToggle.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+    lucide.createIcons();
+  });
+
+  // enable the Log In button only once both fields have content
+  const emailInput = document.getElementById('email');
+  const loginBtn = document.getElementById('login-btn');
+  function refreshLoginState() {
+    const ready = emailInput.value.trim().length > 0 && pwInput.value.length > 0;
+    loginBtn.disabled = !ready;
+    loginBtn.classList.toggle('is-ready', ready);
+  }
+  emailInput.addEventListener('input', refreshLoginState);
+  pwInput.addEventListener('input', refreshLoginState);
+
+  // form submit — wire this up to your real auth endpoint
+  document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (loginBtn.disabled) return;
+    // TODO: replace with real authentication call
+    console.log('Login submitted', { email: emailInput.value });
+  });
+</script>
+
+</body>
+</html>
