@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -220,43 +221,6 @@
     background: var(--paper); color: var(--text-onpaper);
     box-shadow: 0 12px 28px -10px rgba(0,0,0,0.35);
   }
-
-
-    /* ---------- three-card looping hero row ---------- */
-  .loop-card{ border-radius: 18px; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55); }
-  .loop-screen{
-    position: relative; overflow: hidden; border-radius: 18px;
-    border: 1px solid var(--line-onink-soft); background: #050710;
-  }
-  .loop-slide{
-    position: absolute; inset: 0; padding: 20px;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    opacity: 0; animation-name: loopfade; animation-timing-function: ease-in-out; animation-iteration-count: infinite;
-  }
-  @keyframes loopfade{ 0%{opacity:0;} 6%{opacity:1;} 40%{opacity:1;} 46%{opacity:0;} 100%{opacity:0;} }
-
-    /* ---------- coverflow hero row: ~3 cards visible, center scales up ---------- */
-  .coverflow-viewport{
-    width: 100%; overflow: hidden;
-    /* no mask — edges crop cleanly, full-bleed, like Squarespace's version */
-  }
-    .coverflow-track{ display: flex; align-items: center; gap: 16px; width: max-content; transition: transform .5s cubic-bezier(.65,0,.35,1); }
-  .coverflow-card{
-    position: relative; width: clamp(300px, 42vw, 620px); aspect-ratio: 16/10; flex-shrink: 0;
-    border-radius: 14px; overflow: hidden;
-    transform: scale(0.84);
-    transition: transform .5s cubic-bezier(.65,0,.35,1), height .5s cubic-bezier(.65,0,.35,1);
-    will-change: transform;
-  }
-    .coverflow-card:not(.is-center){ aspect-ratio: 16/9.7; align-self: center; }
-  .coverflow-card.is-center{ border-radius: 14px; transform: scale(1.14); z-index: 5; }
-  .coverflow-card img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .coverflow-card .slide-overlay{
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 32%, transparent 75%);
-  }
-  .coverflow-card .slide-label{ position: absolute; left: 0; right: 0; bottom: 0; padding: 20px; }
-  
 </style>
 </head>
 
@@ -333,117 +297,63 @@
         <p class="muted-onink text-[13.5px]">No long-term contracts · Launch via mobile money in minutes</p>
       </div>
     </div>
-    <!-- coverflow hero row: 3 visible, center scales up as images pass through -->
-    <div class="reveal relative z-10 mt-10 sm:mt-14 coverflow-viewport">
-      <div class="coverflow-track" id="coverflow-track">
 
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
+    <!-- overlapping mockup stack, bleeding past the section edges -->
+    <div class="reveal relative z-10 mt-10 sm:mt-14 max-w-6xl mx-auto px-5">
+      <div class="relative flex items-center justify-center">
+
+        <!-- left peeking card -->
+<div class="mock-card hidden md:flex w-[240px] h-[300px] absolute left-0 -translate-x-1/3 rotate-[-4deg] z-0 overflow-hidden flex-col justify-end p-5">
+  <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+  <span class="relative text-[10px] tracked uppercase text-white/70 mb-1">Partner dashboard</span>
+  <span class="relative font-tight font-semibold text-[15px] text-white">Approve ads in 1 click</span>
+</div>
+
+        <!-- right peeking card -->
+        <div class="mock-card hidden md:flex w-[240px] h-[300px] absolute right-0 translate-x-1/3 rotate-[4deg] z-0 overflow-hidden flex-col justify-end p-5">
+  <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+  <span class="relative text-[10px] tracked uppercase text-white/70 mb-1">Screen network</span>
+  <span class="relative font-tight font-semibold text-[15px] text-white">Live map of Cotonou</span>
+</div>
+
+        <!-- center card: live screen mockup -->
+        <div class="mock-card w-full max-w-2xl p-3 relative z-10">
+          <div class="flex items-center justify-between px-2 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="live-dot"></span>
+              <span class="text-[11px] tracked uppercase muted-onink">Live · Screen #04</span>
+            </div>
+            <i data-lucide="wifi" class="w-3.5 h-3.5 faint-onink"></i>
           </div>
-        </div>
-
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
-          </div>
-        </div>
-
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
-          </div>
-        </div>
-
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
-          </div>
-        </div>
-
-        <!-- duplicate set — required for a seamless loop -->
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
-          </div>
-        </div>
-
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
-          </div>
-        </div>
-
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
-          </div>
-        </div>
-
-                <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
-          </div>
-        </div>
-
-        <!-- third set — keeps a full row visible ahead of the loop at all times -->
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
-          </div>
-        </div>
-
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
-          </div>
-        </div>
-
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
-          </div>
-        </div>
-
-        <div class="coverflow-card">
-          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
-          <div class="slide-overlay"></div>
-          <div class="slide-label">
-            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
-            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
+          <div class="billboard-screen">
+           <div class="ad-slide s1">
+  <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
+  <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent -z-10"></div>
+  <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
+  <span class="font-tight font-semibold text-[22px] text-white">Chez Rachelle Traiteur</span>
+  <span class="text-[12px] text-white/55 mt-1">Weekend promo · 3-day run</span>
+</div>
+            <div class="ad-slide s2">
+  <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
+  <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent -z-10"></div>
+  <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
+  <span class="font-tight font-semibold text-[22px] text-white">Pharmacie du Phare</span>
+  <span class="text-[12px] text-white/55 mt-1">Peak hours · 6am–9am</span>
+</div>
+            <div class="ad-slide s3">
+  <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
+  <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent -z-10"></div>
+  <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
+  <span class="font-tight font-semibold text-[22px] text-white">Boutique Wax &amp; Co</span>
+  <span class="text-[12px] text-white/55 mt-1">Funded via MTN MoMo</span>
+</div>
+            <div class="scanline"></div>
+            <div class="ticker-bar px-4 py-2.5 flex items-center justify-between text-[11px]">
+              <span class="muted-onink">IMPRESSIONS <span id="ticker-count" class="text-white font-medium">12,482</span></span>
+              <span class="text-[var(--amber)]">● live</span>
+            </div>
           </div>
         </div>
 
@@ -857,55 +767,6 @@
       tickerEl.textContent = impressions.toLocaleString('en-US');
     }, 2200);
   }
-
-
-    // coverflow: cards snap one at a time into the centered position —
-  // a sharp step, not a continuous drift
-  const cfTrack = document.getElementById('coverflow-track');
-  if (cfTrack) {
-    const cfViewport = cfTrack.parentElement;
-        const cards = Array.from(cfTrack.querySelectorAll('.coverflow-card'));
-    const uniqueCount = cards.length / 3; // three identical sets in a row
-    let index = uniqueCount; // start in the MIDDLE set, so a full row is already visible on the left
-
-    function goTo(i, animate = true) {
-      const card = cards[i];
-      const gap = 16;
-      const step = card.offsetWidth + gap;
-      const centerOffset = (cfViewport.offsetWidth - card.offsetWidth) / 2;
-      cfTrack.style.transition = animate ? '' : 'none';
-      cfTrack.style.transform = `translateX(${centerOffset - i * step}px)`;
-      cards.forEach((c, ci) => c.classList.toggle('is-center', ci === i));
-      if (!animate) cfTrack.offsetHeight; // force reflow so the "none" transition actually applies
-    }
-
-        goTo(index, false);
-
-    let cfTimer = null;
-    function step() {
-      index++;
-      goTo(index, true);
-      if (index >= uniqueCount * 2) {
-        setTimeout(() => { index -= uniqueCount; goTo(index, false); }, 520);
-      }
-    }
-    function startAutoplay() {
-      if (cfTimer) return; // already running
-      cfTimer = setInterval(step, 2600);
-    }
-    function stopAutoplay() {
-      clearInterval(cfTimer);
-      cfTimer = null;
-    }
-
-    startAutoplay();
-    cfViewport.addEventListener('mouseenter', stopAutoplay);
-    cfViewport.addEventListener('mouseleave', startAutoplay);
-
-    window.addEventListener('resize', () => goTo(index, false));
-    
-  }
-  
 </script>
 
 </body>
