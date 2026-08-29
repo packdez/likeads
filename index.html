@@ -221,6 +221,26 @@
     background: var(--paper); color: var(--text-onpaper);
     box-shadow: 0 12px 28px -10px rgba(0,0,0,0.35);
   }
+
+
+    /* ---------- partner logo marquee ---------- */
+  .partners-mask{
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+  .partners-track{
+    display: flex; align-items: center; gap: 56px; width: max-content;
+    animation: partnersscroll 26s linear infinite;
+  }
+  .partners-track:hover{ animation-play-state: paused; }
+  @keyframes partnersscroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+  .partner-logo{
+    font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: 19px;
+    letter-spacing: -0.01em; white-space: nowrap; flex-shrink: 0;
+    color: var(--faint-onink); transition: color .2s ease;
+  }
+  .partner-logo:hover{ color: var(--text-onink); }
+  
 </style>
 </head>
 
@@ -471,15 +491,35 @@
         <h3 class="font-tight font-semibold text-[19px] mt-4 mb-2.5">Set your budget</h3>
         <p class="muted-onink text-[14.5px] leading-relaxed">Control exactly when your ad plays. Pick peak traffic hours or run a short three-day weekend promotion — you only pay for the time slots you want.</p>
       </div>
-      <div class="reveal step-row md:border-t md:border-b-0 py-8 md:py-10 md:pl-8 md:border-l line-onink">
+            <div class="reveal step-row md:border-t md:border-b-0 py-8 md:py-10 md:pl-8 md:border-l line-onink">
         <span class="text-[12px] tracked uppercase faint-onink">03</span>
         <h3 class="font-tight font-semibold text-[19px] mt-4 mb-2.5">Launch via mobile money</h3>
         <p class="muted-onink text-[14.5px] leading-relaxed">Upload your image or video ad directly through the dashboard, then fund your campaign instantly using MTN MoMo, Moov Money, or Wave.</p>
       </div>
     </div>
+
+    <!-- partner logo strip -->
+    <div class="reveal partners-mask mt-16 sm:mt-20">
+      <div class="partners-track">
+        <span class="partner-logo">MTN</span>
+        <span class="partner-logo">Moov Africa</span>
+        <span class="partner-logo">Celtiis</span>
+        <span class="partner-logo">Canal Com Bénin</span>
+        <span class="partner-logo">Facebook</span>
+        <span class="partner-logo">Google</span>
+        <!-- duplicate set — required for a seamless loop -->
+        <span class="partner-logo">MTN</span>
+        <span class="partner-logo">Moov Africa</span>
+        <span class="partner-logo">Celtiis</span>
+        <span class="partner-logo">Canal Com Bénin</span>
+        <span class="partner-logo">Facebook</span>
+        <span class="partner-logo">Google</span>
+      </div>
+    </div>
   </div>
 </section>
 
+  
 <!-- ============ PARTNER PORTAL ============ -->
 <section id="partners" class="section-paper py-24 md:py-32">
   <div class="max-w-7xl mx-auto px-5 sm:px-8">
