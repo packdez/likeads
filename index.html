@@ -235,25 +235,31 @@
   }
   @keyframes loopfade{ 0%{opacity:0;} 6%{opacity:1;} 40%{opacity:1;} 46%{opacity:0;} 100%{opacity:0;} }
 
-
-
-    /* ---------- sliding image row ---------- */
-  .slide-mask{ mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent); }
-  .slide-track{ display: flex; gap: 20px; width: max-content; animation: slideleft 32s linear infinite; }
-  .slide-track:hover{ animation-play-state: paused; }
-  @keyframes slideleft{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
-  .slide-card{
-    position: relative; width: 300px; height: 380px; flex-shrink: 0;
+    /* ---------- coverflow hero row: ~3 cards visible, center scales up ---------- */
+  .coverflow-viewport{
+    max-width: 860px; margin: 0 auto; overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  }
+  .coverflow-track{ display: flex; align-items: center; gap: 20px; width: max-content; animation: coverflowscroll 34s linear infinite; }
+  .coverflow-track:hover{ animation-play-state: paused; }
+  @keyframes coverflowscroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+  .coverflow-card{
+    position: relative; width: 260px; height: 340px; flex-shrink: 0;
     border-radius: 18px; overflow: hidden;
     box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
     border: 1px solid var(--line-onink-soft);
+    transform: scale(0.82);
+    transition: transform .35s ease;
+    will-change: transform;
   }
-  .slide-card img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .slide-card .slide-overlay{
+  .coverflow-card img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .coverflow-card .slide-overlay{
     position: absolute; inset: 0;
     background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 32%, transparent 75%);
   }
-  .slide-card .slide-label{ position: absolute; left: 0; right: 0; bottom: 0; padding: 20px; }
+  .coverflow-card .slide-label{ position: absolute; left: 0; right: 0; bottom: 0; padding: 20px; }
+  
 </style>
 </head>
 
@@ -330,12 +336,11 @@
         <p class="muted-onink text-[13.5px]">No long-term contracts · Launch via mobile money in minutes</p>
       </div>
     </div>
+    <!-- coverflow hero row: 3 visible, center scales up as images pass through -->
+    <div class="reveal relative z-10 mt-10 sm:mt-14 coverflow-viewport">
+      <div class="coverflow-track" id="coverflow-track">
 
-          <!-- sliding image row -->
-    <div class="reveal relative z-10 mt-10 sm:mt-14 slide-mask">
-      <div class="slide-track">
-
-        <div class="slide-card">
+        <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-label">
@@ -344,7 +349,7 @@
           </div>
         </div>
 
-        <div class="slide-card">
+        <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-label">
@@ -353,7 +358,7 @@
           </div>
         </div>
 
-        <div class="slide-card">
+        <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-label">
@@ -362,7 +367,7 @@
           </div>
         </div>
 
-        <div class="slide-card">
+        <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-label">
@@ -372,7 +377,7 @@
         </div>
 
         <!-- duplicate set — required for a seamless loop -->
-        <div class="slide-card">
+        <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-label">
@@ -381,7 +386,7 @@
           </div>
         </div>
 
-        <div class="slide-card">
+        <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-label">
@@ -390,7 +395,7 @@
           </div>
         </div>
 
-        <div class="slide-card">
+        <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-label">
@@ -399,7 +404,7 @@
           </div>
         </div>
 
-        <div class="slide-card">
+        <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-label">
@@ -817,6 +822,30 @@
       impressions += Math.floor(Math.random() * 4) + 1;
       tickerEl.textContent = impressions.toLocaleString('en-US');
     }, 2200);
+  }
+
+
+    // coverflow: whichever card sits nearest the viewport's horizontal center
+  // scales up; cards on either side ease back down to the same smaller size
+  const cfTrack = document.getElementById('coverflow-track');
+  if (cfTrack) {
+    const cfViewport = cfTrack.parentElement;
+    const MIN_SCALE = 0.82, MAX_SCALE = 1.18, FALLOFF = 220; // px — how far the scale-up reaches
+    function updateCoverflow() {
+      const vRect = cfViewport.getBoundingClientRect();
+      const viewportCenter = vRect.left + vRect.width / 2;
+      cfTrack.querySelectorAll('.coverflow-card').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const dist = Math.abs(cardCenter - viewportCenter);
+        const t = Math.max(0, 1 - dist / FALLOFF);
+        const scale = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * t;
+        card.style.transform = `scale(${scale.toFixed(3)})`;
+        card.style.zIndex = Math.round(t * 10);
+      });
+      requestAnimationFrame(updateCoverflow);
+    }
+    requestAnimationFrame(updateCoverflow);
   }
 </script>
 
