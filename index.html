@@ -400,6 +400,43 @@
           </div>
         </div>
 
+                <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
+          </div>
+        </div>
+
+        <!-- third set — keeps a full row visible ahead of the loop at all times -->
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
+          </div>
+        </div>
+
+        <div class="coverflow-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
+          </div>
+        </div>
+
         <div class="coverflow-card">
           <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
           <div class="slide-overlay"></div>
@@ -826,9 +863,9 @@
   const cfTrack = document.getElementById('coverflow-track');
   if (cfTrack) {
     const cfViewport = cfTrack.parentElement;
-    const cards = Array.from(cfTrack.querySelectorAll('.coverflow-card'));
-    const uniqueCount = cards.length / 2; // first half is unique, second half is the loop-duplicate
-    let index = 0;
+        const cards = Array.from(cfTrack.querySelectorAll('.coverflow-card'));
+    const uniqueCount = cards.length / 3; // three identical sets in a row
+    let index = uniqueCount; // start in the MIDDLE set, so a full row is already visible on the left
 
     function goTo(i, animate = true) {
       const card = cards[i];
@@ -841,16 +878,15 @@
       if (!animate) cfTrack.offsetHeight; // force reflow so the "none" transition actually applies
     }
 
-    goTo(0, false);
+    goTo(index, false);
 
     setInterval(() => {
       index++;
-      if (index >= uniqueCount) {
-        // reached the duplicate set: snap the reveal, then jump back invisibly
-        goTo(index, true);
-        setTimeout(() => { index = 0; goTo(0, false); }, 520);
-      } else {
-        goTo(index, true);
+      goTo(index, true);
+      if (index >= uniqueCount * 2) {
+        // entered the third set: after the step finishes, jump invisibly
+        // back to the equivalent position in the middle set — loop never ends
+        setTimeout(() => { index -= uniqueCount; goTo(index, false); }, 520);
       }
     }, 2600);
 
