@@ -231,12 +231,11 @@
     mask-image: linear-gradient(90deg, black 0%, black 88%, transparent 100%);
     -webkit-mask-image: linear-gradient(90deg, black 0%, black 88%, transparent 100%);
   }
-  .partners-track{
-    display: flex; align-items: center; gap: 48px; width: max-content;
-    animation: partnersscroll 26s linear infinite;
-  }
-  .partners-track:hover{ animation-play-state: paused; }
-  @keyframes partnersscroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+.partners-track{
+  display: flex; align-items: center; gap: 48px; width: max-content;
+  animation: partnersscroll 26s linear infinite;
+}
+@keyframes partnersscroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
   .partner-logo-img{
     height: 26px; width: auto; object-fit: contain; flex-shrink: 0;
     opacity: 0.92; transition: opacity .2s ease;
