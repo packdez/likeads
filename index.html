@@ -234,6 +234,26 @@
     opacity: 0; animation-name: loopfade; animation-timing-function: ease-in-out; animation-iteration-count: infinite;
   }
   @keyframes loopfade{ 0%{opacity:0;} 6%{opacity:1;} 40%{opacity:1;} 46%{opacity:0;} 100%{opacity:0;} }
+
+
+
+    /* ---------- sliding image row ---------- */
+  .slide-mask{ mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent); }
+  .slide-track{ display: flex; gap: 20px; width: max-content; animation: slideleft 32s linear infinite; }
+  .slide-track:hover{ animation-play-state: paused; }
+  @keyframes slideleft{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+  .slide-card{
+    position: relative; width: 300px; height: 380px; flex-shrink: 0;
+    border-radius: 18px; overflow: hidden;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
+    border: 1px solid var(--line-onink-soft);
+  }
+  .slide-card img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .slide-card .slide-overlay{
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 32%, transparent 75%);
+  }
+  .slide-card .slide-label{ position: absolute; left: 0; right: 0; bottom: 0; padding: 20px; }
 </style>
 </head>
 
@@ -311,82 +331,80 @@
       </div>
     </div>
 
-       <!-- three-card looping mockup row -->
-    <div class="reveal relative z-10 mt-10 sm:mt-14 max-w-6xl mx-auto px-5">
-      <div class="flex flex-col sm:flex-row items-center sm:items-end justify-center gap-4">
+          <!-- sliding image row -->
+    <div class="reveal relative z-10 mt-10 sm:mt-14 slide-mask">
+      <div class="slide-track">
 
-        <!-- left card -->
-        <div class="loop-card hidden sm:block w-full sm:w-[26%]">
-          <div class="loop-screen aspect-[3/4]">
-            <div class="loop-slide" style="animation-duration:8s; animation-delay:0s;">
-              <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
-              <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_30%,transparent_75%)] -z-10"></div>
-              <span class="text-[10px] tracked uppercase text-white/70 mb-1">Partner dashboard</span>
-              <span class="font-tight font-semibold text-[15px] text-white">Approve ads in 1 click</span>
-            </div>
-            <div class="loop-slide" style="animation-duration:8s; animation-delay:4s;">
-              <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
-              <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_30%,transparent_75%)] -z-10"></div>
-              <span class="text-[10px] tracked uppercase text-white/70 mb-1">Partner dashboard</span>
-              <span class="font-tight font-semibold text-[15px] text-white">Track revenue share</span>
-            </div>
+        <div class="slide-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
           </div>
         </div>
 
-        <!-- center card -->
-        <div class="loop-card w-full sm:w-[42%] sm:-mt-10 z-10">
-          <div class="flex items-center justify-between px-1 pb-2.5">
-            <div class="flex items-center gap-2">
-              <span class="live-dot"></span>
-              <span class="text-[11px] tracked uppercase muted-onink">Live · Screen #04</span>
-            </div>
-            <i data-lucide="wifi" class="w-3.5 h-3.5 faint-onink"></i>
-          </div>
-          <div class="loop-screen aspect-[16/11]">
-            <div class="loop-slide" style="animation-duration:12s; animation-delay:0s;">
-              <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
-              <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_30%,transparent_75%)] -z-10"></div>
-              <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
-              <span class="font-tight font-semibold text-[22px] text-white">Chez Rachelle Traiteur</span>
-              <span class="text-[12px] text-white/55 mt-1">Weekend promo · 3-day run</span>
-            </div>
-            <div class="loop-slide" style="animation-duration:12s; animation-delay:4s;">
-              <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
-              <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_30%,transparent_75%)] -z-10"></div>
-              <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
-              <span class="font-tight font-semibold text-[22px] text-white">Pharmacie du Phare</span>
-              <span class="text-[12px] text-white/55 mt-1">Peak hours · 6am–9am</span>
-            </div>
-            <div class="loop-slide" style="animation-duration:12s; animation-delay:8s;">
-              <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
-              <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_30%,transparent_75%)] -z-10"></div>
-              <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
-              <span class="font-tight font-semibold text-[22px] text-white">Boutique Wax &amp; Co</span>
-              <span class="text-[12px] text-white/55 mt-1">Funded via MTN MoMo</span>
-            </div>
-            <div class="scanline"></div>
-            <div class="ticker-bar px-4 py-2.5 flex items-center justify-between text-[11px]">
-              <span class="muted-onink">IMPRESSIONS <span id="ticker-count" class="text-white font-medium">12,482</span></span>
-              <span class="text-[var(--amber)]">● live</span>
-            </div>
+        <div class="slide-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
           </div>
         </div>
 
-        <!-- right card -->
-        <div class="loop-card hidden sm:block w-full sm:w-[26%]">
-          <div class="loop-screen aspect-[3/4]">
-            <div class="loop-slide" style="animation-duration:8s; animation-delay:0s;">
-              <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
-              <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_30%,transparent_75%)] -z-10"></div>
-              <span class="text-[10px] tracked uppercase text-white/70 mb-1">Screen network</span>
-              <span class="font-tight font-semibold text-[15px] text-white">Live map of Cotonou</span>
-            </div>
-            <div class="loop-slide" style="animation-duration:8s; animation-delay:4s;">
-              <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
-              <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_30%,transparent_75%)] -z-10"></div>
-              <span class="text-[10px] tracked uppercase text-white/70 mb-1">Screen network</span>
-              <span class="font-tight font-semibold text-[15px] text-white">40+ screens in Cotonou</span>
-            </div>
+        <div class="slide-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
+          </div>
+        </div>
+
+        <div class="slide-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
+          </div>
+        </div>
+
+        <!-- duplicate set — required for a seamless loop -->
+        <div class="slide-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Chez Rachelle Traiteur</span>
+          </div>
+        </div>
+
+        <div class="slide-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-1 block">Now showing</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Pharmacie du Phare</span>
+          </div>
+        </div>
+
+        <div class="slide-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Tunmi.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Partner dashboard</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Approve ads in 1 click</span>
+          </div>
+        </div>
+
+        <div class="slide-card">
+          <img src="https://raw.githubusercontent.com/Levinders/Spreadsheet-CRM-images/refs/heads/main/Christian.png" alt="">
+          <div class="slide-overlay"></div>
+          <div class="slide-label">
+            <span class="text-[10px] tracked uppercase text-white/70 mb-1 block">Screen network</span>
+            <span class="font-tight font-semibold text-[18px] text-white">Live map of Cotonou</span>
           </div>
         </div>
 
