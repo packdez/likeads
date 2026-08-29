@@ -248,7 +248,7 @@
     transition: transform .5s cubic-bezier(.65,0,.35,1), height .5s cubic-bezier(.65,0,.35,1);
     will-change: transform;
   }
-    .coverflow-card:not(.is-center){ aspect-ratio: 16/9.2; align-self: center; }
+    .coverflow-card:not(.is-center){ aspect-ratio: 16/9.7; align-self: center; }
   .coverflow-card.is-center{ border-radius: 14px; transform: scale(1.14); z-index: 5; }
   .coverflow-card img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .coverflow-card .slide-overlay{
@@ -879,19 +879,31 @@
       if (!animate) cfTrack.offsetHeight; // force reflow so the "none" transition actually applies
     }
 
-    goTo(index, false);
+        goTo(index, false);
 
-    setInterval(() => {
+    let cfTimer = null;
+    function step() {
       index++;
       goTo(index, true);
       if (index >= uniqueCount * 2) {
-        // entered the third set: after the step finishes, jump invisibly
-        // back to the equivalent position in the middle set — loop never ends
         setTimeout(() => { index -= uniqueCount; goTo(index, false); }, 520);
       }
-    }, 2600);
+    }
+    function startAutoplay() {
+      if (cfTimer) return; // already running
+      cfTimer = setInterval(step, 2600);
+    }
+    function stopAutoplay() {
+      clearInterval(cfTimer);
+      cfTimer = null;
+    }
+
+    startAutoplay();
+    cfViewport.addEventListener('mouseenter', stopAutoplay);
+    cfViewport.addEventListener('mouseleave', startAutoplay);
 
     window.addEventListener('resize', () => goTo(index, false));
+    
   }
   
 </script>
