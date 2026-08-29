@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create your LikeAds account</title>
+<meta name="description" content="Sign up as an advertiser or a screen partner on LikeAds — launching soon in Cotonou.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink: #0B0B0C;
+    --paper: #F0ECE3;
+    --text-onpaper: #17140F;
+    --muted-onpaper: rgba(23,20,15,0.62);
+    --faint-onpaper: rgba(23,20,15,0.38);
+    --line-onpaper: rgba(23,20,15,0.14);
+    --line-onpaper-strong: rgba(23,20,15,0.22);
+    --amber: #E8A93A;
+    --amber-soft: rgba(232,169,58,0.16);
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    background: var(--paper);
+    color: var(--text-onpaper);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-tight{ font-family: 'Inter Tight', 'Inter', sans-serif; letter-spacing: -0.02em; }
+  .tracked{ letter-spacing: 0.10em; }
+  ::selection{ background: var(--amber); color: #1a1305; }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px;
+  }
+
+  .top-link{ color: var(--muted-onpaper); transition: color .2s ease; }
+  .top-link:hover{ color: var(--text-onpaper); }
+  .top-link:disabled{ opacity: .35; pointer-events: none; }
+
+  /* ---------- progress bar ---------- */
+  .progress-track{ height: 3px; background: var(--line-onpaper); border-radius: 2px; overflow: hidden; }
+  .progress-fill{ height: 100%; background: var(--ink); border-radius: 2px; transition: width .35s cubic-bezier(.4,0,.2,1); width: 0%; }
+
+  /* ---------- step transitions ---------- */
+  .step{ display: none; }
+  .step.active{ display: block; animation: stepIn .35s cubic-bezier(.2,.7,.2,1); }
+  @keyframes stepIn{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform: translateY(0);} }
+
+  /* ---------- role cards ---------- */
+  .role-card{
+    display: flex; align-items: flex-start; gap: 16px; text-align: left; width: 100%;
+    padding: 22px; border-radius: 14px; border: 1.5px solid var(--line-onpaper-strong);
+    background: transparent; transition: border-color .2s ease, background-color .2s ease, transform .15s ease;
+  }
+  .role-card:hover{ border-color: var(--text-onpaper); background: rgba(23,20,15,0.03); transform: translateY(-1px); }
+  .role-icon{
+    width: 44px; height: 44px; border-radius: 10px; background: var(--amber-soft);
+    display: grid; place-items: center; flex-shrink: 0;
+  }
+
+  /* ---------- fields ---------- */
+  .field-label{
+    font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--faint-onpaper); display: block; margin-bottom: 8px;
+  }
+  .field-input, .field-select, .field-textarea{
+    width: 100%; background: transparent; border: none; border-bottom: 1.5px solid var(--line-onpaper-strong);
+    padding: 8px 0; font-size: 15px; color: var(--text-onpaper); outline: none;
+    transition: border-color .2s ease;
+  }
+  .field-input::placeholder, .field-textarea::placeholder{ color: var(--faint-onpaper); }
+  .field-input:focus, .field-select:focus, .field-textarea:focus{ border-bottom-color: var(--amber); }
+  .field-textarea{ resize: none; font-family: inherit; }
+  .field-select{ appearance: none; -webkit-appearance: none; background-image: none; cursor: pointer; }
+  .select-wrap{ position: relative; }
+  .select-wrap i{ position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: var(--faint-onpaper); pointer-events: none; }
+
+  /* ---------- buttons ---------- */
+  .btn-primary{
+    padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 14.5px;
+    background: var(--ink); color: #F5F3EE;
+    transition: background-color .2s ease, transform .15s ease, opacity .2s ease;
+  }
+  .btn-primary:hover{ background: #232320; transform: translateY(-1px); }
+  .btn-primary:active{ transform: translateY(0); }
+  .btn-primary:disabled{ opacity: .4; pointer-events: none; }
+  .btn-primary .spinner{ display: none; }
+  .btn-primary.is-loading .spinner{ display: inline-block; }
+  .btn-primary.is-loading .btn-label{ opacity: .6; }
+
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .spinner{ width: 14px; height: 14px; border: 2px solid rgba(245,243,238,.35); border-top-color: #F5F3EE; border-radius: 50%; animation: spin .7s linear infinite; }
+
+  /* ---------- success screen ---------- */
+  .success-icon{
+    width: 64px; height: 64px; border-radius: 50%; background: var(--amber-soft);
+    display: grid; place-items: center; margin: 0 auto;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="flex items-center justify-between py-6 sm:py-8">
+    <button id="back-btn" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium" type="button">
+      <i data-lucide="chevron-left" class="w-4 h-4"></i> Back
+    </button>
+    <a href="login.html" class="top-link text-[13px] tracked uppercase font-medium">Log In</a>
+  </header>
+
+  <!-- ============ PROGRESS BAR ============ -->
+  <div id="progress-wrap" class="max-w-md mx-auto mb-2">
+    <div class="progress-track">
+      <div id="progress-fill" class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- ============ WIZARD ============ -->
+  <main class="max-w-xl mx-auto pt-10 sm:pt-14 pb-24">
+
+    <!-- ===== STEP 1: role ===== -->
+    <section class="step active" data-step="role">
+      <div class="text-center mb-10">
+        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">How will you use LikeAds?</h1>
+        <p class="muted-onpaper text-[15px]" style="color:var(--muted-onpaper)">We'll tailor a couple of quick questions to get you set up.</p>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <button type="button" class="role-card" data-role="advertiser">
+          <span class="role-icon"><i data-lucide="megaphone" class="w-5 h-5" style="color:var(--amber)"></i></span>
+          <span>
+            <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm an Advertiser</span>
+            <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I want to put my business on outdoor screens.</span>
+          </span>
+        </button>
+        <button type="button" class="role-card" data-role="partner">
+          <span class="role-icon"><i data-lucide="tv-minimal" class="w-5 h-5" style="color:var(--amber)"></i></span>
+          <span>
+            <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm a Screen Partner</span>
+            <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I own or manage a screen network with unsold airtime.</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== STEP 2a: advertiser details ===== -->
+    <section class="step" data-step="advertiser-details">
+      <div class="text-center mb-10">
+        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">Tell us about your business.</h1>
+        <p style="color:var(--muted-onpaper)" class="text-[15px]">This helps us match you with the right screens at launch.</p>
+      </div>
+
+      <form id="advertiser-details-form" class="space-y-6" novalidate>
+        <div>
+          <label class="field-label" for="adv-business-name">Business name</label>
+          <input id="adv-business-name" type="text" class="field-input" placeholder="e.g. Chez Rachelle Traiteur" required>
+        </div>
+        <div>
+          <label class="field-label" for="adv-category">Business category</label>
+          <div class="select-wrap">
+            <select id="adv-category" class="field-select" required>
+              <option value="" disabled selected>Select a category</option>
+              <option>Restaurant</option>
+              <option>Pharmacy</option>
+              <option>Salon & Beauty</option>
+              <option>Retail</option>
+              <option>Event</option>
+              <option>Other</option>
+            </select>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div>
+          <label class="field-label" for="adv-area">Area in Cotonou</label>
+          <input id="adv-area" type="text" class="field-input" placeholder="e.g. Cadjehoun, Akpakpa, Fidjrossè" required>
+        </div>
+
+        <button type="submit" class="btn-primary w-full mt-2">
+          <span class="btn-label">Continue</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ===== STEP 2b: partner details ===== -->
+    <section class="step" data-step="partner-details">
+      <div class="text-center mb-10">
+        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">Tell us about your screens.</h1>
+        <p style="color:var(--muted-onpaper)" class="text-[15px]">This helps us onboard your network first at launch.</p>
+      </div>
+
+      <form id="partner-details-form" class="space-y-6" novalidate>
+        <div>
+          <label class="field-label" for="par-network-name">Network / business name</label>
+          <input id="par-network-name" type="text" class="field-input" placeholder="e.g. Canal Com Bénin" required>
+        </div>
+        <div>
+          <label class="field-label" for="par-screen-count">Number of screens</label>
+          <input id="par-screen-count" type="number" min="1" class="field-input" placeholder="e.g. 6" required>
+        </div>
+        <div>
+          <label class="field-label" for="par-screen-type">Screen type</label>
+          <div class="select-wrap">
+            <select id="par-screen-type" class="field-select" required>
+              <option value="" disabled selected>Select a type</option>
+              <option>LED billboard</option>
+              <option>Transparent LCD</option>
+              <option>Indoor display</option>
+              <option>Mixed / other</option>
+            </select>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div>
+          <label class="field-label" for="par-locations">Screen locations</label>
+          <textarea id="par-locations" rows="2" class="field-textarea" placeholder="e.g. Cadjehoun Clinic, Erevan Market" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary w-full mt-2">
+          <span class="btn-label">Continue</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ===== STEP 3: contact (shared) ===== -->
+    <section class="step" data-step="contact">
+      <div class="text-center mb-10">
+        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">How do we reach you?</h1>
+        <p style="color:var(--muted-onpaper)" class="text-[15px]">We'll notify you the moment we launch in Cotonou.</p>
+      </div>
+
+      <form id="contact-form" class="space-y-6" novalidate>
+        <div>
+          <label class="field-label" for="con-full-name">Full name</label>
+          <input id="con-full-name" type="text" class="field-input" placeholder="Your name" required>
+        </div>
+        <div>
+          <label class="field-label" for="con-phone">Phone number</label>
+          <input id="con-phone" type="tel" class="field-input" placeholder="e.g. 97 00 00 00" required>
+        </div>
+        <div>
+          <label class="field-label" for="con-email">Email address</label>
+          <input id="con-email" type="email" class="field-input" placeholder="name@example.com" required>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn-primary w-full mt-2 flex items-center justify-center gap-2">
+          <span class="spinner"></span>
+          <span class="btn-label">Submit</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ===== STEP 4: done ===== -->
+    <section class="step" data-step="done">
+      <div class="text-center">
+        <div class="success-icon mb-6">
+          <i data-lucide="check" class="w-7 h-7" style="color:var(--amber)"></i>
+        </div>
+        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">You're on the list.</h1>
+        <p style="color:var(--muted-onpaper)" class="text-[15px] max-w-sm mx-auto leading-relaxed">
+          LikeAds is launching soon in Cotonou. We'll email and text you the moment we're live, so you can be among the first on the network.
+        </p>
+        <a href="index.html" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium mt-8">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to LikeAds
+        </a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  /* =====================================================================
+     GOOGLE SHEETS SUBMISSION
+     -------------------------------------------------------------------
+     1. Create a Google Sheet (any name).
+     2. In it: Extensions > Apps Script, paste the doPost script provided
+        alongside this file, then Deploy > New deployment > Web app.
+        - Execute as: Me
+        - Who has access: Anyone
+     3. Copy the resulting Web App URL and paste it below.
+     Advertiser and Partner submissions are written to separate tabs
+     ("Advertisers" / "Partners") in that same sheet automatically.
+  ===================================================================== */
+  const GAS_URL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+  const steps = ['role', 'advertiser-details', 'partner-details', 'contact', 'done'];
+  const stepEls = {};
+  steps.forEach(name => { stepEls[name] = document.querySelector(`.step[data-step="${name}"]`); });
+
+  // the *sequence* a given session actually walks through, built once a role is picked
+  let flow = ['role'];
+  let flowIndex = 0;
+  let role = null;
+  const answers = {};
+
+  const progressFill = document.getElementById('progress-fill');
+  const progressWrap = document.getElementById('progress-wrap');
+  const backBtn = document.getElementById('back-btn');
+
+  function renderStep() {
+    const current = flow[flowIndex];
+    Object.values(stepEls).forEach(el => el.classList.remove('active'));
+    stepEls[current].classList.add('active');
+
+    // progress: hide on the final "done" screen, otherwise show step (n / total-1)
+    const totalDataSteps = flow.length - 1; // exclude "done" from the denominator
+    if (current === 'done') {
+      progressWrap.style.display = 'none';
+    } else {
+      progressWrap.style.display = '';
+      progressFill.style.width = `${(flowIndex / totalDataSteps) * 100}%`;
+    }
+
+    backBtn.disabled = flowIndex === 0;
+  }
+
+  function goNext() {
+    flowIndex++;
+    renderStep();
+  }
+  function goBack() {
+    if (flowIndex === 0) return;
+    flowIndex--;
+    renderStep();
+  }
+  backBtn.addEventListener('click', goBack);
+
+  // ---- step 1: role selection ----
+  document.querySelectorAll('.role-card').forEach(card => {
+    card.addEventListener('click', () => {
+      role = card.dataset.role;
+      answers.type = role;
+      flow = role === 'advertiser'
+        ? ['role', 'advertiser-details', 'contact', 'done']
+        : ['role', 'partner-details', 'contact', 'done'];
+      goNext();
+    });
+  });
+
+  // ---- step 2a: advertiser details ----
+  document.getElementById('advertiser-details-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    answers.businessName = document.getElementById('adv-business-name').value.trim();
+    answers.category = document.getElementById('adv-category').value;
+    answers.area = document.getElementById('adv-area').value.trim();
+    goNext();
+  });
+
+  // ---- step 2b: partner details ----
+  document.getElementById('partner-details-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    answers.networkName = document.getElementById('par-network-name').value.trim();
+    answers.screenCount = document.getElementById('par-screen-count').value;
+    answers.screenType = document.getElementById('par-screen-type').value;
+    answers.screenLocations = document.getElementById('par-locations').value.trim();
+    goNext();
+  });
+
+  // ---- step 3: contact + submit to Google Sheets ----
+  const submitBtn = document.getElementById('submit-btn');
+  document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    answers.fullName = document.getElementById('con-full-name').value.trim();
+    answers.phone = document.getElementById('con-phone').value.trim();
+    answers.email = document.getElementById('con-email').value.trim();
+
+    submitBtn.classList.add('is-loading');
+    submitBtn.disabled = true;
+
+    try {
+      // Apps Script web apps don't support JSON + CORS preflight from the browser,
+      // so we send as text/plain (no preflight) and parse JSON on the server side.
+      await fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(answers)
+      });
+      // 'no-cors' mode means we can't read the response — treat the fetch
+      // resolving (vs. throwing) as success and move to the confirmation step.
+      goNext();
+    } catch (err) {
+      console.error('Signup submission failed', err);
+      submitBtn.classList.remove('is-loading');
+      submitBtn.disabled = false;
+      alert("Something went wrong sending your details. Please try again.");
+    }
+  });
+
+  renderStep();
+</script>
+
+</body>
+</html>
