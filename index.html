@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -122,20 +123,22 @@
   /* ---------- hero video background + overlapping mockup stack ---------- */
   .hero-video-wrap{
     position: absolute; inset: 0; overflow: hidden;
-    background: linear-gradient(180deg, #1a1917 0%, #0B0B0C 70%);
+    background: linear-gradient(180deg, #1a1917 0%, #0B0B0C 70%); /* fallback while video loads / if it fails */
   }
   .hero-video-wrap video{
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; object-position: center 40%;
-    opacity: 0.25;
+    opacity: 0.5; /* keeps the headline legible over the footage */
     filter: saturate(0.85) brightness(0.9);
   }
+  /* darken for text contrast, top and centre */
   .hero-video-scrim{
     position: absolute; inset: 0;
     background:
       radial-gradient(ellipse 70% 55% at 50% 15%, rgba(11,11,12,0.55), transparent 60%),
       linear-gradient(180deg, rgba(11,11,12,0.35) 0%, rgba(11,11,12,0.15) 35%, rgba(11,11,12,0.55) 70%);
   }
+  /* smooth fade into the ink section that follows */
   .hero-video-fade{
     position: absolute; left: 0; right: 0; bottom: 0; height: 45%;
     background: linear-gradient(180deg, transparent, var(--ink) 92%);
@@ -152,7 +155,7 @@
     border: 1px dashed var(--line-onink);
   }
 
-  /* ---------- billboard live-screen mockup ---------- */
+  /* ---------- billboard live-screen mockup (center card content) ---------- */
   .billboard-screen{
     position: relative; border-radius: 14px; overflow: hidden;
     aspect-ratio: 16/11; background: #050710; border: 1px solid rgba(255,255,255,0.06);
@@ -162,64 +165,133 @@
     display: flex; flex-direction: column; justify-content: flex-end;
     opacity: 0; animation: adcycle 9s infinite;
   }
-  .ad-slide.s1{ background: radial-gradient(circle at 25% 20%, rgba(232,169,58,0.15), #0b0f19 70%); animation-delay: 0s; }
-  .ad-slide.s2{ background: radial-gradient(circle at 75% 30%, rgba(59,130,246,0.15), #0b0f19 70%); animation-delay: 3s; }
-  .ad-slide.s3{ background: radial-gradient(circle at 50% 80%, rgba(139,92,246,0.15), #0b0f19 70%); animation-delay: 6s; }
+  .ad-slide.s1{ background: radial-gradient(circle at 25% 20%, rgba(232,169,58,0.30), #0b0f19 70%); animation-delay: 0s; }
+  .ad-slide.s2{ background: radial-gradient(circle at 75% 30%, rgba(232,169,58,0.22), #0b0f19 70%); animation-delay: 3s; }
+  .ad-slide.s3{ background: radial-gradient(circle at 50% 80%, rgba(232,169,58,0.26), #0b0f19 70%); animation-delay: 6s; }
   @keyframes adcycle{ 0%{opacity:0;} 3%{opacity:1;} 30%{opacity:1;} 36%{opacity:0;} 100%{opacity:0;} }
 
   .scanline{
     position: absolute; left:0; right:0; height: 40%;
-    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.04), transparent);
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06), transparent);
     animation: sweep 5s linear infinite; pointer-events: none;
   }
   @keyframes sweep{ 0%{ top:-40%; } 100%{ top:100%; } }
 
   .live-dot{
     width:7px; height:7px; border-radius:50%; background:#E8A93A;
-    box-shadow: 0 0 8px 1px #E8A93A;
-    animation: pulse 1.8s infinite;
+    box-shadow: 0 0 8px 1px rgba(232,169,58,0.7);
+    animation: blink 1.6s ease-in-out infinite;
   }
-  @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  .ticker-bar{
+    position: absolute; left:0; right:0; bottom:0;
+    background: rgba(5,7,16,0.85); backdrop-filter: blur(6px);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- bento feature card ---------- */
+  .bento-card{
+    background: var(--ink); border: 1px solid rgba(245,243,238,0.08);
+    transition: border-color .25s ease, transform .25s ease;
+  }
+  .bento-card:hover{ border-color: rgba(245,243,238,0.24); transform: translateY(-3px); }
+
+  /* ---------- how it works list ---------- */
+  .step-row{ border-top: 1px solid var(--line-onink); }
+  .step-row:last-child{ border-bottom: 1px solid var(--line-onink); }
+
+  /* ---------- accordion ---------- */
+  .accordion-item{ border-top: 1px solid var(--line-onink); }
+  .accordion-item:last-child{ border-bottom: 1px solid var(--line-onink); }
+  .accordion-panel{ max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .accordion-btn .plus-icon{ transition: transform .3s ease; }
+  .accordion-item.open .plus-icon{ transform: rotate(45deg); }
+
+  /* ---------- mobile menu ---------- */
+  #mobile-menu{ max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  #mobile-menu.open{ max-height: 340px; }
+
+  .success-check{ animation: pop .4s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes pop{ 0%{ transform: scale(0); opacity:0; } 70%{ transform: scale(1.15); opacity:1; } 100%{ transform: scale(1); } }
+
+  /* floating chip on partner card */
+  .float-chip{
+    background: var(--paper); color: var(--text-onpaper);
+    box-shadow: 0 12px 28px -10px rgba(0,0,0,0.35);
+  }
+
+
+    /* ---------- partner logo marquee ---------- */
+  .partners-row{ display: flex; align-items: center; gap: 28px; }
+  .partners-label{ flex-shrink: 0; white-space: nowrap; }
+  .partners-mask{
+    flex: 1; min-width: 0; overflow: hidden;
+    mask-image: linear-gradient(90deg, black 0%, black 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, black 0%, black 88%, transparent 100%);
+  }
+.partners-track{
+  display: flex; align-items: center; gap: 48px; width: max-content;
+  animation: partnersscroll 26s linear infinite;
+}
+@keyframes partnersscroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+  .partner-logo-img{
+    height: 50px; width: auto; object-fit: contain; flex-shrink: 0;
+    opacity: 0.92; transition: opacity .2s ease;
+  }
+  .partner-logo-img:hover{ opacity: 1; }
+  
 </style>
 </head>
+
 <body>
 
-  <!-- NAVIGATION -->
-  <nav id="navbar" class="nav-shell fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2.5 group">
-        <div class="logo-mark flex items-center justify-center text-[var(--amber)]">
-          <i data-lucide="layers" class="w-6 h-6"></i>
-        </div>
-        <span class="font-tight text-xl font-bold tracking-tight text-[var(--text-onink)]">LikeAds</span>
+<!-- ============ NAV ============ -->
+<header id="site-header" class="nav-shell fixed top-0 inset-x-0 z-50">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="flex items-center justify-between h-16">
+
+      <a href="#top" class="flex items-center gap-2.5 shrink-0">
+        <span class="logo-mark">
+          <svg viewBox="0 0 26 26" fill="none">
+            <rect x="1" y="4" width="24" height="15" rx="3" stroke="#F5F3EE" stroke-width="1.6"/>
+            <rect x="9" y="22" width="8" height="1.6" rx="0.8" fill="#F5F3EE"/>
+            <circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/>
+          </svg>
+        </span>
+        <span class="font-tight font-semibold text-[16.5px]">LikeAds</span>
       </a>
 
-      <!-- Desktop Links -->
-      <div class="hidden md:flex items-center gap-8">
-        <a href="#features" class="nav-link text-sm font-medium">Features</a>
-        <a href="#how-it-works" class="nav-link text-sm font-medium">How It Works</a>
-        <a href="#partners" class="nav-link text-sm font-medium">Screen Partners</a>
+      <nav class="hidden md:flex items-center gap-8 text-[13px] tracked uppercase">
+        <a href="#how-it-works" class="nav-link">How to advertise</a>
+        <a href="#partners" class="nav-link">Screen Partners</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+      </nav>
+
+      <div class="hidden md:flex items-center gap-6">
+        <a href="#" class="text-[13px] tracked uppercase nav-link">Log In</a>
+        <a href="#waitlist" class="pill-white rounded-full px-5 py-2.5 text-[13px]">Get Early Access</a>
       </div>
 
-      <div class="hidden md:flex items-center">
-        <a href="#waitlist" class="pill-white text-xs px-5 py-2.5 rounded-full">Get Early Access</a>
-      </div>
-
-      <!-- Mobile Burger Trigger -->
-      <button id="mobile-toggle" class="md:hidden flex text-[var(--text-onink)] focus:outline-none" aria-label="Toggle Menu">
+      <button id="menu-toggle" class="md:hidden p-2 -mr-2" aria-label="Toggle menu" aria-expanded="false">
         <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
       </button>
     </div>
 
-    <!-- Mobile Drawer -->
-    <div id="mobile-menu" class="hidden md:hidden bg-[var(--ink)] border-b border-gray-800 px-6 py-6 flex flex-col gap-5">
-      <a href="#features" class="nav-link text-base font-medium mobile-nav-item">Features</a>
-      <a href="#how-it-works" class="nav-link text-base font-medium mobile-nav-item">How It Works</a>
-      <a href="#partners" class="nav-link text-base font-medium mobile-nav-item">Screen Partners</a>
-      <a href="#waitlist" class="pill-white text-sm text-center py-3 rounded-full mt-2 mobile-nav-item">Get Early Access</a>
+    <div id="mobile-menu" class="md:hidden">
+      <nav class="flex flex-col gap-1 pb-5 text-[15px]">
+        <a href="#features" class="nav-link py-2.5 border-t line-onink">Features</a>
+        <a href="#how-it-works" class="nav-link py-2.5 border-t line-onink">How It Works</a>
+        <a href="#partners" class="nav-link py-2.5 border-t line-onink">Screen Partners</a>
+        <a href="#pricing" class="nav-link py-2.5 border-t line-onink">Pricing</a>
+        <a href="#waitlist" class="pill-white rounded-full px-5 py-2.5 text-center mt-3">Get Early Access</a>
+      </nav>
     </div>
-  </nav>
+  </div>
+</header>
 
+<main id="top">
 
 <!-- ============ HERO ============ -->
 <section class="section-ink relative overflow-hidden">
