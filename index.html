@@ -119,19 +119,28 @@
     *{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
   }
 
-  /* ---------- hero photo + overlapping mockup stack ---------- */
-  .hero-photo{
-    background:
-      radial-gradient(ellipse 70% 55% at 50% 20%, rgba(232,169,58,0.10), transparent 60%),
-      repeating-linear-gradient(135deg, rgba(245,243,238,0.025) 0px, rgba(245,243,238,0.025) 12px, transparent 12px, transparent 24px),
-      linear-gradient(180deg, #1a1917 0%, #0B0B0C 65%);
-    border-bottom: 1px solid var(--line-onink-soft);
+  /* ---------- hero video background + overlapping mockup stack ---------- */
+  .hero-video-wrap{
+    position: absolute; inset: 0; overflow: hidden;
+    background: linear-gradient(180deg, #1a1917 0%, #0B0B0C 70%); /* fallback while video loads / if it fails */
   }
-  .hero-photo::after{
-    content:'Hero background photo — replace this layer';
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    color: var(--faint-onink); font-size:11px; letter-spacing:.08em; text-transform:uppercase; text-align:center; padding:0 20px;
-    opacity:.55;
+  .hero-video-wrap video{
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center 40%;
+    opacity: 0.5; /* keeps the headline legible over the footage */
+    filter: saturate(0.85) brightness(0.9);
+  }
+  /* darken for text contrast, top and centre */
+  .hero-video-scrim{
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 15%, rgba(11,11,12,0.55), transparent 60%),
+      linear-gradient(180deg, rgba(11,11,12,0.35) 0%, rgba(11,11,12,0.15) 35%, rgba(11,11,12,0.55) 70%);
+  }
+  /* smooth fade into the ink section that follows */
+  .hero-video-fade{
+    position: absolute; left: 0; right: 0; bottom: 0; height: 45%;
+    background: linear-gradient(180deg, transparent, var(--ink) 92%);
   }
 
   .mock-card{
@@ -265,9 +274,22 @@
 
 <!-- ============ HERO ============ -->
 <section class="section-ink relative overflow-hidden">
-  <div class="hero-photo relative pt-40 pb-40 sm:pb-48">
+  <div class="relative pt-40 pb-40 sm:pb-48">
+
+    <!-- video background: replace src with your own footage (screen network / city at night works well) -->
+    <div class="hero-video-wrap">
+      <video id="hero-video" autoplay muted loop playsinline
+             poster="">
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-scrim"></div>
+      <div class="hero-video-fade"></div>
+    </div>
+
     <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
       <div class="reveal inline-flex items-center gap-2 text-[12px] tracked uppercase muted-onink border line-onink rounded-full px-4 py-1.5 mb-8 bg-[var(--ink)]/60 backdrop-blur">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--amber)]"></span>
+        Self-serve DOOH · Cotonou
       </div>
 
       <h1 class="reveal font-tight font-semibold text-[38px] leading-[1.08] sm:text-[52px] lg:text-[58px]">
@@ -659,6 +681,15 @@
 
 <script>
   lucide.createIcons();
+
+  // hero video: play back slower for a gentle slow-motion feel, and
+  // fail quietly to the gradient background if the source can't load
+  const heroVideo = document.getElementById('hero-video');
+  if (heroVideo) {
+    heroVideo.playbackRate = 0.5;
+    heroVideo.addEventListener('loadedmetadata', () => { heroVideo.playbackRate = 0.5; });
+    heroVideo.addEventListener('error', () => { heroVideo.style.display = 'none'; });
+  }
 
   const header = document.getElementById('site-header');
   window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 8));
