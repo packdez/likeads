@@ -237,19 +237,16 @@
 
     /* ---------- coverflow hero row: ~3 cards visible, center scales up ---------- */
   .coverflow-viewport{
-    max-width: 860px; margin: 0 auto; overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+    width: 100%; overflow: hidden;
+    /* no mask — edges crop cleanly, full-bleed, like Squarespace's version */
   }
-  .coverflow-track{ display: flex; align-items: center; gap: 20px; width: max-content; animation: coverflowscroll 34s linear infinite; }
+  .coverflow-track{ display: flex; align-items: center; gap: 24px; width: max-content; animation: coverflowscroll 34s linear infinite; }
   .coverflow-track:hover{ animation-play-state: paused; }
   @keyframes coverflowscroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
   .coverflow-card{
-    position: relative; width: 260px; height: 340px; flex-shrink: 0;
-    border-radius: 18px; overflow: hidden;
-    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
-    border: 1px solid var(--line-onink-soft);
-    transform: scale(0.82);
+    position: relative; width: 760px; height: 480px; flex-shrink: 0;
+    border-radius: 14px; overflow: hidden;
+    transform: scale(0.86);
     transition: transform .35s ease;
     will-change: transform;
   }
@@ -830,7 +827,7 @@
   const cfTrack = document.getElementById('coverflow-track');
   if (cfTrack) {
     const cfViewport = cfTrack.parentElement;
-    const MIN_SCALE = 0.82, MAX_SCALE = 1.18, FALLOFF = 220; // px — how far the scale-up reaches
+    const MIN_SCALE = 0.86, MAX_SCALE = 1.08, FALLOFF = 420; // px — how far the scale-up reaches
     function updateCoverflow() {
       const vRect = cfViewport.getBoundingClientRect();
       const viewportCenter = vRect.left + vRect.width / 2;
