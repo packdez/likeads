@@ -119,16 +119,66 @@
     *{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
   }
 
-  /* ---------- hero filmstrip ---------- */
-  .filmstrip-mask{ mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); }
-  .filmstrip-track{ display: flex; gap: 16px; width: max-content; animation: scrollstrip 38s linear infinite; }
-  .filmstrip-track:hover{ animation-play-state: paused; }
-  @keyframes scrollstrip{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+  /* ---------- hero photo + overlapping mockup stack ---------- */
+  .hero-photo{
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 20%, rgba(232,169,58,0.10), transparent 60%),
+      repeating-linear-gradient(135deg, rgba(245,243,238,0.025) 0px, rgba(245,243,238,0.025) 12px, transparent 12px, transparent 24px),
+      linear-gradient(180deg, #1a1917 0%, #0B0B0C 65%);
+    border-bottom: 1px solid var(--line-onink-soft);
+  }
+  .hero-photo::after{
+    content:'Hero background photo — replace this layer';
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color: var(--faint-onink); font-size:11px; letter-spacing:.08em; text-transform:uppercase; text-align:center; padding:0 20px;
+    opacity:.55;
+  }
 
-  .ad-tile{
-    width: 168px; aspect-ratio: 3/4; border-radius: 14px; flex-shrink: 0;
-    padding: 16px; display: flex; flex-direction: column; justify-content: flex-end;
-    border: 1px solid var(--line-onink-soft);
+  .mock-card{
+    border-radius: 18px; border: 1px solid var(--line-onink-soft);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
+    background: linear-gradient(160deg,#17181c,#0c0d10);
+  }
+  .mock-card-side{
+    display:flex; flex-direction:column; justify-content:flex-end; padding:20px;
+    background: repeating-linear-gradient(135deg, rgba(245,243,238,0.03) 0px, rgba(245,243,238,0.03) 10px, transparent 10px, transparent 20px), linear-gradient(160deg,#1c1d22,#0c0d10);
+    border: 1px dashed var(--line-onink);
+  }
+
+  /* ---------- billboard live-screen mockup (center card content) ---------- */
+  .billboard-screen{
+    position: relative; border-radius: 14px; overflow: hidden;
+    aspect-ratio: 16/11; background: #050710; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .ad-slide{
+    position: absolute; inset: 0; padding: 22px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    opacity: 0; animation: adcycle 9s infinite;
+  }
+  .ad-slide.s1{ background: radial-gradient(circle at 25% 20%, rgba(232,169,58,0.30), #0b0f19 70%); animation-delay: 0s; }
+  .ad-slide.s2{ background: radial-gradient(circle at 75% 30%, rgba(232,169,58,0.22), #0b0f19 70%); animation-delay: 3s; }
+  .ad-slide.s3{ background: radial-gradient(circle at 50% 80%, rgba(232,169,58,0.26), #0b0f19 70%); animation-delay: 6s; }
+  @keyframes adcycle{ 0%{opacity:0;} 3%{opacity:1;} 30%{opacity:1;} 36%{opacity:0;} 100%{opacity:0;} }
+
+  .scanline{
+    position: absolute; left:0; right:0; height: 40%;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation: sweep 5s linear infinite; pointer-events: none;
+  }
+  @keyframes sweep{ 0%{ top:-40%; } 100%{ top:100%; } }
+
+  .live-dot{
+    width:7px; height:7px; border-radius:50%; background:#E8A93A;
+    box-shadow: 0 0 8px 1px rgba(232,169,58,0.7);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  .ticker-bar{
+    position: absolute; left:0; right:0; bottom:0;
+    background: rgba(5,7,16,0.85); backdrop-filter: blur(6px);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    font-variant-numeric: tabular-nums;
   }
 
   /* ---------- bento feature card ---------- */
@@ -214,89 +264,94 @@
 <main id="top">
 
 <!-- ============ HERO ============ -->
-<section class="section-ink relative pt-40 pb-0 overflow-hidden">
-  <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center">
-    <div class="reveal inline-flex items-center gap-2 text-[12px] tracked uppercase muted-onink border line-onink rounded-full px-4 py-1.5 mb-8">
-      <span class="w-1.5 h-1.5 rounded-full bg-[var(--amber)]"></span>
-      Self-serve DOOH · Cotonou
+<section class="section-ink relative overflow-hidden">
+  <div class="hero-photo relative pt-40 pb-40 sm:pb-48">
+    <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
+      <div class="reveal inline-flex items-center gap-2 text-[12px] tracked uppercase muted-onink border line-onink rounded-full px-4 py-1.5 mb-8 bg-[var(--ink)]/60 backdrop-blur">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--amber)]"></span>
+        Self-serve DOOH · Cotonou
+      </div>
+
+      <h1 class="reveal font-tight font-semibold text-[38px] leading-[1.08] sm:text-[52px] lg:text-[58px]">
+        Put your business on<br class="hidden sm:block"> the biggest screens in Benin.
+      </h1>
+
+      <div class="reveal mt-9 flex flex-col items-center gap-4">
+        <a href="#waitlist" class="pill-white rounded-full px-7 py-3.5 text-[14.5px]">Get Early Access</a>
+        <p class="muted-onink text-[13.5px]">No long-term contracts · Launch via mobile money in minutes</p>
+      </div>
     </div>
 
-    <h1 class="reveal font-tight font-semibold text-[40px] leading-[1.06] sm:text-[56px] lg:text-[66px]">
-      Put your business on the biggest screens in Benin.
-    </h1>
+    <!-- overlapping mockup stack, bleeding past the section edges -->
+    <div class="reveal relative z-10 mt-16 sm:mt-20 max-w-6xl mx-auto px-5">
+      <div class="relative flex items-center justify-center">
 
-    <p class="reveal muted-onink text-[16.5px] sm:text-[18px] leading-relaxed mt-7 max-w-2xl mx-auto">
-      The self-serve advertising platform that lets local businesses book digital billboard space instantly. No long-term contracts. No massive agency fees. Launch your campaign via mobile money in minutes.
-    </p>
+        <!-- left peeking card -->
+        <div class="mock-card mock-card-side hidden md:flex w-[240px] h-[300px] absolute left-0 -translate-x-1/3 rotate-[-4deg] z-0">
+          <span class="text-[10px] tracked uppercase text-white/45 mb-1">Partner dashboard</span>
+          <span class="font-tight font-semibold text-[15px] text-white/85">Approve ads in 1 click</span>
+        </div>
 
-    <form id="hero-form" class="reveal mt-10 max-w-md mx-auto" novalidate>
-      <div class="input-pill flex-1 rounded-full pl-5 pr-1.5 py-1.5 flex items-center gap-2">
-        <input type="email" required placeholder="you@yourbusiness.com" class="w-full text-[14.5px]" aria-label="Email address">
-        <button type="submit" class="pill-white rounded-full px-5 py-2.5 text-[13.5px] whitespace-nowrap shrink-0">
-          Join the Waitlist
-        </button>
+        <!-- right peeking card -->
+        <div class="mock-card mock-card-side hidden md:flex w-[240px] h-[300px] absolute right-0 translate-x-1/3 rotate-[4deg] z-0">
+          <span class="text-[10px] tracked uppercase text-white/45 mb-1">Screen network</span>
+          <span class="font-tight font-semibold text-[15px] text-white/85">Live map of Cotonou</span>
+        </div>
+
+        <!-- center card: live screen mockup -->
+        <div class="mock-card w-full max-w-2xl p-3 relative z-10">
+          <div class="flex items-center justify-between px-2 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="live-dot"></span>
+              <span class="text-[11px] tracked uppercase muted-onink">Live · Screen #04</span>
+            </div>
+            <i data-lucide="wifi" class="w-3.5 h-3.5 faint-onink"></i>
+          </div>
+          <div class="billboard-screen">
+            <div class="ad-slide s1">
+              <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
+              <span class="font-tight font-semibold text-[22px] text-white">Chez Rachelle Traiteur</span>
+              <span class="text-[12px] text-white/55 mt-1">Weekend promo · 3-day run</span>
+            </div>
+            <div class="ad-slide s2">
+              <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
+              <span class="font-tight font-semibold text-[22px] text-white">Pharmacie du Phare</span>
+              <span class="text-[12px] text-white/55 mt-1">Peak hours · 6am–9am</span>
+            </div>
+            <div class="ad-slide s3">
+              <span class="text-[10px] tracked uppercase text-[var(--amber)] mb-2">Now showing</span>
+              <span class="font-tight font-semibold text-[22px] text-white">Boutique Wax &amp; Co</span>
+              <span class="text-[12px] text-white/55 mt-1">Funded via MTN MoMo</span>
+            </div>
+            <div class="scanline"></div>
+            <div class="ticker-bar px-4 py-2.5 flex items-center justify-between text-[11px]">
+              <span class="muted-onink">IMPRESSIONS <span id="ticker-count" class="text-white font-medium">12,482</span></span>
+              <span class="text-[var(--amber)]">● live</span>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div class="hero-success hidden mt-4 flex items-center justify-center gap-2.5 text-[14px]">
-        <span class="success-check w-5 h-5 rounded-full bg-[var(--amber)] grid place-items-center">
-          <i data-lucide="check" class="w-3.5 h-3.5 text-[#1a1305]"></i>
-        </span>
-        Thank you for joining! We'll be in touch before launch.
-      </div>
-      <p class="faint-onink text-[12.5px] mt-4">Launching first in Cotonou · No spam, just a heads-up when doors open</p>
-    </form>
+    </div>
   </div>
+</section>
 
-  <!-- bleeding filmstrip -->
-  <div class="reveal filmstrip-mask mt-16 sm:mt-20 pb-10">
-    <div class="filmstrip-track">
-      <div class="ad-tile" style="background:linear-gradient(160deg,#2C3A4C,#1B2430);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">Weekend promo</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Chez Rachelle Traiteur</span>
+<!-- ============ STATS ============ -->
+<section class="section-ink py-16 sm:py-20 border-t line-onink text-center">
+  <div class="max-w-3xl mx-auto px-5 sm:px-8">
+    <p class="reveal text-[13.5px] muted-onink mb-10">Built for advertisers and screen owners across Cotonou.</p>
+    <div class="grid grid-cols-3 gap-6 sm:gap-10">
+      <div class="reveal">
+        <div class="font-tight font-semibold text-[34px] sm:text-[48px] leading-none">0 CFA</div>
+        <div class="muted-onink text-[12px] sm:text-[13.5px] mt-3">Cost to integrate a screen network</div>
       </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#3E4636,#232619);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">Peak hours</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Pharmacie du Phare</span>
+      <div class="reveal">
+        <div class="font-tight font-semibold text-[34px] sm:text-[48px] leading-none">1-click</div>
+        <div class="muted-onink text-[12px] sm:text-[13.5px] mt-3">Manual approval before any ad airs</div>
       </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#4A3B24,#241C10);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">Mobile money</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Boutique Wax &amp; Co</span>
-      </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#33313D,#19181F);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">3-day run</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Salon Aurore</span>
-      </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#2A3D3A,#151F1D);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">Now live</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Erevan Market</span>
-      </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#413036,#1E1519);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">New advertiser</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Studio Kponou</span>
-      </div>
-      <!-- duplicate set for seamless loop -->
-      <div class="ad-tile" style="background:linear-gradient(160deg,#2C3A4C,#1B2430);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">Weekend promo</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Chez Rachelle Traiteur</span>
-      </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#3E4636,#232619);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">Peak hours</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Pharmacie du Phare</span>
-      </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#4A3B24,#241C10);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">Mobile money</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Boutique Wax &amp; Co</span>
-      </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#33313D,#19181F);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">3-day run</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Salon Aurore</span>
-      </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#2A3D3A,#151F1D);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">Now live</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Erevan Market</span>
-      </div>
-      <div class="ad-tile" style="background:linear-gradient(160deg,#413036,#1E1519);">
-        <span class="text-[10px] tracked uppercase text-white/50 mb-1">New advertiser</span>
-        <span class="font-tight font-semibold text-[15px] text-white">Studio Kponou</span>
+      <div class="reveal">
+        <div class="font-tight font-semibold text-[34px] sm:text-[48px] leading-none">3 min</div>
+        <div class="muted-onink text-[12px] sm:text-[13.5px] mt-3">Typical time to launch a campaign</div>
       </div>
     </div>
   </div>
@@ -371,7 +426,7 @@
   </div>
 </section>
 
-<!-- ============ HOW IT WORKS + STATS ============ -->
+<!-- ============ HOW IT WORKS ============ -->
 <section id="how-it-works" class="section-ink py-24 md:py-32">
   <div class="max-w-7xl mx-auto px-5 sm:px-8">
     <div class="reveal max-w-xl mb-16">
@@ -394,21 +449,6 @@
         <span class="text-[12px] tracked uppercase faint-onink">03</span>
         <h3 class="font-tight font-semibold text-[19px] mt-4 mb-2.5">Launch via mobile money</h3>
         <p class="muted-onink text-[14.5px] leading-relaxed">Upload your image or video ad directly through the dashboard, then fund your campaign instantly using MTN MoMo, Moov Money, or Wave.</p>
-      </div>
-    </div>
-
-    <div class="grid sm:grid-cols-3 gap-10 mt-24 pt-16 border-t line-onink">
-      <div class="reveal">
-        <div class="font-tight font-semibold text-[44px] sm:text-[52px] leading-none">0 CFA</div>
-        <div class="muted-onink text-[13.5px] mt-3">Cost for a screen network to integrate</div>
-      </div>
-      <div class="reveal">
-        <div class="font-tight font-semibold text-[44px] sm:text-[52px] leading-none">1-click</div>
-        <div class="muted-onink text-[13.5px] mt-3">Manual approval before any ad airs</div>
-      </div>
-      <div class="reveal">
-        <div class="font-tight font-semibold text-[44px] sm:text-[52px] leading-none">3 min</div>
-        <div class="muted-onink text-[13.5px] mt-3">Typical time to launch a campaign</div>
       </div>
     </div>
   </div>
@@ -666,7 +706,6 @@
       lucide.createIcons();
     });
   }
-  wireWaitlistForm('hero-form', '.hero-success');
   wireWaitlistForm('footer-form', '.footer-success');
 
   document.querySelectorAll('.accordion-item').forEach(item => {
@@ -684,6 +723,15 @@
       panel.style.maxHeight = !isOpen ? panel.scrollHeight + 'px' : null;
     });
   });
+
+  const tickerEl = document.getElementById('ticker-count');
+  if (tickerEl) {
+    let impressions = 12482;
+    setInterval(() => {
+      impressions += Math.floor(Math.random() * 4) + 1;
+      tickerEl.textContent = impressions.toLocaleString('en-US');
+    }, 2200);
+  }
 </script>
 
 </body>
