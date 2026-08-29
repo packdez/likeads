@@ -55,8 +55,8 @@
   .line-onpaper{ border-color: var(--line-onpaper); }
 
   /* ---------- nav ---------- */
-  .nav-shell{ background: var(--ink); border-bottom: 1px solid transparent; transition: border-color .25s ease; }
-  .nav-shell.scrolled{ border-bottom-color: var(--line-onink); }
+  .nav-shell{ background: transparent; border-bottom: 1px solid transparent; transition: background-color .25s ease, border-color .25s ease; }
+  .nav-shell.scrolled{ background: rgba(11,11,12,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom-color: var(--line-onink); }
   .nav-link{ color: var(--muted-onink); transition: color .2s ease; }
   .nav-link:hover{ color: var(--text-onink); }
 
