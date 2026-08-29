@@ -240,16 +240,15 @@
     width: 100%; overflow: hidden;
     /* no mask — edges crop cleanly, full-bleed, like Squarespace's version */
   }
-  .coverflow-track{ display: flex; align-items: center; gap: 16px; width: max-content; animation: coverflowscroll 34s linear infinite; }
-  .coverflow-track:hover{ animation-play-state: paused; }
-  @keyframes coverflowscroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+    .coverflow-track{ display: flex; align-items: center; gap: 16px; width: max-content; transition: transform .5s cubic-bezier(.65,0,.35,1); }
   .coverflow-card{
     position: relative; width: clamp(300px, 42vw, 620px); aspect-ratio: 16/10; flex-shrink: 0;
     border-radius: 14px; overflow: hidden;
     transform: scale(0.84);
-    transition: transform .35s ease;
+    transition: transform .5s cubic-bezier(.65,0,.35,1);
     will-change: transform;
   }
+  .coverflow-card.is-center{ transform: scale(1.14); z-index: 5; }
   .coverflow-card img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .coverflow-card .slide-overlay{
     position: absolute; inset: 0;
@@ -822,28 +821,42 @@
   }
 
 
-    // coverflow: whichever card sits nearest the viewport's horizontal center
-  // scales up; cards on either side ease back down to the same smaller size
+    // coverflow: cards snap one at a time into the centered position —
+  // a sharp step, not a continuous drift
   const cfTrack = document.getElementById('coverflow-track');
   if (cfTrack) {
     const cfViewport = cfTrack.parentElement;
-    const MIN_SCALE = 0.84, MAX_SCALE = 1.14, FALLOFF = 260; // px — how far the scale-up reaches
-    function updateCoverflow() {
-      const vRect = cfViewport.getBoundingClientRect();
-      const viewportCenter = vRect.left + vRect.width / 2;
-      cfTrack.querySelectorAll('.coverflow-card').forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
-        const dist = Math.abs(cardCenter - viewportCenter);
-        const t = Math.max(0, 1 - dist / FALLOFF);
-        const scale = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * t;
-        card.style.transform = `scale(${scale.toFixed(3)})`;
-        card.style.zIndex = Math.round(t * 10);
-      });
-      requestAnimationFrame(updateCoverflow);
+    const cards = Array.from(cfTrack.querySelectorAll('.coverflow-card'));
+    const uniqueCount = cards.length / 2; // first half is unique, second half is the loop-duplicate
+    let index = 0;
+
+    function goTo(i, animate = true) {
+      const card = cards[i];
+      const gap = 16;
+      const step = card.offsetWidth + gap;
+      const centerOffset = (cfViewport.offsetWidth - card.offsetWidth) / 2;
+      cfTrack.style.transition = animate ? '' : 'none';
+      cfTrack.style.transform = `translateX(${centerOffset - i * step}px)`;
+      cards.forEach((c, ci) => c.classList.toggle('is-center', ci === i));
+      if (!animate) cfTrack.offsetHeight; // force reflow so the "none" transition actually applies
     }
-    requestAnimationFrame(updateCoverflow);
+
+    goTo(0, false);
+
+    setInterval(() => {
+      index++;
+      if (index >= uniqueCount) {
+        // reached the duplicate set: snap the reveal, then jump back invisibly
+        goTo(index, true);
+        setTimeout(() => { index = 0; goTo(0, false); }, 520);
+      } else {
+        goTo(index, true);
+      }
+    }, 2600);
+
+    window.addEventListener('resize', () => goTo(index, false));
   }
+  
 </script>
 
 </body>
