@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LikeAds — Put your business on the biggest screens in Benin</title>
+<meta name="description" content="The self-serve advertising platform that lets local businesses book digital billboard space instantly, funded by mobile money.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #0B0E1A;
+    --bg-soft: #0F1326;
+    --surface: #141936;
+    --surface-2: #191F42;
+    --border: rgba(237,239,247,0.09);
+    --border-strong: rgba(237,239,247,0.16);
+    --text: #EDEFF7;
+    --text-muted: #9498B8;
+    --text-faint: #656B93;
+    --amber: #FFB93E;
+    --amber-soft: rgba(255,185,62,0.14);
+    --cyan: #35E7C7;
+    --cyan-soft: rgba(53,231,199,0.14);
+    --partner-bg: #071617;
+    --partner-surface: #0C2224;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: 88px; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-display{ font-family: 'Space Grotesk', 'Inter', sans-serif; }
+  .font-mono{ font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  ::selection{ background: var(--amber); color: #17130a; }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .bg-app{ background: var(--bg); }
+  .bg-soft{ background: var(--bg-soft); }
+  .bg-surface{ background: var(--surface); }
+  .border-hair{ border-color: var(--border); }
+  .text-muted{ color: var(--text-muted); }
+  .text-faint{ color: var(--text-faint); }
+
+  .grain{
+    background-image: radial-gradient(circle at 20% 20%, rgba(255,185,62,0.06), transparent 40%),
+                       radial-gradient(circle at 85% 10%, rgba(53,231,199,0.05), transparent 45%);
+  }
+
+  /* ---------- nav ---------- */
+  .nav-shell{
+    background: rgba(11,14,26,0.72);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s ease, background .3s ease;
+  }
+  .nav-shell.scrolled{
+    border-bottom-color: var(--border);
+  }
+  .nav-link{
+    color: var(--text-muted);
+    position: relative;
+    transition: color .2s ease;
+  }
+  .nav-link:hover{ color: var(--text); }
+  .nav-link::after{
+    content:'';
+    position:absolute; left:0; bottom:-4px;
+    width:0%; height:1px; background: var(--amber);
+    transition: width .25s ease;
+  }
+  .nav-link:hover::after{ width:100%; }
+
+  /* ---------- logo mark ---------- */
+  .logo-mark{
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: linear-gradient(155deg, #1B2148, #0E1130);
+    border: 1px solid var(--border-strong);
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+  .logo-mark span{
+    display:block; width:5px; height:5px; border-radius:1px;
+  }
+  .logo-grid{ display:grid; grid-template-columns: repeat(2,5px); gap:3px; }
+  .logo-grid span:nth-child(1){ background: var(--text-faint); }
+  .logo-grid span:nth-child(2){ background: var(--text-faint); }
+  .logo-grid span:nth-child(3){ background: var(--text-faint); }
+  .logo-grid span:nth-child(4){ background: var(--amber); animation: pixelpulse 2.4s ease-in-out infinite; }
+
+  @keyframes pixelpulse{
+    0%,100%{ opacity:1; box-shadow: 0 0 6px 1px var(--amber);}
+    50%{ opacity:.35; box-shadow: 0 0 0 0 transparent;}
+  }
+
+  /* ---------- buttons ---------- */
+  .btn-primary{
+    background: var(--amber);
+    color: #191204;
+    font-weight: 600;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.15);
+  }
+  .btn-primary:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -8px rgba(255,185,62,0.55);
+  }
+  .btn-primary:active{ transform: translateY(0px); }
+
+  .btn-ghost{
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    transition: border-color .2s ease, background .2s ease, transform .18s ease;
+  }
+  .btn-ghost:hover{ border-color: var(--cyan); background: var(--cyan-soft); transform: translateY(-2px); }
+
+  .btn-cyan{
+    border: 1px solid rgba(53,231,199,0.5);
+    color: var(--cyan);
+    transition: all .2s ease;
+  }
+  .btn-cyan:hover{
+    background: var(--cyan);
+    color: #04211d;
+    box-shadow: 0 10px 24px -8px rgba(53,231,199,0.45);
+    transform: translateY(-2px);
+  }
+
+  /* ---------- input ---------- */
+  .input-shell{
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .input-shell:focus-within{
+    border-color: var(--amber);
+    box-shadow: 0 0 0 4px var(--amber-soft);
+  }
+  .input-shell input{
+    background: transparent; color: var(--text); outline: none;
+  }
+  .input-shell input::placeholder{ color: var(--text-faint); }
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in{ opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity: 1; transform: none; transition: none; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+  }
+
+  /* ---------- card ---------- */
+  .step-card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: border-color .25s ease, transform .25s ease, background .25s ease;
+  }
+  .step-card:hover{
+    border-color: rgba(255,185,62,0.4);
+    transform: translateY(-4px);
+    background: var(--surface-2);
+  }
+  .step-num{
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-faint);
+    font-size: 13px;
+    letter-spacing: .04em;
+  }
+
+  /* ---------- billboard mockup ---------- */
+  .billboard-wrap{ perspective: 1400px; }
+  .billboard-frame{
+    background: linear-gradient(160deg, #1a1f3f, #0b0e1e);
+    border: 1px solid var(--border-strong);
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+    transform: rotateY(-8deg) rotateX(3deg);
+    transition: transform .6s ease;
+  }
+  .billboard-wrap:hover .billboard-frame{ transform: rotateY(-3deg) rotateX(1deg); }
+
+  .billboard-screen{
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: #050813;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .ad-slide{
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 22px;
+    opacity: 0;
+    animation: adcycle 9s infinite;
+  }
+  .ad-slide.s1{ background: radial-gradient(circle at 20% 20%, #23305e, #0b0e1e 70%); animation-delay: 0s; }
+  .ad-slide.s2{ background: radial-gradient(circle at 80% 30%, #2a1f4a, #0b0e1e 70%); animation-delay: 3s; }
+  .ad-slide.s3{ background: radial-gradient(circle at 50% 80%, #12332f, #0b0e1e 70%); animation-delay: 6s; }
+
+  @keyframes adcycle{
+    0%{ opacity:0; }
+    3%{ opacity:1; }
+    30%{ opacity:1; }
+    36%{ opacity:0; }
+    100%{ opacity:0; }
+  }
+
+  .scanline{
+    position: absolute; left:0; right:0; height: 40%;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation: sweep 5s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes sweep{
+    0%{ top: -40%; }
+    100%{ top: 100%; }
+  }
+
+  .live-dot{
+    width: 7px; height:7px; border-radius: 50%; background: #ff5d5d;
+    box-shadow: 0 0 8px 1px rgba(255,93,93,0.7);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{ opacity:1;} 50%{ opacity:.25;} }
+
+  .ticker-bar{
+    position: absolute; left:0; right:0; bottom:0;
+    background: rgba(5,8,19,0.82);
+    backdrop-filter: blur(6px);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .pin-badge{
+    position: absolute;
+    background: rgba(20,25,54,0.9);
+    border: 1px solid var(--border-strong);
+    backdrop-filter: blur(6px);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .pin-dot{
+    width:6px; height:6px; border-radius:50%; background: var(--cyan);
+    box-shadow: 0 0 0 0 rgba(53,231,199,0.6);
+    animation: ringpulse 2.2s ease-out infinite;
+  }
+  @keyframes ringpulse{
+    0%{ box-shadow: 0 0 0 0 rgba(53,231,199,0.55); }
+    70%{ box-shadow: 0 0 0 8px rgba(53,231,199,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(53,231,199,0); }
+  }
+
+  /* ---------- partner section ---------- */
+  .partner-section{
+    background: radial-gradient(ellipse at 20% 0%, var(--partner-surface), var(--partner-bg) 60%);
+    border-top: 1px solid rgba(53,231,199,0.15);
+    border-bottom: 1px solid rgba(53,231,199,0.15);
+  }
+  .check-pill{
+    width: 22px; height: 22px; border-radius: 6px;
+    background: var(--cyan-soft);
+    border: 1px solid rgba(53,231,199,0.4);
+    display: grid; place-items:center; flex-shrink:0;
+  }
+
+  /* ---------- mobile menu ---------- */
+  #mobile-menu{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+  }
+  #mobile-menu.open{ max-height: 340px; }
+
+  .success-check{
+    animation: pop .4s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes pop{
+    0%{ transform: scale(0); opacity:0; }
+    70%{ transform: scale(1.15); opacity:1; }
+    100%{ transform: scale(1); }
+  }
+</style>
+</head>
+
+<body class="bg-app grain">
+
+<!-- ============ HEADER ============ -->
+<header id="site-header" class="nav-shell fixed top-0 inset-x-0 z-50">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="flex items-center justify-between h-16">
+
+      <a href="#top" class="flex items-center gap-2.5 shrink-0">
+        <div class="logo-mark">
+          <div class="logo-grid">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <span class="font-display font-semibold text-[17px] tracking-tight">LikeAds</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-[14.5px]">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#partners" class="nav-link">Screen Partners</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+      </nav>
+
+      <div class="hidden md:block">
+        <a href="#waitlist" class="btn-primary rounded-lg px-4 py-2 text-[14px]">Get Early Access</a>
+      </div>
+
+      <button id="menu-toggle" class="md:hidden p-2 -mr-2 text-muted" aria-label="Toggle menu" aria-expanded="false">
+        <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="md:hidden">
+      <nav class="flex flex-col gap-1 pb-5 text-[15px]">
+        <a href="#features" class="nav-link py-2.5 border-b border-hair">Features</a>
+        <a href="#how-it-works" class="nav-link py-2.5 border-b border-hair">How It Works</a>
+        <a href="#partners" class="nav-link py-2.5 border-b border-hair">Screen Partners</a>
+        <a href="#pricing" class="nav-link py-2.5 border-b border-hair">Pricing</a>
+        <a href="#waitlist" class="btn-primary rounded-lg px-4 py-2.5 text-center mt-3">Get Early Access</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section id="features" class="relative pt-36 pb-24 md:pt-44 md:pb-32 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 lg:gap-10 items-center">
+
+      <!-- left -->
+      <div>
+        <div class="reveal inline-flex items-center gap-2 font-mono text-[12px] tracking-[0.12em] text-faint uppercase border border-hair rounded-full px-3 py-1.5 mb-7">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--amber)]"></span>
+          Self-serve DOOH · Cotonou
+        </div>
+
+        <h1 class="reveal font-display font-semibold text-[38px] leading-[1.08] sm:text-[46px] lg:text-[52px] tracking-tight">
+          Put your business on the <span class="text-[var(--amber)]">biggest screens</span> in Benin.
+        </h1>
+
+        <p class="reveal text-muted text-[16.5px] leading-relaxed mt-6 max-w-lg">
+          The self-serve advertising platform that lets local businesses book digital billboard space instantly. No long-term contracts. No massive agency fees. Launch your campaign via mobile money in minutes.
+        </p>
+
+        <form id="hero-form" class="reveal mt-9 max-w-md" novalidate>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <div class="input-shell flex-1 rounded-xl px-4 py-3.5 flex items-center gap-2">
+              <i data-lucide="mail" class="w-4 h-4 text-faint shrink-0"></i>
+              <input type="email" required placeholder="you@yourbusiness.com" class="w-full text-[14.5px]" aria-label="Email address">
+            </div>
+            <button type="submit" class="btn-primary rounded-xl px-5 py-3.5 text-[14.5px] whitespace-nowrap">
+              Join the Waitlist
+            </button>
+          </div>
+          <div class="hero-success hidden mt-4 flex items-center gap-2.5 text-[14px] text-[var(--cyan)]">
+            <span class="success-check w-5 h-5 rounded-full bg-[var(--cyan-soft)] grid place-items-center">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            </span>
+            Thank you for joining! We'll be in touch before launch.
+          </div>
+          <p class="text-faint text-[12.5px] mt-3">Launching first in Cotonou. No spam — just a heads-up when doors open.</p>
+        </form>
+      </div>
+
+      <!-- right: billboard mockup -->
+      <div class="reveal billboard-wrap relative">
+        <div class="billboard-frame">
+
+          <!-- top status row -->
+          <div class="flex items-center justify-between px-1.5 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="live-dot"></span>
+              <span class="font-mono text-[11px] tracking-wide text-muted">LIVE · SCREEN #04 — CADJEHOUN</span>
+            </div>
+            <i data-lucide="wifi" class="w-3.5 h-3.5 text-faint"></i>
+          </div>
+
+          <div class="billboard-screen">
+            <div class="ad-slide s1">
+              <span class="font-mono text-[10px] tracking-[0.15em] text-[var(--amber)] uppercase mb-2">Now showing</span>
+              <span class="font-display font-semibold text-[20px] text-white">Chez Rachelle Traiteur</span>
+              <span class="text-[12px] text-white/60 mt-1">Weekend promo · 3-day run</span>
+            </div>
+            <div class="ad-slide s2">
+              <span class="font-mono text-[10px] tracking-[0.15em] text-[var(--amber)] uppercase mb-2">Now showing</span>
+              <span class="font-display font-semibold text-[20px] text-white">Pharmacie du Phare</span>
+              <span class="text-[12px] text-white/60 mt-1">Peak hours · 6am–9am</span>
+            </div>
+            <div class="ad-slide s3">
+              <span class="font-mono text-[10px] tracking-[0.15em] text-[var(--amber)] uppercase mb-2">Now showing</span>
+              <span class="font-display font-semibold text-[20px] text-white">Boutique Wax & Co</span>
+              <span class="text-[12px] text-white/60 mt-1">Funded via MTN MoMo</span>
+            </div>
+
+            <div class="scanline"></div>
+
+            <!-- floating pin badges -->
+            <div class="pin-badge rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-[10px] text-muted top-4 right-4">
+              <span class="pin-dot"></span> Erevan Market
+            </div>
+            <div class="pin-badge rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-[10px] text-muted bottom-14 left-4">
+              <span class="pin-dot"></span> Cadjehoun Clinic
+            </div>
+
+            <!-- ticker -->
+            <div class="ticker-bar px-4 py-2.5 flex items-center justify-between text-[11px]">
+              <span class="text-muted">IMPRESSIONS <span id="ticker-count" class="text-white font-medium">12,482</span></span>
+              <span class="text-[var(--cyan)]">+ live</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- floating budget chip -->
+        <div class="hidden sm:flex absolute -left-6 -bottom-6 items-center gap-3 bg-[var(--surface)] border border-hair rounded-xl px-4 py-3 shadow-2xl">
+          <div class="w-8 h-8 rounded-lg bg-[var(--amber-soft)] grid place-items-center">
+            <i data-lucide="wallet" class="w-4 h-4 text-[var(--amber)]"></i>
+          </div>
+          <div class="leading-tight">
+            <div class="font-mono text-[10px] text-faint">Campaign budget</div>
+            <div class="text-[13px] font-medium">12,000 CFA / day</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how-it-works" class="py-24 md:py-32 border-t border-hair">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal max-w-xl mb-16">
+      <div class="font-mono text-[12px] tracking-[0.12em] text-faint uppercase mb-3">The process</div>
+      <h2 class="font-display font-semibold text-[30px] sm:text-[36px] tracking-tight">Three steps between you and your first screen.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+
+      <div class="reveal step-card rounded-2xl p-7">
+        <div class="flex items-center justify-between mb-8">
+          <div class="w-11 h-11 rounded-xl bg-[var(--amber-soft)] grid place-items-center">
+            <i data-lucide="map-pin" class="w-5 h-5 text-[var(--amber)]"></i>
+          </div>
+          <span class="step-num">01</span>
+        </div>
+        <h3 class="font-display font-semibold text-[18px] mb-2.5">Choose your screen</h3>
+        <p class="text-muted text-[14.5px] leading-relaxed">Browse our interactive map of premium digital screens across Cotonou and major regional hubs. Select the exact locations that match your target audience.</p>
+      </div>
+
+      <div class="reveal step-card rounded-2xl p-7">
+        <div class="flex items-center justify-between mb-8">
+          <div class="w-11 h-11 rounded-xl bg-[var(--amber-soft)] grid place-items-center">
+            <i data-lucide="sliders-horizontal" class="w-5 h-5 text-[var(--amber)]"></i>
+          </div>
+          <span class="step-num">02</span>
+        </div>
+        <h3 class="font-display font-semibold text-[18px] mb-2.5">Set your budget</h3>
+        <p class="text-muted text-[14.5px] leading-relaxed">Control exactly when your ad plays. Pick peak traffic hours or run a short 3-day weekend promotion. You only pay for the time slots you want.</p>
+      </div>
+
+      <div class="reveal step-card rounded-2xl p-7">
+        <div class="flex items-center justify-between mb-8">
+          <div class="w-11 h-11 rounded-xl bg-[var(--amber-soft)] grid place-items-center">
+            <i data-lucide="smartphone" class="w-5 h-5 text-[var(--amber)]"></i>
+          </div>
+          <span class="step-num">03</span>
+        </div>
+        <h3 class="font-display font-semibold text-[18px] mb-2.5">Launch via mobile money</h3>
+        <p class="text-muted text-[14.5px] leading-relaxed">Upload your image or video ad directly through the dashboard. Securely fund your campaign instantly using MTN MoMo, Moov Money, or Wave.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARTNER PORTAL ============ -->
+<section id="partners" class="partner-section py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+      <div>
+        <div class="reveal font-mono text-[12px] tracking-[0.12em] text-[var(--cyan)] uppercase mb-4">For media networks</div>
+        <h2 class="reveal font-display font-semibold text-[28px] sm:text-[34px] leading-[1.15] tracking-tight mb-5">
+          Own an LED screen network? Maximize your unsold airtime.
+        </h2>
+        <p class="reveal text-muted text-[15.5px] leading-relaxed mb-10 max-w-lg">
+          Don't let your premium digital displays run blank intervals. LikeAds acts as your automated sales assistant, seamlessly funneling programmatic ad budgets from local small-and-medium enterprises directly into your empty loop slots.
+        </p>
+
+        <div class="reveal space-y-5 mb-10">
+          <div class="flex items-start gap-3.5">
+            <div class="check-pill mt-0.5">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[var(--cyan)]"></i>
+            </div>
+            <div>
+              <div class="font-medium text-[14.5px] mb-1">100% brand safety</div>
+              <div class="text-muted text-[14px] leading-relaxed">You maintain total creative control. No ad goes live on your physical hardware without a 1-click manual approval from your internal management dashboard.</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3.5">
+            <div class="check-pill mt-0.5">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[var(--cyan)]"></i>
+            </div>
+            <div>
+              <div class="font-medium text-[14.5px] mb-1">Zero financial risk</div>
+              <div class="text-muted text-[14px] leading-relaxed">We operate on a pure revenue-share model. The platform is entirely free for your network to integrate — we only make money when we bring new advertisers to your screens.</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#waitlist" class="reveal btn-cyan inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[14.5px] font-medium">
+          Partner with us
+          <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- revenue share visual -->
+      <div class="reveal bg-[rgba(255,255,255,0.02)] border border-[rgba(53,231,199,0.18)] rounded-2xl p-7 sm:p-9">
+        <div class="flex items-center justify-between mb-8">
+          <span class="font-mono text-[11px] tracking-wide text-faint uppercase">Unsold airtime, before / after</span>
+          <i data-lucide="bar-chart-3" class="w-4 h-4 text-[var(--cyan)]"></i>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <div class="flex justify-between text-[12.5px] mb-2">
+              <span class="text-muted">Before LikeAds</span>
+              <span class="font-mono text-faint">38% filled</span>
+            </div>
+            <div class="h-2.5 rounded-full bg-white/5 overflow-hidden">
+              <div class="h-full rounded-full bg-white/20" style="width:38%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[12.5px] mb-2">
+              <span class="text-muted">With LikeAds</span>
+              <span class="font-mono text-[var(--cyan)]">94% filled</span>
+            </div>
+            <div class="h-2.5 rounded-full bg-white/5 overflow-hidden">
+              <div class="h-full rounded-full bg-[var(--cyan)]" style="width:94%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-9 pt-7 border-t border-[rgba(255,255,255,0.06)] grid grid-cols-2 gap-6">
+          <div>
+            <div class="font-display font-semibold text-[24px] text-[var(--cyan)]">0 CFA</div>
+            <div class="text-faint text-[12.5px] mt-1">Cost to integrate</div>
+          </div>
+          <div>
+            <div class="font-display font-semibold text-[24px]">1-click</div>
+            <div class="text-faint text-[12.5px] mt-1">Ad approval</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING (light anchor target referenced in nav) ============ -->
+<section id="pricing" class="py-24 md:py-28 border-t border-hair">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 text-center">
+    <div class="reveal font-mono text-[12px] tracking-[0.12em] text-faint uppercase mb-4">Pricing</div>
+    <h2 class="reveal font-display font-semibold text-[28px] sm:text-[34px] tracking-tight mb-4">Pay for the slots you use. Nothing else.</h2>
+    <p class="reveal text-muted text-[15.5px] max-w-xl mx-auto leading-relaxed">
+      Campaigns start from a single day on a single screen. Pricing goes live for early access members before public launch — join the waitlist to lock in founding rates.
+    </p>
+  </div>
+</section>
+
+<!-- ============ FOOTER / WAITLIST CLOSER ============ -->
+<footer id="waitlist" class="border-t border-hair pt-24 pb-10">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-center max-w-lg mx-auto">
+      <h2 class="font-display font-semibold text-[28px] sm:text-[32px] tracking-tight mb-3">Be first on the network.</h2>
+      <p class="text-muted text-[15px] mb-8">Join advertisers and screen partners getting early access before we launch in Cotonou.</p>
+
+      <form id="footer-form" class="max-w-md mx-auto" novalidate>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="input-shell flex-1 rounded-xl px-4 py-3.5 flex items-center gap-2">
+            <i data-lucide="mail" class="w-4 h-4 text-faint shrink-0"></i>
+            <input type="email" required placeholder="you@yourbusiness.com" class="w-full text-[14.5px]" aria-label="Email address">
+          </div>
+          <button type="submit" class="btn-primary rounded-xl px-5 py-3.5 text-[14.5px] whitespace-nowrap">
+            Join the Waitlist
+          </button>
+        </div>
+        <div class="footer-success hidden mt-4 flex items-center justify-center gap-2.5 text-[14px] text-[var(--cyan)]">
+          <span class="success-check w-5 h-5 rounded-full bg-[var(--cyan-soft)] grid place-items-center">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+          </span>
+          Thank you for joining!
+        </div>
+      </form>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6 mt-24 pt-8 border-t border-hair">
+      <div class="flex items-center gap-2.5">
+        <div class="logo-mark scale-90">
+          <div class="logo-grid">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <span class="font-display font-semibold text-[15px]">LikeAds</span>
+      </div>
+
+      <nav class="flex items-center gap-6 text-[13.5px] text-muted">
+        <a href="#" class="hover:text-white transition-colors">Privacy</a>
+        <a href="#" class="hover:text-white transition-colors">Terms</a>
+        <a href="#" class="hover:text-white transition-colors">Contact</a>
+      </nav>
+
+      <span class="text-faint text-[12.5px] font-mono">© 2026 LikeAds Technologies. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script>
+  lucide.createIcons();
+
+  // sticky nav border on scroll
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 8);
+  });
+
+  // mobile menu
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuIcon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+    lucide.createIcons();
+  });
+  document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuIcon.setAttribute('data-lucide', 'menu');
+      lucide.createIcons();
+    });
+  });
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('in'), i % 6 * 60);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // waitlist form handling (dummy — no backend)
+  function wireWaitlistForm(formId, successSelector) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = form.querySelector('input[type="email"]');
+      if (!input.checkValidity()) {
+        input.focus();
+        return;
+      }
+      const success = form.querySelector(successSelector);
+      form.querySelector('div').classList.add('opacity-40', 'pointer-events-none');
+      success.classList.remove('hidden');
+      input.value = '';
+      lucide.createIcons();
+    });
+  }
+  wireWaitlistForm('hero-form', '.hero-success');
+  wireWaitlistForm('footer-form', '.footer-success');
+
+  // live impressions ticker
+  const tickerEl = document.getElementById('ticker-count');
+  let impressions = 12482;
+  setInterval(() => {
+    impressions += Math.floor(Math.random() * 4) + 1;
+    tickerEl.textContent = impressions.toLocaleString('en-US');
+  }, 2200);
+</script>
+
+</body>
+</html>
