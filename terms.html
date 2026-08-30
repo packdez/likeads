@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — LikeAds</title>
+<meta name="description" content="The terms that govern advertisers and screen partners using LikeAds.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink: #0B0B0C;
+    --paper: #F0ECE3;
+    --text-onpaper: #17140F;
+    --muted-onpaper: rgba(23,20,15,0.62);
+    --faint-onpaper: rgba(23,20,15,0.38);
+    --line-onpaper: rgba(23,20,15,0.14);
+    --line-onpaper-strong: rgba(23,20,15,0.22);
+    --amber: #E8A93A;
+    --amber-soft: rgba(232,169,58,0.14);
+  }
+  *{ box-sizing: border-box; }
+  body{
+    background: var(--paper);
+    color: var(--text-onpaper);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-tight{ font-family: 'Inter Tight', 'Inter', sans-serif; letter-spacing: -0.02em; }
+  .tracked{ letter-spacing: 0.10em; }
+  ::selection{ background: var(--amber); color: #1a1305; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px; }
+
+  .top-link{ color: var(--muted-onpaper); transition: color .2s ease; }
+  .top-link:hover{ color: var(--text-onpaper); }
+  .logo-mark{ width: 26px; height: 26px; flex-shrink: 0; }
+
+  .doc-nav a{
+    display: block; padding: 7px 0; font-size: 13px; color: var(--muted-onpaper);
+    border-left: 2px solid transparent; padding-left: 14px; transition: color .2s ease, border-color .2s ease;
+  }
+  .doc-nav a:hover{ color: var(--text-onpaper); }
+  .doc-nav a.active{ color: var(--text-onpaper); border-left-color: var(--amber); font-weight: 500; }
+
+  .prose-section{ scroll-margin-top: 100px; }
+  .prose-section h2{ font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .prose-section h3{ font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 15.5px; margin-top: 20px; margin-bottom: 8px; }
+  .prose-section p{ font-size: 14.5px; line-height: 1.7; color: var(--muted-onpaper); margin-bottom: 14px; }
+  .prose-section ul{ margin-bottom: 14px; padding-left: 4px; }
+  .prose-section li{ font-size: 14.5px; line-height: 1.7; color: var(--muted-onpaper); margin-bottom: 8px; list-style: none; position: relative; padding-left: 20px; }
+  .prose-section li::before{ content: '—'; position: absolute; left: 0; color: var(--faint-onpaper); }
+  .prose-section strong{ color: var(--text-onpaper); font-weight: 600; }
+  .prose-section a.inline-link{ color: var(--text-onpaper); text-decoration: underline; text-underline-offset: 2px; }
+
+  .callout{
+    background: var(--amber-soft); border: 1px solid rgba(232,169,58,0.35);
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 24px;
+  }
+  .callout p{ color: #6B4E14; font-size: 13.5px; line-height: 1.6; margin: 0; }
+</style>
+</head>
+
+<body>
+
+<div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="flex items-center justify-between py-6 sm:py-8">
+    <a href="index.html" class="flex items-center gap-2.5">
+      <span class="logo-mark">
+        <svg viewBox="0 0 26 26" fill="none">
+          <rect x="1" y="4" width="24" height="15" rx="3" stroke="#17140F" stroke-width="1.6"/>
+          <rect x="9" y="22" width="8" height="1.6" rx="0.8" fill="#17140F"/>
+          <circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/>
+        </svg>
+      </span>
+      <span class="font-tight font-semibold text-[16.5px]">LikeAds</span>
+    </a>
+    <a href="index.html" class="top-link text-[13px] tracked uppercase font-medium">Back to LikeAds</a>
+  </header>
+
+  <!-- ============ TITLE ============ -->
+  <div class="max-w-3xl pt-6 sm:pt-10 pb-12">
+    <div class="text-[12px] tracked uppercase mb-4" style="color:var(--faint-onpaper)">Legal</div>
+    <h1 class="font-tight font-semibold text-[34px] sm:text-[44px] leading-tight mb-4">Terms of Service</h1>
+    <p class="text-[14.5px]" style="color:var(--muted-onpaper)">Last updated: [Month Day, Year]</p>
+  </div>
+
+  <div class="callout max-w-3xl">
+    <p><strong>Note for the site owner:</strong> this draft is written around how LikeAds actually works today — a two-sided marketplace connecting advertisers and screen partners, funded by mobile money — but several commercial terms (fees, revenue-share percentage, refund policy, payout schedule) are placeholders until you've finalized them. Have this reviewed by a lawyer familiar with Benin's commercial and consumer-protection law before publishing.</p>
+  </div>
+
+  <!-- ============ CONTENT ============ -->
+  <div class="grid lg:grid-cols-[220px_1fr] gap-12 pb-28">
+
+    <!-- side nav -->
+    <nav class="doc-nav hidden lg:block sticky top-10 self-start border-l" style="border-color:var(--line-onpaper)">
+      <a href="#acceptance">Acceptance of terms</a>
+      <a href="#the-service">The service</a>
+      <a href="#eligibility">Eligibility &amp; accounts</a>
+      <a href="#advertisers">Terms for advertisers</a>
+      <a href="#partners">Terms for screen partners</a>
+      <a href="#payments">Payments &amp; fees</a>
+      <a href="#prohibited">Prohibited content &amp; conduct</a>
+      <a href="#ip">Intellectual property</a>
+      <a href="#termination">Suspension &amp; termination</a>
+      <a href="#disclaimers">Disclaimers</a>
+      <a href="#liability">Limitation of liability</a>
+      <a href="#indemnification">Indemnification</a>
+      <a href="#governing-law">Governing law</a>
+      <a href="#changes">Changes to these terms</a>
+      <a href="#contact">Contact us</a>
+    </nav>
+
+    <!-- prose -->
+    <div class="max-w-2xl">
+
+      <section id="acceptance" class="prose-section mb-14">
+        <h2>Acceptance of terms</h2>
+        <p>These Terms of Service ("Terms") govern your access to and use of LikeAds — our website, sign-up flow, and account features (together, the "Service"). LikeAds ("we," "us," "our") is a self-serve advertising platform connecting local businesses ("advertisers") with owners of outdoor and digital display screens ("screen partners") in Cotonou, Benin.</p>
+        <p>By creating an account, submitting information through our sign-up flow, or otherwise using the Service, you agree to be bound by these Terms. If you're agreeing on behalf of a business, you're confirming you have the authority to do so, and "you" refers to that business as well as you personally.</p>
+      </section>
+
+      <section id="the-service" class="prose-section mb-14">
+        <h2>The service</h2>
+        <p>LikeAds lets advertisers book advertising space on screen partners' displays, fund campaigns via mobile money, and track their ads — all from their phone. Screen partners list their available screens and unsold airtime, review and approve ads before they air, and receive a share of the revenue those ads generate.</p>
+        <p>LikeAds is currently in a pre-launch phase in Cotonou. Some features, screen locations, and pricing described on our site may change before or as we launch.</p>
+      </section>
+
+      <section id="eligibility" class="prose-section mb-14">
+        <h2>Eligibility &amp; accounts</h2>
+        <ul>
+          <li>You must be at least 18 years old and able to form a legally binding contract to use LikeAds.</li>
+          <li>You must provide accurate, current information when you sign up, and keep it up to date.</li>
+          <li>You're responsible for keeping your account credentials secure and for all activity that happens under your account.</li>
+          <li>One account per business, unless we agree otherwise in writing.</li>
+        </ul>
+      </section>
+
+      <section id="advertisers" class="prose-section mb-14">
+        <h2>Terms for advertisers</h2>
+        <h3>Submitting a campaign</h3>
+        <p>When you create a campaign, you choose the screen(s), schedule, and creative (image or video) you want to run, and fund it via mobile money. You're responsible for making sure your ad content is accurate, lawful, and complies with the content standards described below.</p>
+        <h3>Ad review</h3>
+        <p>Every ad is reviewed by the relevant screen partner before it goes live. Screen partners may decline to air an ad at their discretion — for example, if it doesn't fit their brand-safety standards — and LikeAds does not guarantee that a submitted ad will be approved.</p>
+        <h3>Scheduling &amp; changes</h3>
+        <p>You only pay for the time slots you book. Changes or cancellations to an already-funded campaign are subject to the cancellation and refund terms in place at the time — [to be defined: cancellation window, refund eligibility].</p>
+      </section>
+
+      <section id="partners" class="prose-section mb-14">
+        <h2>Terms for screen partners</h2>
+        <h3>Listing your screens</h3>
+        <p>You're responsible for accurately describing your screen network — including screen type, count, and locations — and for keeping that information current. Misrepresenting your inventory may result in suspension of your partner account.</p>
+        <h3>Ad approval</h3>
+        <p>You agree to review submitted ads in a reasonably timely manner. You retain full creative control over what airs on your hardware and may decline any ad that doesn't meet your standards, subject to acting in good faith and not unreasonably.</p>
+        <h3>Revenue share</h3>
+        <p>LikeAds operates on a revenue-share model: your network is free to integrate, and LikeAds takes a share of the revenue generated by advertisers we bring to your screens. The specific revenue-share percentage and payout schedule will be set out in your partner agreement — [to be defined].</p>
+      </section>
+
+      <section id="payments" class="prose-section mb-14">
+        <h2>Payments &amp; fees</h2>
+        <p>Advertisers fund campaigns using third-party mobile money services, including MTN MoMo, Moov Money, and Wave. Those transactions are processed directly by the relevant provider under its own terms; LikeAds is not a party to, and does not control, the mobile money service itself.</p>
+        <p>All prices are in CFA francs (XOF) unless stated otherwise. [Platform fees, if any beyond the advertiser's campaign budget, to be defined.]</p>
+      </section>
+
+      <section id="prohibited" class="prose-section mb-14">
+        <h2>Prohibited content &amp; conduct</h2>
+        <p>You may not use LikeAds to submit, list, or facilitate:</p>
+        <ul>
+          <li>Content that's illegal, fraudulent, or misleading</li>
+          <li>Content that infringes someone else's intellectual property or other rights</li>
+          <li>Content that's defamatory, hateful, obscene, or discriminatory</li>
+          <li>Ads for products or services prohibited by Beninese law</li>
+          <li>Any attempt to interfere with, disrupt, or gain unauthorized access to the Service</li>
+        </ul>
+        <p>We may remove content or suspend accounts that violate this section, with or without notice.</p>
+      </section>
+
+      <section id="ip" class="prose-section mb-14">
+        <h2>Intellectual property</h2>
+        <p>You retain ownership of the ad creative and other content you submit. By submitting it, you grant LikeAds and the relevant screen partner a limited, non-exclusive license to display it as part of your campaign.</p>
+        <p>The LikeAds name, logo, and platform are our property (or licensed to us), and nothing in these Terms gives you rights to use them beyond what's needed to use the Service.</p>
+      </section>
+
+      <section id="termination" class="prose-section mb-14">
+        <h2>Suspension &amp; termination</h2>
+        <p>You may stop using LikeAds and close your account at any time. We may suspend or terminate your access to the Service if you violate these Terms, if we reasonably believe your account poses a risk to LikeAds or others, or as needed to comply with law.</p>
+      </section>
+
+      <section id="disclaimers" class="prose-section mb-14">
+        <h2>Disclaimers</h2>
+        <p>LikeAds is provided "as is" and "as available." We don't guarantee that the Service will be uninterrupted, error-free, or that any campaign will achieve a particular level of impressions, engagement, or results. As a pre-launch platform, features and availability may change.</p>
+      </section>
+
+      <section id="liability" class="prose-section mb-14">
+        <h2>Limitation of liability</h2>
+        <p>To the fullest extent permitted by law, LikeAds and its team won't be liable for indirect, incidental, or consequential damages arising from your use of the Service. Our total liability for any claim relating to the Service is limited to the amount you paid us, if any, in the [12 months] before the claim arose.</p>
+      </section>
+
+      <section id="indemnification" class="prose-section mb-14">
+        <h2>Indemnification</h2>
+        <p>You agree to indemnify and hold LikeAds harmless from any claims, losses, or expenses arising from your use of the Service, your content, or your violation of these Terms.</p>
+      </section>
+
+      <section id="governing-law" class="prose-section mb-14">
+        <h2>Governing law</h2>
+        <p>These Terms are governed by the laws of the Republic of Benin. Any dispute arising from these Terms or the Service will be subject to the exclusive jurisdiction of the competent courts of Benin, unless otherwise required by applicable law.</p>
+      </section>
+
+      <section id="changes" class="prose-section mb-14">
+        <h2>Changes to these terms</h2>
+        <p>We may update these Terms as LikeAds evolves. We'll update the "Last updated" date above, and where changes are significant, we'll make a reasonable effort to let you know directly. Continuing to use the Service after changes take effect means you accept the updated Terms.</p>
+      </section>
+
+      <section id="contact" class="prose-section">
+        <h2>Contact us</h2>
+        <p>Questions about these Terms? Reach us at:</p>
+        <p>
+          <strong>[LikeAds Technologies]</strong><br>
+          [Registered address, Cotonou, Benin]<br>
+          <a href="mailto:legal@likeads.example" class="inline-link">[legal@likeads.example]</a>
+        </p>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  // highlight the active section in the side nav as the reader scrolls
+  const sections = document.querySelectorAll('.prose-section');
+  const navLinks = document.querySelectorAll('.doc-nav a');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.doc-nav a[href="#${entry.target.id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px' });
+  sections.forEach(section => io.observe(section));
+</script>
+
+</body>
+</html>
