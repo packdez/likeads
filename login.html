@@ -58,6 +58,26 @@
   .eye-btn{ color: var(--faint-onpaper); transition: color .2s ease; }
   .eye-btn:hover{ color: var(--text-onpaper); }
 
+  /* ---------- error alert ---------- */
+  .login-alert{
+    display: none; align-items: flex-start; gap: 10px;
+    background: rgba(179,64,28,0.08); border: 1px solid rgba(179,64,28,0.25);
+    border-radius: 10px; padding: 12px 14px; margin-top: 4px;
+  }
+  .login-alert.show{ display: flex; }
+  .login-alert p{ font-size: 13.5px; line-height: 1.45; color: #7A2A11; }
+  .login-alert a{ color: #7A2A11; text-decoration: underline; font-weight: 600; }
+  .login-alert i{ color: #B3401C; flex-shrink: 0; margin-top: 1px; }
+
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .btn-login .spinner{
+    display: none; width: 14px; height: 14px; border: 2px solid rgba(245,243,238,.35);
+    border-top-color: #F5F3EE; border-radius: 50%; animation: spin .7s linear infinite;
+  }
+  .btn-login.is-loading{ background: var(--ink); color: #F5F3EE; cursor: default; pointer-events: none; }
+  .btn-login.is-loading .spinner{ display: inline-block; }
+  .btn-login.is-loading .btn-label{ opacity: .7; }
+
   /* ---------- log in button ---------- */
   .btn-login{
     width: 100%; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 14.5px;
@@ -137,7 +157,15 @@
           </div>
         </div>
 
-        <button type="submit" id="login-btn" class="btn-login mt-2" disabled>Log In</button>
+        <button type="submit" id="login-btn" class="btn-login mt-2 flex items-center justify-center gap-2" disabled>
+          <span class="spinner"></span>
+          <span class="btn-label">Log In</span>
+        </button>
+
+        <div id="login-alert" class="login-alert" role="alert">
+          <i data-lucide="alert-circle" class="w-4 h-4"></i>
+          <p>We couldn't find an account with that email. <a href="signup.html">Create one instead?</a></p>
+        </div>
       </div>
 
       <!-- OR divider (desktop: vertical, mobile: horizontal) -->
@@ -203,12 +231,21 @@
   emailInput.addEventListener('input', refreshLoginState);
   pwInput.addEventListener('input', refreshLoginState);
 
-  // form submit — wire this up to your real auth endpoint
+    // form submit — every attempt currently reports "account doesn't exist".
+  // Replace the body of this handler with a real authentication call once
+  // a backend is wired up.
+  const loginAlert = document.getElementById('login-alert');
   document.getElementById('login-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    if (loginBtn.disabled) return;
-    // TODO: replace with real authentication call
-    console.log('Login submitted', { email: emailInput.value });
+    if (loginBtn.classList.contains('is-loading')) return;
+
+    loginAlert.classList.remove('show');
+    loginBtn.classList.add('is-loading');
+
+    setTimeout(() => {
+      loginBtn.classList.remove('is-loading');
+      loginAlert.classList.add('show');
+    }, 650);
   });
 </script>
 
