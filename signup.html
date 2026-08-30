@@ -32,7 +32,6 @@
     color: var(--text-onpaper);
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
-    display: flex; flex-direction: column;
   }
   .font-tight{ font-family: 'Inter Tight', 'Inter', sans-serif; letter-spacing: -0.02em; }
   .tracked{ letter-spacing: 0.10em; }
@@ -45,10 +44,49 @@
   .top-link:hover{ color: var(--text-onpaper); }
   .top-link:disabled{ opacity: .35; pointer-events: none; }
 
+  /* ---------- page shell: content pane + image pane ---------- */
+  .page-shell{ display: flex; min-height: 100vh; }
+  .content-pane{ flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .content-inner{ max-width: 1000px; width: 100%; margin: 0 auto; padding: 0 20px; flex: 1; display: flex; flex-direction: column; }
+  @media (min-width: 640px){ .content-inner{ padding: 0 32px; } }
+
+  .image-pane{ display: none; }
+  @media (min-width: 900px){
+    .image-pane{
+      display: block; width: 38%; max-width: 520px; position: sticky; top: 0;
+      height: 100vh; overflow: hidden; flex-shrink: 0;
+    }
+  }
+  .image-panel{
+    position: absolute; inset: 0; opacity: 0; pointer-events: none;
+    transition: opacity .5s ease;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 40px; overflow: hidden;
+  }
+  .image-panel.active{ opacity: 1; pointer-events: auto; }
+  .image-panel::after{
+    /* subtle grain/texture so a flat gradient still reads as a photo placeholder, not a UI block */
+    content: ''; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px, transparent 2px, transparent 6px);
+    pointer-events: none;
+  }
+  .image-panel-tag{
+    position: relative; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); margin-bottom: 10px;
+  }
+  .image-panel-caption{
+    position: relative; font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 19px;
+    color: #fff; line-height: 1.3; max-width: 300px;
+  }
+  .image-panel-note{
+    position: relative; font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 14px;
+    border-top: 1px dashed rgba(255,255,255,0.25); padding-top: 12px;
+  }
+
   /* ---------- two-column step layout (Squarespace-style) ---------- */
   .wizard-grid{ display: grid; grid-template-columns: 1fr; gap: 28px; }
-  @media (min-width: 860px){
-    .wizard-grid{ grid-template-columns: 0.85fr 1.15fr; gap: 64px; align-items: start; }
+  @media (min-width: 640px){
+    .wizard-grid{ grid-template-columns: 0.85fr 1.15fr; gap: 48px; align-items: start; }
   }
   .step-question h1{ line-height: 1.15; }
 
@@ -156,176 +194,213 @@
 
 <body>
 
-<div class="max-w-6xl mx-auto px-5 sm:px-8 flex-1 w-full flex flex-col">
+<div class="page-shell">
 
-  <!-- ============ TOP BAR ============ -->
-  <header class="flex items-center justify-between py-6 sm:py-8">
-    <button id="back-btn" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium" type="button">
-      <i data-lucide="chevron-left" class="w-4 h-4"></i> Back
-    </button>
-    <a href="login.html" class="top-link text-[13px] tracked uppercase font-medium">Already have an account? Log in</a>
-  </header>
+  <!-- ============ CONTENT PANE ============ -->
+  <div class="content-pane">
+    <div class="content-inner">
 
-  <!-- ============ WIZARD ============ -->
-  <main class="max-w-3xl w-full mx-auto py-6 sm:py-10 flex-1 flex flex-col">
+      <!-- ============ TOP BAR ============ -->
+      <header class="flex items-center justify-between py-6 sm:py-8">
+        <button id="back-btn" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium" type="button">
+          <i data-lucide="chevron-left" class="w-4 h-4"></i> Back
+        </button>
+        <a href="login.html" class="top-link text-[13px] tracked uppercase font-medium">Already have an account? Log in</a>
+      </header>
 
-    <div class="flex-1">
+      <!-- ============ WIZARD ============ -->
+      <main class="w-full flex-1 flex flex-col py-2 sm:py-6">
 
-      <!-- ===== STEP 1: role ===== -->
-      <section class="step active" data-step="role">
-        <div class="wizard-grid">
-          <div class="step-question">
-            <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">How will you use LikeAds?</h1>
-            <p class="text-[14.5px]" style="color:var(--muted-onpaper)">We'll tailor a couple of quick questions to get you set up.</p>
-          </div>
-          <div class="flex flex-col gap-4">
-            <button type="button" class="role-card" data-role="advertiser">
-              <span class="role-icon"><i data-lucide="megaphone" class="w-5 h-5" style="color:var(--amber)"></i></span>
-              <span>
-                <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm an Advertiser</span>
-                <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I want to put my business on outdoor screens.</span>
-              </span>
-            </button>
-            <button type="button" class="role-card" data-role="partner">
-              <span class="role-icon"><i data-lucide="tv-minimal" class="w-5 h-5" style="color:var(--amber)"></i></span>
-              <span>
-                <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm a Screen Partner</span>
-                <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I own or manage a screen network with unsold airtime.</span>
-              </span>
-            </button>
-          </div>
-        </div>
-      </section>
+        <div class="flex-1">
 
-      <!-- ===== STEP 2a: advertiser details ===== -->
-      <section class="step" data-step="advertiser-details">
-        <form id="advertiser-details-form" class="wizard-grid" novalidate>
-          <div class="step-question">
-            <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">Tell us about your business.</h1>
-            <p class="text-[14.5px]" style="color:var(--muted-onpaper)">This helps us match you with the right screens at launch.</p>
-          </div>
-          <div class="space-y-7">
-            <div>
-              <label class="field-label" for="adv-business-name">Business name</label>
-              <input id="adv-business-name" type="text" class="field-input" placeholder="e.g. Chez Rachelle Traiteur" required>
-            </div>
-            <div>
-              <label class="field-label" for="adv-category">Business category</label>
-              <div class="select-wrap">
-                <select id="adv-category" class="field-select" required>
-                  <option value="" disabled selected>Select a category</option>
-                  <option>Restaurant</option>
-                  <option>Pharmacy</option>
-                  <option>Salon & Beauty</option>
-                  <option>Retail</option>
-                  <option>Event</option>
-                  <option>Other</option>
-                </select>
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          <!-- ===== STEP 1: role ===== -->
+          <section class="step active" data-step="role">
+            <div class="wizard-grid">
+              <div class="step-question">
+                <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">How will you use LikeAds?</h1>
+                <p class="text-[14.5px]" style="color:var(--muted-onpaper)">We'll tailor a couple of quick questions to get you set up.</p>
+              </div>
+              <div class="flex flex-col gap-4">
+                <button type="button" class="role-card" data-role="advertiser">
+                  <span class="role-icon"><i data-lucide="megaphone" class="w-5 h-5" style="color:var(--amber)"></i></span>
+                  <span>
+                    <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm an Advertiser</span>
+                    <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I want to put my business on outdoor screens.</span>
+                  </span>
+                </button>
+                <button type="button" class="role-card" data-role="partner">
+                  <span class="role-icon"><i data-lucide="tv-minimal" class="w-5 h-5" style="color:var(--amber)"></i></span>
+                  <span>
+                    <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm a Screen Partner</span>
+                    <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I own or manage a screen network with unsold airtime.</span>
+                  </span>
+                </button>
               </div>
             </div>
-            <div>
-              <label class="field-label">Area(s) in Cotonou</label>
-              <div id="adv-area-chips" class="chip-row"></div>
-              <p class="field-error" id="adv-area-error">Pick at least one area.</p>
-            </div>
-          </div>
-        </form>
-      </section>
+          </section>
 
-      <!-- ===== STEP 2b: partner details ===== -->
-      <section class="step" data-step="partner-details">
-        <form id="partner-details-form" class="wizard-grid" novalidate>
-          <div class="step-question">
-            <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">Tell us about your screens.</h1>
-            <p class="text-[14.5px]" style="color:var(--muted-onpaper)">This helps us onboard your network first at launch.</p>
-          </div>
-          <div class="space-y-7">
-            <div>
-              <label class="field-label" for="par-network-name">Network / business name</label>
-              <input id="par-network-name" type="text" class="field-input" placeholder="e.g. Canal Com Bénin" required>
-            </div>
-            <div>
-              <label class="field-label">Number of screens</label>
-              <div class="stepper">
-                <button type="button" id="screen-count-minus" class="stepper-btn" aria-label="Decrease"><i data-lucide="minus" class="w-4 h-4"></i></button>
-                <span id="screen-count-value" class="stepper-count">1</span>
-                <button type="button" id="screen-count-plus" class="stepper-btn" aria-label="Increase"><i data-lucide="plus" class="w-4 h-4"></i></button>
+          <!-- ===== STEP 2a: advertiser details ===== -->
+          <section class="step" data-step="advertiser-details">
+            <form id="advertiser-details-form" class="wizard-grid" novalidate>
+              <div class="step-question">
+                <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">Tell us about your business.</h1>
+                <p class="text-[14.5px]" style="color:var(--muted-onpaper)">This helps us match you with the right screens at launch.</p>
               </div>
-            </div>
-            <div>
-              <label class="field-label">Screen type(s)</label>
-              <div id="par-screen-type-chips" class="chip-row"></div>
-              <input id="par-screen-type-other" type="text" class="field-input mt-3 hidden" placeholder="Describe your screen type">
-              <p class="field-error" id="par-screen-type-error">Pick at least one screen type.</p>
-            </div>
-            <div>
-              <label class="field-label">Screen location(s)</label>
-              <div id="par-location-chips" class="chip-row"></div>
-              <p class="field-error" id="par-location-error">Pick at least one location.</p>
-            </div>
-          </div>
-        </form>
-      </section>
+              <div class="space-y-7">
+                <div>
+                  <label class="field-label" for="adv-business-name">Business name</label>
+                  <input id="adv-business-name" type="text" class="field-input" placeholder="e.g. Chez Rachelle Traiteur" required>
+                </div>
+                <div>
+                  <label class="field-label" for="adv-category">Business category</label>
+                  <div class="select-wrap">
+                    <select id="adv-category" class="field-select" required>
+                      <option value="" disabled selected>Select a category</option>
+                      <option>Restaurant</option>
+                      <option>Pharmacy</option>
+                      <option>Salon & Beauty</option>
+                      <option>Retail</option>
+                      <option>Event</option>
+                      <option>Other</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <div>
+                  <label class="field-label">Area(s) in Cotonou</label>
+                  <div id="adv-area-chips" class="chip-row"></div>
+                  <p class="field-error" id="adv-area-error">Pick at least one area.</p>
+                </div>
+              </div>
+            </form>
+          </section>
 
-      <!-- ===== STEP 3: contact (shared) ===== -->
-      <section class="step" data-step="contact">
-        <form id="contact-form" class="wizard-grid" novalidate>
-          <div class="step-question">
-            <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">How do we reach you?</h1>
-            <p class="text-[14.5px]" style="color:var(--muted-onpaper)">We'll notify you the moment we launch in Cotonou.</p>
-          </div>
-          <div class="space-y-7">
-            <div>
-              <label class="field-label" for="con-full-name">Full name</label>
-              <input id="con-full-name" type="text" class="field-input" placeholder="Your name" required>
-            </div>
-            <div>
-              <label class="field-label" for="con-phone">Phone number</label>
-              <input id="con-phone" type="tel" class="field-input" placeholder="e.g. 97 00 00 00" required>
-              <p class="field-error" id="con-phone-error">Enter a valid phone number.</p>
-            </div>
-            <div>
-              <label class="field-label" for="con-email">Email address</label>
-              <input id="con-email" type="email" class="field-input" placeholder="name@example.com" required>
-              <p class="field-error" id="con-email-error">Enter a valid email address.</p>
-            </div>
-          </div>
-        </form>
-      </section>
+          <!-- ===== STEP 2b: partner details ===== -->
+          <section class="step" data-step="partner-details">
+            <form id="partner-details-form" class="wizard-grid" novalidate>
+              <div class="step-question">
+                <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">Tell us about your screens.</h1>
+                <p class="text-[14.5px]" style="color:var(--muted-onpaper)">This helps us onboard your network first at launch.</p>
+              </div>
+              <div class="space-y-7">
+                <div>
+                  <label class="field-label" for="par-network-name">Network / business name</label>
+                  <input id="par-network-name" type="text" class="field-input" placeholder="e.g. Canal Com Bénin" required>
+                </div>
+                <div>
+                  <label class="field-label">Number of screens</label>
+                  <div class="stepper">
+                    <button type="button" id="screen-count-minus" class="stepper-btn" aria-label="Decrease"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                    <span id="screen-count-value" class="stepper-count">1</span>
+                    <button type="button" id="screen-count-plus" class="stepper-btn" aria-label="Increase"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+                <div>
+                  <label class="field-label">Screen type(s)</label>
+                  <div id="par-screen-type-chips" class="chip-row"></div>
+                  <input id="par-screen-type-other" type="text" class="field-input mt-3 hidden" placeholder="Describe your screen type">
+                  <p class="field-error" id="par-screen-type-error">Pick at least one screen type.</p>
+                </div>
+                <div>
+                  <label class="field-label">Screen location(s)</label>
+                  <div id="par-location-chips" class="chip-row"></div>
+                  <p class="field-error" id="par-location-error">Pick at least one location.</p>
+                </div>
+              </div>
+            </form>
+          </section>
 
-      <!-- ===== STEP 4: done ===== -->
-      <section class="step" data-step="done">
-        <div class="text-center py-10">
-          <div class="success-icon mb-6">
-            <i data-lucide="check" class="w-7 h-7" style="color:var(--amber)"></i>
-          </div>
-          <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">You're on the list.</h1>
-          <p style="color:var(--muted-onpaper)" class="text-[15px] max-w-sm mx-auto leading-relaxed">
-            LikeAds is launching soon in Cotonou. We'll email and text you the moment we're live, so you can be among the first on the network.
-          </p>
-          <a href="index.html" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium mt-8">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to LikeAds
-          </a>
+          <!-- ===== STEP 3: contact (shared) ===== -->
+          <section class="step" data-step="contact">
+            <form id="contact-form" class="wizard-grid" novalidate>
+              <div class="step-question">
+                <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">How do we reach you?</h1>
+                <p class="text-[14.5px]" style="color:var(--muted-onpaper)">We'll notify you the moment we launch in Cotonou.</p>
+              </div>
+              <div class="space-y-7">
+                <div>
+                  <label class="field-label" for="con-full-name">Full name</label>
+                  <input id="con-full-name" type="text" class="field-input" placeholder="Your name" required>
+                </div>
+                <div>
+                  <label class="field-label" for="con-phone">Phone number</label>
+                  <input id="con-phone" type="tel" class="field-input" placeholder="e.g. 97 00 00 00" required>
+                  <p class="field-error" id="con-phone-error">Enter a valid phone number.</p>
+                </div>
+                <div>
+                  <label class="field-label" for="con-email">Email address</label>
+                  <input id="con-email" type="email" class="field-input" placeholder="name@example.com" required>
+                  <p class="field-error" id="con-email-error">Enter a valid email address.</p>
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <!-- ===== STEP 4: done ===== -->
+          <section class="step" data-step="done">
+            <div class="text-center py-10">
+              <div class="success-icon mb-6">
+                <i data-lucide="check" class="w-7 h-7" style="color:var(--amber)"></i>
+              </div>
+              <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">You're on the list.</h1>
+              <p style="color:var(--muted-onpaper)" class="text-[15px] max-w-sm mx-auto leading-relaxed">
+                LikeAds is launching soon in Cotonou. We'll email and text you the moment we're live, so you can be among the first on the network.
+              </p>
+              <a href="index.html" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium mt-8">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to LikeAds
+              </a>
+            </div>
+          </section>
+
         </div>
-      </section>
 
+        <!-- ============ FOOTER BAR: dots + next/submit ============ -->
+        <div id="wizard-footer" class="wizard-footer">
+          <div class="step-dots">
+            <span class="step-dot" data-dot="0"></span>
+            <span class="step-dot" data-dot="1"></span>
+            <span class="step-dot" data-dot="2"></span>
+          </div>
+          <button type="button" id="footer-next-btn" class="btn-primary flex items-center justify-center gap-2">
+            <span class="spinner"></span>
+            <span class="btn-label">Continue</span>
+          </button>
+        </div>
+
+      </main>
     </div>
+  </div>
 
-    <!-- ============ FOOTER BAR: dots + next/submit ============ -->
-    <div id="wizard-footer" class="wizard-footer">
-      <div class="step-dots">
-        <span class="step-dot" data-dot="0"></span>
-        <span class="step-dot" data-dot="1"></span>
-        <span class="step-dot" data-dot="2"></span>
-      </div>
-      <button type="button" id="footer-next-btn" class="btn-primary flex items-center justify-center gap-2">
-        <span class="spinner"></span>
-        <span class="btn-label">Continue</span>
-      </button>
+  <!-- ============ IMAGE PANE — placeholder panels, one per step ============ -->
+  <!-- Swap each .image-panel's background (and the <img> if you add one) for real photography per step. -->
+  <div class="image-pane">
+    <div class="image-panel active" data-image="role" style="background:linear-gradient(160deg,#2C2417,#0B0B0C 70%);">
+      <div class="image-panel-tag">Photo placeholder</div>
+      <div class="image-panel-caption">A business owner and a screen partner, side by side — LikeAds connects both.</div>
+      <div class="image-panel-note">Replace this panel's background with real photography.</div>
     </div>
+    <div class="image-panel" data-image="advertiser-details" style="background:linear-gradient(160deg,#3A2A12,#0B0B0C 70%);">
+      <div class="image-panel-tag">Photo placeholder</div>
+      <div class="image-panel-caption">A shopkeeper reviewing their ad creative on their phone.</div>
+      <div class="image-panel-note">Suggested: a storefront or product photo.</div>
+    </div>
+    <div class="image-panel" data-image="partner-details" style="background:linear-gradient(160deg,#132A2C,#0B0B0C 70%);">
+      <div class="image-panel-tag">Photo placeholder</div>
+      <div class="image-panel-caption">A digital screen lighting up a street at dusk.</div>
+      <div class="image-panel-note">Suggested: one of your own screen installations.</div>
+    </div>
+    <div class="image-panel" data-image="contact" style="background:linear-gradient(160deg,#241730,#0B0B0C 70%);">
+      <div class="image-panel-tag">Photo placeholder</div>
+      <div class="image-panel-caption">Someone checking their phone for a notification.</div>
+      <div class="image-panel-note">Suggested: a candid mobile-money or phone moment.</div>
+    </div>
+    <div class="image-panel" data-image="done" style="background:linear-gradient(160deg,#2C2417,#0B0B0C 70%);">
+      <div class="image-panel-tag">Photo placeholder</div>
+      <div class="image-panel-caption">Cotonou at golden hour — where LikeAds launches first.</div>
+      <div class="image-panel-note">Suggested: a skyline or street shot of Cotonou.</div>
+    </div>
+  </div>
 
-  </main>
 </div>
 
 <script>
@@ -342,6 +417,8 @@
   const stepNames = ['role', 'advertiser-details', 'partner-details', 'contact', 'done'];
   const stepEls = {};
   stepNames.forEach(name => { stepEls[name] = document.querySelector(`.step[data-step="${name}"]`); });
+  const imagePanelEls = {};
+  document.querySelectorAll('.image-panel').forEach(el => { imagePanelEls[el.dataset.image] = el; });
 
   let flow = ['role'];
   let flowIndex = 0;
@@ -450,6 +527,9 @@
     const current = flow[flowIndex];
     Object.values(stepEls).forEach(el => el.classList.remove('active'));
     stepEls[current].classList.add('active');
+
+    Object.values(imagePanelEls).forEach(el => el.classList.remove('active'));
+    if (imagePanelEls[current]) imagePanelEls[current].classList.add('active');
 
     if (current === 'role' || current === 'done') {
       footer.style.display = 'none';
