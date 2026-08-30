@@ -245,15 +245,15 @@
 
 
     /* ---------- animated network map background (Partner Portal) ---------- */
-  .network-map-bg{
-  position: absolute; left: 50%; right: 0; bottom: 0; top: 50%;
+.network-map-bg{
+  position: absolute; left: 50%; right: 0; bottom: -8%; top: 0;
   pointer-events: none; z-index: 0;
   -webkit-mask-image:
-    linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%),
     linear-gradient(to right, transparent 0%, black 12%);
   -webkit-mask-composite: source-in;
   mask-image:
-    linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%),
     linear-gradient(to right, transparent 0%, black 12%);
   mask-composite: intersect;
 }
@@ -264,12 +264,11 @@
   }
   @keyframes netline{ 0%,100%{ opacity:.10; } 50%{ opacity:.30; } }
   .net-dot{ fill: var(--text-onpaper); opacity: .35; }
-  .net-pulse{
-    fill: none; stroke: var(--text-onpaper); stroke-width: 1.2; opacity: .5;
-    transform-box: fill-box; transform-origin: center;
-    animation: netpulse 3.4s ease-out infinite;
-  }
-  .net-pulse-amber{ stroke: var(--amber); }
+.net-pulse{
+  fill: none; stroke: var(--amber); stroke-width: 1.2; opacity: .5;
+  transform-box: fill-box; transform-origin: center;
+  animation: netpulse 3.4s ease-out infinite;
+}
   @keyframes netpulse{
     0%{ transform: scale(0.6); opacity: .55; }
     70%{ transform: scale(3.2); opacity: 0; }
@@ -566,7 +565,9 @@
 
   <!-- animated network map — confined to the right (card) column only, lower half, fading top/bottom and toward the left edge -->
   <div class="network-map-bg" aria-hidden="true">
-    <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 800 700" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <line class="net-line" x1="60" y1="20" x2="180" y2="90" style="animation-delay:.4s"/>
+      <line class="net-line" x1="180" y1="90" x2="80" y2="60" style="animation-delay:1s"/>
       <line class="net-line" x1="80" y1="60" x2="220" y2="140" style="animation-delay:.2s"/>
       <line class="net-line" x1="220" y1="140" x2="360" y2="40" style="animation-delay:.9s"/>
       <line class="net-line" x1="360" y1="40" x2="480" y2="180" style="animation-delay:1.6s"/>
@@ -577,9 +578,17 @@
       <line class="net-line" x1="340" y1="300" x2="480" y2="180" style="animation-delay:1.8s"/>
       <line class="net-line" x1="480" y1="180" x2="560" y2="320" style="animation-delay:.7s"/>
       <line class="net-line" x1="560" y1="320" x2="700" y2="340" style="animation-delay:2.4s"/>
-      <line class="net-line" x1="700" y1="340" x2="720" y2="220" style="animation-delay:1.3s"/>
+        <line class="net-line" x1="700" y1="340" x2="720" y2="220" style="animation-delay:1.3s"/>
+  <line class="net-line" x1="700" y1="340" x2="620" y2="480" style="animation-delay:.8s"/>
+  <line class="net-line" x1="620" y1="480" x2="440" y2="560" style="animation-delay:1.9s"/>
+  <line class="net-line" x1="440" y1="560" x2="560" y2="640" style="animation-delay:.5s"/>
+  <line class="net-line" x1="560" y1="640" x2="720" y2="600" style="animation-delay:2.2s"/>
 
-      <circle class="net-dot" cx="80" cy="60" r="4"/>
+  <circle class="net-dot" cx="60" cy="20" r="4"/>
+  <circle class="net-pulse" cx="60" cy="20" r="4" style="animation-delay:1.6s"/>
+  <circle class="net-dot" cx="180" cy="90" r="4"/>
+  <circle class="net-pulse" cx="180" cy="90" r="4" style="animation-delay:.4s"/>
+  <circle class="net-dot" cx="80" cy="60" r="4"/>
       <circle class="net-pulse" cx="80" cy="60" r="4" style="animation-delay:0s"/>
       <circle class="net-dot" cx="220" cy="140" r="4"/>
       <circle class="net-pulse" cx="220" cy="140" r="4" style="animation-delay:.6s"/>
@@ -597,9 +606,17 @@
       <circle class="net-pulse" cx="340" cy="300" r="4" style="animation-delay:1.5s"/>
       <circle class="net-dot" cx="560" cy="320" r="5"/>
       <circle class="net-pulse net-pulse-amber" cx="560" cy="320" r="5" style="animation-delay:0s"/>
-      <circle class="net-dot" cx="700" cy="340" r="4"/>
-      <circle class="net-pulse" cx="700" cy="340" r="4" style="animation-delay:2.4s"/>
-        </svg>
+        <circle class="net-dot" cx="700" cy="340" r="4"/>
+  <circle class="net-pulse" cx="700" cy="340" r="4" style="animation-delay:2.4s"/>
+  <circle class="net-dot" cx="620" cy="480" r="4"/>
+  <circle class="net-pulse" cx="620" cy="480" r="4" style="animation-delay:.9s"/>
+  <circle class="net-dot" cx="440" cy="560" r="5"/>
+  <circle class="net-pulse" cx="440" cy="560" r="5" style="animation-delay:1.7s"/>
+  <circle class="net-dot" cx="560" cy="640" r="4"/>
+  <circle class="net-pulse" cx="560" cy="640" r="4" style="animation-delay:.2s"/>
+  <circle class="net-dot" cx="720" cy="600" r="4"/>
+  <circle class="net-pulse" cx="720" cy="600" r="4" style="animation-delay:2.6s"/>
+    </svg>
   </div>
 
   <div class="grid lg:grid-cols-2 gap-16 items-center relative z-10">
