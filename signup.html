@@ -22,14 +22,17 @@
     --line-onpaper-strong: rgba(23,20,15,0.22);
     --amber: #E8A93A;
     --amber-soft: rgba(232,169,58,0.16);
+    --error: #B3401C;
   }
 
   *{ box-sizing: border-box; }
+  html, body{ height: 100%; }
   body{
     background: var(--paper);
     color: var(--text-onpaper);
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column;
   }
   .font-tight{ font-family: 'Inter Tight', 'Inter', sans-serif; letter-spacing: -0.02em; }
   .tracked{ letter-spacing: 0.10em; }
@@ -42,9 +45,12 @@
   .top-link:hover{ color: var(--text-onpaper); }
   .top-link:disabled{ opacity: .35; pointer-events: none; }
 
-  /* ---------- progress bar ---------- */
-  .progress-track{ height: 3px; background: var(--line-onpaper); border-radius: 2px; overflow: hidden; }
-  .progress-fill{ height: 100%; background: var(--ink); border-radius: 2px; transition: width .35s cubic-bezier(.4,0,.2,1); width: 0%; }
+  /* ---------- two-column step layout (Squarespace-style) ---------- */
+  .wizard-grid{ display: grid; grid-template-columns: 1fr; gap: 28px; }
+  @media (min-width: 860px){
+    .wizard-grid{ grid-template-columns: 0.85fr 1.15fr; gap: 64px; align-items: start; }
+  }
+  .step-question h1{ line-height: 1.15; }
 
   /* ---------- step transitions ---------- */
   .step{ display: none; }
@@ -58,6 +64,7 @@
     background: transparent; transition: border-color .2s ease, background-color .2s ease, transform .15s ease;
   }
   .role-card:hover{ border-color: var(--text-onpaper); background: rgba(23,20,15,0.03); transform: translateY(-1px); }
+  .role-card.selected{ border-color: var(--ink); background: rgba(23,20,15,0.04); }
   .role-icon{
     width: 44px; height: 44px; border-radius: 10px; background: var(--amber-soft);
     display: grid; place-items: center; flex-shrink: 0;
@@ -68,21 +75,64 @@
     font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
     color: var(--faint-onpaper); display: block; margin-bottom: 8px;
   }
-  .field-input, .field-select, .field-textarea{
+  .field-input, .field-select{
     width: 100%; background: transparent; border: none; border-bottom: 1.5px solid var(--line-onpaper-strong);
     padding: 8px 0; font-size: 15px; color: var(--text-onpaper); outline: none;
     transition: border-color .2s ease;
   }
-  .field-input::placeholder, .field-textarea::placeholder{ color: var(--faint-onpaper); }
-  .field-input:focus, .field-select:focus, .field-textarea:focus{ border-bottom-color: var(--amber); }
-  .field-textarea{ resize: none; font-family: inherit; }
+  .field-input::placeholder{ color: var(--faint-onpaper); }
+  .field-input:focus, .field-select:focus{ border-bottom-color: var(--amber); }
   .field-select{ appearance: none; -webkit-appearance: none; background-image: none; cursor: pointer; }
   .select-wrap{ position: relative; }
   .select-wrap i{ position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: var(--faint-onpaper); pointer-events: none; }
+  .field-error{ color: var(--error); font-size: 12px; margin-top: 7px; display: none; }
+  .field-error.show{ display: block; }
+  .field-input.invalid{ border-bottom-color: var(--error); }
+
+  /* ---------- chip multi-select ---------- */
+  .chip-row{ display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .chip{
+    padding: 9px 16px; border-radius: 999px; border: 1.5px solid var(--line-onpaper-strong);
+    font-size: 13.5px; font-weight: 500; color: var(--text-onpaper); background: transparent; cursor: pointer;
+    transition: border-color .15s ease, background-color .15s ease, color .15s ease;
+  }
+  .chip:hover{ border-color: var(--text-onpaper); }
+  .chip.selected{ background: var(--ink); border-color: var(--ink); color: #F5F3EE; }
+  .chip-add-form{ display: inline-flex; align-items: center; gap: 6px; }
+  .chip-add-input{
+    border: none; border-bottom: 1.5px solid var(--line-onpaper-strong); background: transparent;
+    font-size: 13.5px; padding: 8px 2px; outline: none; width: 130px; color: var(--text-onpaper);
+  }
+  .chip-add-input::placeholder{ color: var(--faint-onpaper); }
+  .chip-add-input:focus{ border-bottom-color: var(--amber); }
+  .chip-add-btn{ color: var(--faint-onpaper); transition: color .2s ease; }
+  .chip-add-btn:hover{ color: var(--text-onpaper); }
+
+  /* ---------- number stepper ---------- */
+  .stepper{ display: flex; align-items: center; gap: 18px; }
+  .stepper-btn{
+    width: 38px; height: 38px; border-radius: 10px; border: 1.5px solid var(--line-onpaper-strong);
+    display: grid; place-items: center; transition: border-color .2s ease, background-color .2s ease;
+    flex-shrink: 0; color: var(--text-onpaper);
+  }
+  .stepper-btn:hover{ border-color: var(--text-onpaper); background: rgba(23,20,15,0.03); }
+  .stepper-btn:disabled{ opacity: .3; pointer-events: none; }
+  .stepper-count{ min-width: 36px; text-align: center; font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 19px; }
+
+  /* ---------- footer bar: dots left, action button right ---------- */
+  .wizard-footer{
+    position: sticky; bottom: 0; background: var(--paper);
+    border-top: 1px solid var(--line-onpaper);
+    padding: 18px 0; margin-top: 44px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .step-dots{ display: flex; align-items: center; gap: 6px; }
+  .step-dot{ width: 22px; height: 3px; border-radius: 2px; background: var(--line-onpaper-strong); transition: background-color .2s ease; }
+  .step-dot.active, .step-dot.completed{ background: var(--ink); }
 
   /* ---------- buttons ---------- */
   .btn-primary{
-    padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 14.5px;
+    padding: 13px 30px; border-radius: 10px; font-weight: 600; font-size: 14px;
     background: var(--ink); color: #F5F3EE;
     transition: background-color .2s ease, transform .15s ease, opacity .2s ease;
   }
@@ -106,172 +156,174 @@
 
 <body>
 
-<div class="max-w-6xl mx-auto px-5 sm:px-8">
+<div class="max-w-6xl mx-auto px-5 sm:px-8 flex-1 w-full flex flex-col">
 
   <!-- ============ TOP BAR ============ -->
   <header class="flex items-center justify-between py-6 sm:py-8">
     <button id="back-btn" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium" type="button">
       <i data-lucide="chevron-left" class="w-4 h-4"></i> Back
     </button>
-    <a href="login.html" class="top-link text-[13px] tracked uppercase font-medium">Log In</a>
+    <a href="login.html" class="top-link text-[13px] tracked uppercase font-medium">Already have an account? Log in</a>
   </header>
 
-  <!-- ============ PROGRESS BAR ============ -->
-  <div id="progress-wrap" class="max-w-md mx-auto mb-2">
-    <div class="progress-track">
-      <div id="progress-fill" class="progress-fill"></div>
-    </div>
-  </div>
-
   <!-- ============ WIZARD ============ -->
-  <main class="max-w-xl mx-auto pt-10 sm:pt-14 pb-24">
+  <main class="max-w-3xl w-full mx-auto py-6 sm:py-10 flex-1 flex flex-col">
 
-    <!-- ===== STEP 1: role ===== -->
-    <section class="step active" data-step="role">
-      <div class="text-center mb-10">
-        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">How will you use LikeAds?</h1>
-        <p class="muted-onpaper text-[15px]" style="color:var(--muted-onpaper)">We'll tailor a couple of quick questions to get you set up.</p>
-      </div>
+    <div class="flex-1">
 
-      <div class="flex flex-col gap-4">
-        <button type="button" class="role-card" data-role="advertiser">
-          <span class="role-icon"><i data-lucide="megaphone" class="w-5 h-5" style="color:var(--amber)"></i></span>
-          <span>
-            <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm an Advertiser</span>
-            <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I want to put my business on outdoor screens.</span>
-          </span>
-        </button>
-        <button type="button" class="role-card" data-role="partner">
-          <span class="role-icon"><i data-lucide="tv-minimal" class="w-5 h-5" style="color:var(--amber)"></i></span>
-          <span>
-            <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm a Screen Partner</span>
-            <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I own or manage a screen network with unsold airtime.</span>
-          </span>
-        </button>
-      </div>
-    </section>
-
-    <!-- ===== STEP 2a: advertiser details ===== -->
-    <section class="step" data-step="advertiser-details">
-      <div class="text-center mb-10">
-        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">Tell us about your business.</h1>
-        <p style="color:var(--muted-onpaper)" class="text-[15px]">This helps us match you with the right screens at launch.</p>
-      </div>
-
-      <form id="advertiser-details-form" class="space-y-6" novalidate>
-        <div>
-          <label class="field-label" for="adv-business-name">Business name</label>
-          <input id="adv-business-name" type="text" class="field-input" placeholder="e.g. Chez Rachelle Traiteur" required>
-        </div>
-        <div>
-          <label class="field-label" for="adv-category">Business category</label>
-          <div class="select-wrap">
-            <select id="adv-category" class="field-select" required>
-              <option value="" disabled selected>Select a category</option>
-              <option>Restaurant</option>
-              <option>Pharmacy</option>
-              <option>Salon & Beauty</option>
-              <option>Retail</option>
-              <option>Event</option>
-              <option>Other</option>
-            </select>
-            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+      <!-- ===== STEP 1: role ===== -->
+      <section class="step active" data-step="role">
+        <div class="wizard-grid">
+          <div class="step-question">
+            <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">How will you use LikeAds?</h1>
+            <p class="text-[14.5px]" style="color:var(--muted-onpaper)">We'll tailor a couple of quick questions to get you set up.</p>
+          </div>
+          <div class="flex flex-col gap-4">
+            <button type="button" class="role-card" data-role="advertiser">
+              <span class="role-icon"><i data-lucide="megaphone" class="w-5 h-5" style="color:var(--amber)"></i></span>
+              <span>
+                <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm an Advertiser</span>
+                <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I want to put my business on outdoor screens.</span>
+              </span>
+            </button>
+            <button type="button" class="role-card" data-role="partner">
+              <span class="role-icon"><i data-lucide="tv-minimal" class="w-5 h-5" style="color:var(--amber)"></i></span>
+              <span>
+                <span class="block font-tight font-semibold text-[16.5px] mb-1">I'm a Screen Partner</span>
+                <span class="block text-[13.5px]" style="color:var(--muted-onpaper)">I own or manage a screen network with unsold airtime.</span>
+              </span>
+            </button>
           </div>
         </div>
-        <div>
-          <label class="field-label" for="adv-area">Area in Cotonou</label>
-          <input id="adv-area" type="text" class="field-input" placeholder="e.g. Cadjehoun, Akpakpa, Fidjrossè" required>
-        </div>
+      </section>
 
-        <button type="submit" class="btn-primary w-full mt-2">
-          <span class="btn-label">Continue</span>
-        </button>
-      </form>
-    </section>
-
-    <!-- ===== STEP 2b: partner details ===== -->
-    <section class="step" data-step="partner-details">
-      <div class="text-center mb-10">
-        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">Tell us about your screens.</h1>
-        <p style="color:var(--muted-onpaper)" class="text-[15px]">This helps us onboard your network first at launch.</p>
-      </div>
-
-      <form id="partner-details-form" class="space-y-6" novalidate>
-        <div>
-          <label class="field-label" for="par-network-name">Network / business name</label>
-          <input id="par-network-name" type="text" class="field-input" placeholder="e.g. Canal Com Bénin" required>
-        </div>
-        <div>
-          <label class="field-label" for="par-screen-count">Number of screens</label>
-          <input id="par-screen-count" type="number" min="1" class="field-input" placeholder="e.g. 6" required>
-        </div>
-        <div>
-          <label class="field-label" for="par-screen-type">Screen type</label>
-          <div class="select-wrap">
-            <select id="par-screen-type" class="field-select" required>
-              <option value="" disabled selected>Select a type</option>
-              <option>LED billboard</option>
-              <option>Transparent LCD</option>
-              <option>Indoor display</option>
-              <option>Mixed / other</option>
-            </select>
-            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+      <!-- ===== STEP 2a: advertiser details ===== -->
+      <section class="step" data-step="advertiser-details">
+        <form id="advertiser-details-form" class="wizard-grid" novalidate>
+          <div class="step-question">
+            <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">Tell us about your business.</h1>
+            <p class="text-[14.5px]" style="color:var(--muted-onpaper)">This helps us match you with the right screens at launch.</p>
           </div>
-        </div>
-        <div>
-          <label class="field-label" for="par-locations">Screen locations</label>
-          <textarea id="par-locations" rows="2" class="field-textarea" placeholder="e.g. Cadjehoun Clinic, Erevan Market" required></textarea>
-        </div>
+          <div class="space-y-7">
+            <div>
+              <label class="field-label" for="adv-business-name">Business name</label>
+              <input id="adv-business-name" type="text" class="field-input" placeholder="e.g. Chez Rachelle Traiteur" required>
+            </div>
+            <div>
+              <label class="field-label" for="adv-category">Business category</label>
+              <div class="select-wrap">
+                <select id="adv-category" class="field-select" required>
+                  <option value="" disabled selected>Select a category</option>
+                  <option>Restaurant</option>
+                  <option>Pharmacy</option>
+                  <option>Salon & Beauty</option>
+                  <option>Retail</option>
+                  <option>Event</option>
+                  <option>Other</option>
+                </select>
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Area(s) in Cotonou</label>
+              <div id="adv-area-chips" class="chip-row"></div>
+              <p class="field-error" id="adv-area-error">Pick at least one area.</p>
+            </div>
+          </div>
+        </form>
+      </section>
 
-        <button type="submit" class="btn-primary w-full mt-2">
-          <span class="btn-label">Continue</span>
-        </button>
-      </form>
-    </section>
+      <!-- ===== STEP 2b: partner details ===== -->
+      <section class="step" data-step="partner-details">
+        <form id="partner-details-form" class="wizard-grid" novalidate>
+          <div class="step-question">
+            <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">Tell us about your screens.</h1>
+            <p class="text-[14.5px]" style="color:var(--muted-onpaper)">This helps us onboard your network first at launch.</p>
+          </div>
+          <div class="space-y-7">
+            <div>
+              <label class="field-label" for="par-network-name">Network / business name</label>
+              <input id="par-network-name" type="text" class="field-input" placeholder="e.g. Canal Com Bénin" required>
+            </div>
+            <div>
+              <label class="field-label">Number of screens</label>
+              <div class="stepper">
+                <button type="button" id="screen-count-minus" class="stepper-btn" aria-label="Decrease"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                <span id="screen-count-value" class="stepper-count">1</span>
+                <button type="button" id="screen-count-plus" class="stepper-btn" aria-label="Increase"><i data-lucide="plus" class="w-4 h-4"></i></button>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Screen type(s)</label>
+              <div id="par-screen-type-chips" class="chip-row"></div>
+              <input id="par-screen-type-other" type="text" class="field-input mt-3 hidden" placeholder="Describe your screen type">
+              <p class="field-error" id="par-screen-type-error">Pick at least one screen type.</p>
+            </div>
+            <div>
+              <label class="field-label">Screen location(s)</label>
+              <div id="par-location-chips" class="chip-row"></div>
+              <p class="field-error" id="par-location-error">Pick at least one location.</p>
+            </div>
+          </div>
+        </form>
+      </section>
 
-    <!-- ===== STEP 3: contact (shared) ===== -->
-    <section class="step" data-step="contact">
-      <div class="text-center mb-10">
-        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">How do we reach you?</h1>
-        <p style="color:var(--muted-onpaper)" class="text-[15px]">We'll notify you the moment we launch in Cotonou.</p>
+      <!-- ===== STEP 3: contact (shared) ===== -->
+      <section class="step" data-step="contact">
+        <form id="contact-form" class="wizard-grid" novalidate>
+          <div class="step-question">
+            <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">How do we reach you?</h1>
+            <p class="text-[14.5px]" style="color:var(--muted-onpaper)">We'll notify you the moment we launch in Cotonou.</p>
+          </div>
+          <div class="space-y-7">
+            <div>
+              <label class="field-label" for="con-full-name">Full name</label>
+              <input id="con-full-name" type="text" class="field-input" placeholder="Your name" required>
+            </div>
+            <div>
+              <label class="field-label" for="con-phone">Phone number</label>
+              <input id="con-phone" type="tel" class="field-input" placeholder="e.g. 97 00 00 00" required>
+              <p class="field-error" id="con-phone-error">Enter a valid phone number.</p>
+            </div>
+            <div>
+              <label class="field-label" for="con-email">Email address</label>
+              <input id="con-email" type="email" class="field-input" placeholder="name@example.com" required>
+              <p class="field-error" id="con-email-error">Enter a valid email address.</p>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- ===== STEP 4: done ===== -->
+      <section class="step" data-step="done">
+        <div class="text-center py-10">
+          <div class="success-icon mb-6">
+            <i data-lucide="check" class="w-7 h-7" style="color:var(--amber)"></i>
+          </div>
+          <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">You're on the list.</h1>
+          <p style="color:var(--muted-onpaper)" class="text-[15px] max-w-sm mx-auto leading-relaxed">
+            LikeAds is launching soon in Cotonou. We'll email and text you the moment we're live, so you can be among the first on the network.
+          </p>
+          <a href="index.html" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium mt-8">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to LikeAds
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ============ FOOTER BAR: dots + next/submit ============ -->
+    <div id="wizard-footer" class="wizard-footer">
+      <div class="step-dots">
+        <span class="step-dot" data-dot="0"></span>
+        <span class="step-dot" data-dot="1"></span>
+        <span class="step-dot" data-dot="2"></span>
       </div>
-
-      <form id="contact-form" class="space-y-6" novalidate>
-        <div>
-          <label class="field-label" for="con-full-name">Full name</label>
-          <input id="con-full-name" type="text" class="field-input" placeholder="Your name" required>
-        </div>
-        <div>
-          <label class="field-label" for="con-phone">Phone number</label>
-          <input id="con-phone" type="tel" class="field-input" placeholder="e.g. 97 00 00 00" required>
-        </div>
-        <div>
-          <label class="field-label" for="con-email">Email address</label>
-          <input id="con-email" type="email" class="field-input" placeholder="name@example.com" required>
-        </div>
-
-        <button type="submit" id="submit-btn" class="btn-primary w-full mt-2 flex items-center justify-center gap-2">
-          <span class="spinner"></span>
-          <span class="btn-label">Submit</span>
-        </button>
-      </form>
-    </section>
-
-    <!-- ===== STEP 4: done ===== -->
-    <section class="step" data-step="done">
-      <div class="text-center">
-        <div class="success-icon mb-6">
-          <i data-lucide="check" class="w-7 h-7" style="color:var(--amber)"></i>
-        </div>
-        <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">You're on the list.</h1>
-        <p style="color:var(--muted-onpaper)" class="text-[15px] max-w-sm mx-auto leading-relaxed">
-          LikeAds is launching soon in Cotonou. We'll email and text you the moment we're live, so you can be among the first on the network.
-        </p>
-        <a href="index.html" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium mt-8">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to LikeAds
-        </a>
-      </div>
-    </section>
+      <button type="button" id="footer-next-btn" class="btn-primary flex items-center justify-center gap-2">
+        <span class="spinner"></span>
+        <span class="btn-label">Continue</span>
+      </button>
+    </div>
 
   </main>
 </div>
@@ -280,62 +332,143 @@
   lucide.createIcons();
 
   /* =====================================================================
-     GOOGLE SHEETS SUBMISSION
-     -------------------------------------------------------------------
-     1. Create a Google Sheet (any name).
-     2. In it: Extensions > Apps Script, paste the doPost script provided
-        alongside this file, then Deploy > New deployment > Web app.
-        - Execute as: Me
-        - Who has access: Anyone
-     3. Copy the resulting Web App URL and paste it below.
-     Advertiser and Partner submissions are written to separate tabs
-     ("Advertisers" / "Partners") in that same sheet automatically.
+     GOOGLE SHEETS SUBMISSION — see GOOGLE_SHEETS_SETUP.txt
   ===================================================================== */
-  const GAS_URL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzovQU-3QJ3PF6R7k5L_tdoCS90LgJn0QWRSwjT3Yb6IrJzKbSXKnVFjQcawzgMH67WOA/exec';
 
-  const steps = ['role', 'advertiser-details', 'partner-details', 'contact', 'done'];
+  const AREAS = ['Cadjehoun', 'Akpakpa', 'Fidjrossè', 'Gbégamey', 'Zogbo', 'Sainte Rita', 'Jonquet', 'Dantokpa', 'Godomey', 'Cocotomey', 'Vedoko', 'Camp Guézo', 'Agla', 'Fifadji'];
+  const SCREEN_TYPES = ['LED billboard', 'Transparent LCD', 'Indoor display', 'Digital kiosk', 'Other'];
+
+  const stepNames = ['role', 'advertiser-details', 'partner-details', 'contact', 'done'];
   const stepEls = {};
-  steps.forEach(name => { stepEls[name] = document.querySelector(`.step[data-step="${name}"]`); });
+  stepNames.forEach(name => { stepEls[name] = document.querySelector(`.step[data-step="${name}"]`); });
 
-  // the *sequence* a given session actually walks through, built once a role is picked
   let flow = ['role'];
   let flowIndex = 0;
   let role = null;
   const answers = {};
+  const selected = { advAreas: new Set(), parLocations: new Set(), screenTypes: new Set() };
+  let screenCount = 1;
 
-  const progressFill = document.getElementById('progress-fill');
-  const progressWrap = document.getElementById('progress-wrap');
   const backBtn = document.getElementById('back-btn');
+  const footer = document.getElementById('wizard-footer');
+  const footerNextBtn = document.getElementById('footer-next-btn');
+  const dots = document.querySelectorAll('.step-dot');
 
+  /* ---------- chip picker builder ---------- */
+  function buildChips(containerEl, options, selectedSet, { allowOther = false, onOtherToggle = null } = {}) {
+    containerEl.innerHTML = '';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        if (selectedSet.has(opt)) { selectedSet.delete(opt); btn.classList.remove('selected'); }
+        else { selectedSet.add(opt); btn.classList.add('selected'); }
+        if (allowOther && opt === 'Other' && onOtherToggle) onOtherToggle(selectedSet.has('Other'));
+      });
+      containerEl.appendChild(btn);
+    });
+    if (!allowOther) {
+      const addForm = document.createElement('span');
+      addForm.className = 'chip-add-form';
+      addForm.innerHTML = `
+        <input type="text" class="chip-add-input" placeholder="Add another…">
+        <button type="button" class="chip-add-btn" aria-label="Add"><i data-lucide="plus-circle" class="w-4.5 h-4.5"></i></button>
+      `;
+      const input = addForm.querySelector('input');
+      const addBtn = addForm.querySelector('button');
+      function addCustom() {
+        const val = input.value.trim();
+        if (!val) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip selected';
+        btn.textContent = val;
+        selectedSet.add(val);
+        btn.addEventListener('click', () => {
+          selectedSet.delete(val);
+          btn.remove();
+        });
+        containerEl.insertBefore(btn, addForm);
+        input.value = '';
+        lucide.createIcons();
+      }
+      addBtn.addEventListener('click', addCustom);
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addCustom(); } });
+      containerEl.appendChild(addForm);
+    }
+    lucide.createIcons();
+  }
+
+  buildChips(document.getElementById('adv-area-chips'), AREAS, selected.advAreas);
+  buildChips(document.getElementById('par-location-chips'), AREAS, selected.parLocations);
+  buildChips(document.getElementById('par-screen-type-chips'), SCREEN_TYPES, selected.screenTypes, {
+    allowOther: true,
+    onOtherToggle: (isOn) => {
+      document.getElementById('par-screen-type-other').classList.toggle('hidden', !isOn);
+    }
+  });
+
+  /* ---------- number stepper ---------- */
+  const screenCountValueEl = document.getElementById('screen-count-value');
+  document.getElementById('screen-count-minus').addEventListener('click', () => {
+    if (screenCount > 1) { screenCount--; screenCountValueEl.textContent = screenCount; }
+  });
+  document.getElementById('screen-count-plus').addEventListener('click', () => {
+    screenCount++; screenCountValueEl.textContent = screenCount;
+  });
+
+  /* ---------- validators ---------- */
+  function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
+  function isValidPhone(v) {
+    const digits = v.replace(/[^\d+]/g, '');
+    return /^\+?\d{8,13}$/.test(digits);
+  }
+  function setFieldError(inputEl, errorEl, show) {
+    inputEl.classList.toggle('invalid', show);
+    errorEl.classList.toggle('show', show);
+  }
+
+  const emailInput = document.getElementById('con-email');
+  const emailError = document.getElementById('con-email-error');
+  emailInput.addEventListener('blur', () => {
+    if (emailInput.value.trim()) setFieldError(emailInput, emailError, !isValidEmail(emailInput.value));
+  });
+  emailInput.addEventListener('input', () => setFieldError(emailInput, emailError, false));
+
+  const phoneInput = document.getElementById('con-phone');
+  const phoneError = document.getElementById('con-phone-error');
+  phoneInput.addEventListener('blur', () => {
+    if (phoneInput.value.trim()) setFieldError(phoneInput, phoneError, !isValidPhone(phoneInput.value));
+  });
+  phoneInput.addEventListener('input', () => setFieldError(phoneInput, phoneError, false));
+
+  /* ---------- step rendering ---------- */
   function renderStep() {
     const current = flow[flowIndex];
     Object.values(stepEls).forEach(el => el.classList.remove('active'));
     stepEls[current].classList.add('active');
 
-    // progress: hide on the final "done" screen, otherwise show step (n / total-1)
-    const totalDataSteps = flow.length - 1; // exclude "done" from the denominator
-    if (current === 'done') {
-      progressWrap.style.display = 'none';
+    if (current === 'role' || current === 'done') {
+      footer.style.display = 'none';
     } else {
-      progressWrap.style.display = '';
-      progressFill.style.width = `${(flowIndex / totalDataSteps) * 100}%`;
+      footer.style.display = 'flex';
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === flowIndex);
+        d.classList.toggle('completed', i < flowIndex);
+      });
+      footerNextBtn.querySelector('.btn-label').textContent = current === 'contact' ? 'Submit' : 'Continue';
     }
-
     backBtn.disabled = flowIndex === 0;
   }
 
-  function goNext() {
-    flowIndex++;
-    renderStep();
-  }
-  function goBack() {
-    if (flowIndex === 0) return;
-    flowIndex--;
-    renderStep();
-  }
+  function goNext() { flowIndex++; renderStep(); }
+  function goBack() { if (flowIndex === 0) return; flowIndex--; renderStep(); }
   backBtn.addEventListener('click', goBack);
 
-  // ---- step 1: role selection ----
+  /* ---------- step 1: role selection ---------- */
   document.querySelectorAll('.role-card').forEach(card => {
     card.addEventListener('click', () => {
       role = card.dataset.role;
@@ -347,54 +480,94 @@
     });
   });
 
-  // ---- step 2a: advertiser details ----
-  document.getElementById('advertiser-details-form').addEventListener('submit', (e) => {
-    e.preventDefault();
+  /* ---------- step 2a: advertiser details ---------- */
+  function validateAdvertiserDetails() {
+    const form = document.getElementById('advertiser-details-form');
+    if (!form.reportValidity()) return false;
+    const areaError = document.getElementById('adv-area-error');
+    if (selected.advAreas.size === 0) { areaError.classList.add('show'); return false; }
+    areaError.classList.remove('show');
     answers.businessName = document.getElementById('adv-business-name').value.trim();
     answers.category = document.getElementById('adv-category').value;
-    answers.area = document.getElementById('adv-area').value.trim();
-    goNext();
-  });
+    answers.area = Array.from(selected.advAreas).join(', ');
+    return true;
+  }
 
-  // ---- step 2b: partner details ----
-  document.getElementById('partner-details-form').addEventListener('submit', (e) => {
-    e.preventDefault();
+  /* ---------- step 2b: partner details ---------- */
+  function validatePartnerDetails() {
+    const form = document.getElementById('partner-details-form');
+    if (!form.reportValidity()) return false;
+    const typeError = document.getElementById('par-screen-type-error');
+    const locError = document.getElementById('par-location-error');
+    let ok = true;
+    if (selected.screenTypes.size === 0) { typeError.classList.add('show'); ok = false; } else typeError.classList.remove('show');
+    if (selected.parLocations.size === 0) { locError.classList.add('show'); ok = false; } else locError.classList.remove('show');
+    if (!ok) return false;
+
+    let screenTypeLabel = Array.from(selected.screenTypes).join(', ');
+    if (selected.screenTypes.has('Other')) {
+      const otherText = document.getElementById('par-screen-type-other').value.trim();
+      if (otherText) screenTypeLabel = screenTypeLabel.replace('Other', `Other (${otherText})`);
+    }
+
     answers.networkName = document.getElementById('par-network-name').value.trim();
-    answers.screenCount = document.getElementById('par-screen-count').value;
-    answers.screenType = document.getElementById('par-screen-type').value;
-    answers.screenLocations = document.getElementById('par-locations').value.trim();
-    goNext();
-  });
+    answers.screenCount = screenCount;
+    answers.screenType = screenTypeLabel;
+    answers.screenLocations = Array.from(selected.parLocations).join(', ');
+    return true;
+  }
 
-  // ---- step 3: contact + submit to Google Sheets ----
-  const submitBtn = document.getElementById('submit-btn');
-  document.getElementById('contact-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
+  /* ---------- step 3: contact ---------- */
+  async function validateAndSubmitContact() {
+    const form = document.getElementById('contact-form');
+    if (!form.reportValidity()) return false;
+
+    const emailOk = isValidEmail(emailInput.value);
+    const phoneOk = isValidPhone(phoneInput.value);
+    setFieldError(emailInput, emailError, !emailOk);
+    setFieldError(phoneInput, phoneError, !phoneOk);
+    if (!emailOk || !phoneOk) return false;
+
     answers.fullName = document.getElementById('con-full-name').value.trim();
-    answers.phone = document.getElementById('con-phone').value.trim();
-    answers.email = document.getElementById('con-email').value.trim();
+    answers.phone = phoneInput.value.trim();
+    answers.email = emailInput.value.trim();
 
-    submitBtn.classList.add('is-loading');
-    submitBtn.disabled = true;
-
+    footerNextBtn.classList.add('is-loading');
+    footerNextBtn.disabled = true;
     try {
-      // Apps Script web apps don't support JSON + CORS preflight from the browser,
-      // so we send as text/plain (no preflight) and parse JSON on the server side.
       await fetch(GAS_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(answers)
       });
-      // 'no-cors' mode means we can't read the response — treat the fetch
-      // resolving (vs. throwing) as success and move to the confirmation step.
-      goNext();
+      return true;
     } catch (err) {
       console.error('Signup submission failed', err);
-      submitBtn.classList.remove('is-loading');
-      submitBtn.disabled = false;
       alert("Something went wrong sending your details. Please try again.");
+      return false;
+    } finally {
+      footerNextBtn.classList.remove('is-loading');
+      footerNextBtn.disabled = false;
     }
+  }
+
+  /* ---------- footer Next/Submit button routes by current step ---------- */
+  footerNextBtn.addEventListener('click', async () => {
+    const current = flow[flowIndex];
+    if (current === 'advertiser-details') {
+      if (validateAdvertiserDetails()) goNext();
+    } else if (current === 'partner-details') {
+      if (validatePartnerDetails()) goNext();
+    } else if (current === 'contact') {
+      const ok = await validateAndSubmitContact();
+      if (ok) goNext();
+    }
+  });
+
+  // prevent native form submission (Enter key) from bypassing our validation/routing
+  document.querySelectorAll('.wizard-grid').forEach(form => {
+    if (form.tagName === 'FORM') form.addEventListener('submit', (e) => e.preventDefault());
   });
 
   renderStep();
