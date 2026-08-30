@@ -241,6 +241,35 @@
     opacity: 0.92; transition: opacity .2s ease;
   }
   .partner-logo-img:hover{ opacity: 1; }
+
+
+
+    /* ---------- animated network map background (Partner Portal) ---------- */
+  .network-map-bg{
+    position: absolute; left: 0; right: 0; bottom: 0; top: 50%;
+    pointer-events: none; z-index: 0;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+  }
+  .network-map-bg svg{ width: 100%; height: 100%; display: block; }
+  .net-line{
+    stroke: var(--text-onpaper); stroke-width: 1; opacity: .12;
+    animation: netline 5s ease-in-out infinite;
+  }
+  @keyframes netline{ 0%,100%{ opacity:.10; } 50%{ opacity:.30; } }
+  .net-dot{ fill: var(--text-onpaper); opacity: .35; }
+  .net-pulse{
+    fill: none; stroke: var(--text-onpaper); stroke-width: 1.2; opacity: .5;
+    transform-box: fill-box; transform-origin: center;
+    animation: netpulse 3.4s ease-out infinite;
+  }
+  .net-pulse-amber{ stroke: var(--amber); }
+  @keyframes netpulse{
+    0%{ transform: scale(0.6); opacity: .55; }
+    70%{ transform: scale(3.2); opacity: 0; }
+    100%{ opacity: 0; }
+  }
+
   
 </style>
 </head>
@@ -408,7 +437,7 @@
   <div class="max-w-7xl mx-auto px-5 sm:px-8">
     <div class="reveal max-w-xl mb-14">
       <div class="text-[12px] tracked uppercase muted-onpaper mb-3">Platform</div>
-      <h2 class="font-tight font-normal text-[30px] sm:text-[38px]">Everything you need to launch<br> an outdoor advert.</h2>
+      <h2 class="font-tight font-normal text-[30px] sm:text-[38px]">Everything you need to launch an outdoor advert.</h2>
     </div>
 
     <div class="grid sm:grid-cols-2 gap-4">
@@ -525,8 +554,47 @@
 
   
 <!-- ============ PARTNER PORTAL ============ -->
-<section id="partners" class="section-paper py-24 md:py-32">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+<section id="partners" class="section-paper py-24 md:py-32 relative overflow-hidden">
+
+  <!-- animated network map — behind the content, lower half of the section, fading top and bottom -->
+  <div class="network-map-bg" aria-hidden="true">
+    <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <line class="net-line" x1="80" y1="60" x2="220" y2="140" style="animation-delay:.2s"/>
+      <line class="net-line" x1="220" y1="140" x2="360" y2="40" style="animation-delay:.9s"/>
+      <line class="net-line" x1="360" y1="40" x2="480" y2="180" style="animation-delay:1.6s"/>
+      <line class="net-line" x1="480" y1="180" x2="620" y2="90" style="animation-delay:.5s"/>
+      <line class="net-line" x1="620" y1="90" x2="720" y2="220" style="animation-delay:2.1s"/>
+      <line class="net-line" x1="220" y1="140" x2="160" y2="260" style="animation-delay:1.1s"/>
+      <line class="net-line" x1="160" y1="260" x2="340" y2="300" style="animation-delay:.3s"/>
+      <line class="net-line" x1="340" y1="300" x2="480" y2="180" style="animation-delay:1.8s"/>
+      <line class="net-line" x1="480" y1="180" x2="560" y2="320" style="animation-delay:.7s"/>
+      <line class="net-line" x1="560" y1="320" x2="700" y2="340" style="animation-delay:2.4s"/>
+      <line class="net-line" x1="700" y1="340" x2="720" y2="220" style="animation-delay:1.3s"/>
+
+      <circle class="net-dot" cx="80" cy="60" r="4"/>
+      <circle class="net-pulse" cx="80" cy="60" r="4" style="animation-delay:0s"/>
+      <circle class="net-dot" cx="220" cy="140" r="4"/>
+      <circle class="net-pulse" cx="220" cy="140" r="4" style="animation-delay:.6s"/>
+      <circle class="net-dot" cx="360" cy="40" r="4"/>
+      <circle class="net-pulse" cx="360" cy="40" r="4" style="animation-delay:1.2s"/>
+      <circle class="net-dot" cx="480" cy="180" r="5"/>
+      <circle class="net-pulse net-pulse-amber" cx="480" cy="180" r="5" style="animation-delay:.3s"/>
+      <circle class="net-dot" cx="620" cy="90" r="4"/>
+      <circle class="net-pulse" cx="620" cy="90" r="4" style="animation-delay:1.8s"/>
+      <circle class="net-dot" cx="720" cy="220" r="4"/>
+      <circle class="net-pulse" cx="720" cy="220" r="4" style="animation-delay:.9s"/>
+      <circle class="net-dot" cx="160" cy="260" r="4"/>
+      <circle class="net-pulse" cx="160" cy="260" r="4" style="animation-delay:2.1s"/>
+      <circle class="net-dot" cx="340" cy="300" r="4"/>
+      <circle class="net-pulse" cx="340" cy="300" r="4" style="animation-delay:1.5s"/>
+      <circle class="net-dot" cx="560" cy="320" r="5"/>
+      <circle class="net-pulse net-pulse-amber" cx="560" cy="320" r="5" style="animation-delay:0s"/>
+      <circle class="net-dot" cx="700" cy="340" r="4"/>
+      <circle class="net-pulse" cx="700" cy="340" r="4" style="animation-delay:2.4s"/>
+    </svg>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
     <div class="grid lg:grid-cols-2 gap-16 items-center">
 
       <div>
@@ -674,7 +742,7 @@
       <div>
         <div class="tracked uppercase text-[11px] faint-onink mb-4">Screen Partners</div>
         <div class="flex flex-col gap-2.5 muted-onink">
-          <a href="signup?role=partner" class="nav-link">Become a partners</a>
+          <a href="signup?role=partner" class="nav-link">Become a partner</a>
           <a href="#waitlist" class="nav-link">Revenue share</a>
         </div>
       </div>
