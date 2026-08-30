@@ -246,11 +246,17 @@
 
     /* ---------- animated network map background (Partner Portal) ---------- */
   .network-map-bg{
-    position: absolute; left: 0; right: 0; bottom: 0; top: 50%;
-    pointer-events: none; z-index: 0;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
-  }
+  position: absolute; left: 50%; right: 0; bottom: 0; top: 50%;
+  pointer-events: none; z-index: 0;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%),
+    linear-gradient(to right, transparent 0%, black 12%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%),
+    linear-gradient(to right, transparent 0%, black 12%);
+  mask-composite: intersect;
+}
   .network-map-bg svg{ width: 100%; height: 100%; display: block; }
   .net-line{
     stroke: var(--text-onpaper); stroke-width: 1; opacity: .12;
@@ -556,7 +562,9 @@
 <!-- ============ PARTNER PORTAL ============ -->
 <section id="partners" class="section-paper py-24 md:py-32 relative overflow-hidden">
 
-  <!-- animated network map — behind the content, lower half of the section, fading top and bottom -->
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
+
+  <!-- animated network map — confined to the right (card) column only, lower half, fading top/bottom and toward the left edge -->
   <div class="network-map-bg" aria-hidden="true">
     <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
       <line class="net-line" x1="80" y1="60" x2="220" y2="140" style="animation-delay:.2s"/>
@@ -591,11 +599,10 @@
       <circle class="net-pulse net-pulse-amber" cx="560" cy="320" r="5" style="animation-delay:0s"/>
       <circle class="net-dot" cx="700" cy="340" r="4"/>
       <circle class="net-pulse" cx="700" cy="340" r="4" style="animation-delay:2.4s"/>
-    </svg>
+        </svg>
   </div>
 
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
+  <div class="grid lg:grid-cols-2 gap-16 items-center relative z-10">
 
       <div>
         <div class="reveal text-[12px] tracked uppercase muted-onpaper mb-4">For media networks</div>
@@ -664,8 +671,8 @@
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 </section>
 
 <!-- ============ PRICING ============ -->
