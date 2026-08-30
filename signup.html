@@ -40,9 +40,10 @@
     outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px;
   }
 
-  .top-link{ color: var(--muted-onpaper); transition: color .2s ease; }
-  .top-link:hover{ color: var(--text-onpaper); }
-  .top-link:disabled{ opacity: .35; pointer-events: none; }
+.top-link{ color: var(--muted-onpaper); transition: color .2s ease; }
+.top-link:hover{ color: var(--text-onpaper); }
+.top-link:disabled{ opacity: .35; pointer-events: none; }
+.logo-mark{ width: 26px; height: 26px; flex-shrink: 0; }
 
   /* ---------- page shell: content pane + image pane ---------- */
   .page-shell{ display: flex; min-height: 100vh; }
@@ -202,11 +203,18 @@
 
       <!-- ============ TOP BAR ============ -->
       <header class="flex items-center justify-between py-6 sm:py-8">
-        <button id="back-btn" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium" type="button">
-          <i data-lucide="chevron-left" class="w-4 h-4"></i> Back
-        </button>
-        <a href="login" class="top-link text-[13px] tracked uppercase font-medium">Log in instead</a>
-      </header>
+  <a href="index.html" class="flex items-center gap-2.5">
+    <span class="logo-mark">
+      <svg viewBox="0 0 26 26" fill="none">
+        <rect x="1" y="4" width="24" height="15" rx="3" stroke="#17140F" stroke-width="1.6"/>
+        <rect x="9" y="22" width="8" height="1.6" rx="0.8" fill="#17140F"/>
+        <circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/>
+      </svg>
+    </span>
+    <span class="font-tight font-semibold text-[16.5px]">LikeAds</span>
+  </a>
+  <a href="login.html" class="top-link text-[13px] tracked uppercase font-medium">Already have an account? Log in</a>
+</header>
 
       <!-- ============ WIZARD ============ -->
       <main class="w-full flex-1 flex flex-col py-2 sm:py-6">
@@ -356,16 +364,21 @@
 
         <!-- ============ FOOTER BAR: dots + next/submit ============ -->
         <div id="wizard-footer" class="wizard-footer">
-          <div class="step-dots">
-            <span class="step-dot" data-dot="0"></span>
-            <span class="step-dot" data-dot="1"></span>
-            <span class="step-dot" data-dot="2"></span>
-          </div>
-          <button type="button" id="footer-next-btn" class="btn-primary flex items-center justify-center gap-2">
-            <span class="spinner"></span>
-            <span class="btn-label">Continue</span>
-          </button>
-        </div>
+  <div class="step-dots">
+    <span class="step-dot" data-dot="0"></span>
+    <span class="step-dot" data-dot="1"></span>
+    <span class="step-dot" data-dot="2"></span>
+  </div>
+  <div class="flex items-center gap-5">
+    <button id="back-btn" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium" type="button">
+      <i data-lucide="chevron-left" class="w-4 h-4"></i> Back
+    </button>
+    <button type="button" id="footer-next-btn" class="btn-primary flex items-center justify-center gap-2">
+      <span class="spinner"></span>
+      <span class="btn-label">Continue</span>
+    </button>
+  </div>
+</div>
 
       </main>
     </div>
