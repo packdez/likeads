@@ -667,6 +667,19 @@
     if (form.tagName === 'FORM') form.addEventListener('submit', (e) => e.preventDefault());
   });
 
+  // if the link that brought them here already knows their role
+  // (e.g. "Become a partner" / "Create an advert" on the main site),
+  // skip the role-selection step and jump straight into that flow
+  const urlRole = new URLSearchParams(window.location.search).get('role');
+  if (urlRole === 'partner' || urlRole === 'advertiser') {
+    role = urlRole;
+    answers.type = role;
+    flow = role === 'advertiser'
+      ? ['role', 'advertiser-details', 'contact', 'done']
+      : ['role', 'partner-details', 'contact', 'done'];
+    flowIndex = 1; // skip past "role" straight to the details step
+  }
+
   renderStep();
 </script>
 
