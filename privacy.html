@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — LikeAds</title>
+<meta name="description" content="How LikeAds collects, uses, and protects information from advertisers and screen partners.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink: #0B0B0C;
+    --paper: #F0ECE3;
+    --text-onpaper: #17140F;
+    --muted-onpaper: rgba(23,20,15,0.62);
+    --faint-onpaper: rgba(23,20,15,0.38);
+    --line-onpaper: rgba(23,20,15,0.14);
+    --line-onpaper-strong: rgba(23,20,15,0.22);
+    --amber: #E8A93A;
+    --amber-soft: rgba(232,169,58,0.14);
+  }
+  *{ box-sizing: border-box; }
+  body{
+    background: var(--paper);
+    color: var(--text-onpaper);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-tight{ font-family: 'Inter Tight', 'Inter', sans-serif; letter-spacing: -0.02em; }
+  .tracked{ letter-spacing: 0.10em; }
+  ::selection{ background: var(--amber); color: #1a1305; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px; }
+
+  .top-link{ color: var(--muted-onpaper); transition: color .2s ease; }
+  .top-link:hover{ color: var(--text-onpaper); }
+  .logo-mark{ width: 26px; height: 26px; flex-shrink: 0; }
+
+  .doc-nav a{
+    display: block; padding: 7px 0; font-size: 13px; color: var(--muted-onpaper);
+    border-left: 2px solid transparent; padding-left: 14px; transition: color .2s ease, border-color .2s ease;
+  }
+  .doc-nav a:hover{ color: var(--text-onpaper); }
+  .doc-nav a.active{ color: var(--text-onpaper); border-left-color: var(--amber); font-weight: 500; }
+
+  .prose-section{ scroll-margin-top: 100px; }
+  .prose-section h2{ font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .prose-section h3{ font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 15.5px; margin-top: 20px; margin-bottom: 8px; }
+  .prose-section p{ font-size: 14.5px; line-height: 1.7; color: var(--muted-onpaper); margin-bottom: 14px; }
+  .prose-section ul{ margin-bottom: 14px; padding-left: 4px; }
+  .prose-section li{ font-size: 14.5px; line-height: 1.7; color: var(--muted-onpaper); margin-bottom: 8px; list-style: none; position: relative; padding-left: 20px; }
+  .prose-section li::before{ content: '—'; position: absolute; left: 0; color: var(--faint-onpaper); }
+  .prose-section strong{ color: var(--text-onpaper); font-weight: 600; }
+  .prose-section a.inline-link{ color: var(--text-onpaper); text-decoration: underline; text-underline-offset: 2px; }
+
+  .callout{
+    background: var(--amber-soft); border: 1px solid rgba(232,169,58,0.35);
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 24px;
+  }
+  .callout p{ color: #6B4E14; font-size: 13.5px; line-height: 1.6; margin: 0; }
+</style>
+</head>
+
+<body>
+
+<div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="flex items-center justify-between py-6 sm:py-8">
+    <a href="index.html" class="flex items-center gap-2.5">
+      <span class="logo-mark">
+        <svg viewBox="0 0 26 26" fill="none">
+          <rect x="1" y="4" width="24" height="15" rx="3" stroke="#17140F" stroke-width="1.6"/>
+          <rect x="9" y="22" width="8" height="1.6" rx="0.8" fill="#17140F"/>
+          <circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/>
+        </svg>
+      </span>
+      <span class="font-tight font-semibold text-[16.5px]">LikeAds</span>
+    </a>
+    <a href="index.html" class="top-link text-[13px] tracked uppercase font-medium">Back to LikeAds</a>
+  </header>
+
+  <!-- ============ TITLE ============ -->
+  <div class="max-w-3xl pt-6 sm:pt-10 pb-12">
+    <div class="text-[12px] tracked uppercase mb-4" style="color:var(--faint-onpaper)">Legal</div>
+    <h1 class="font-tight font-semibold text-[34px] sm:text-[44px] leading-tight mb-4">Privacy Policy</h1>
+    <p class="text-[14.5px]" style="color:var(--muted-onpaper)">Last updated: [Month Day, Year]</p>
+  </div>
+
+  <div class="callout max-w-3xl">
+    <p><strong>Note for the site owner:</strong> this draft is written from what LikeAds actually collects today (the advertiser and screen-partner sign-up flows) and is meant as a starting point, not finished legal copy. Replace every bracketed placeholder — company legal name, registered address, contact email — and have it reviewed by a lawyer familiar with Benin's data protection law (loi sur la protection des données à caractère personnel, overseen by the APDP) before publishing.</p>
+  </div>
+
+  <!-- ============ CONTENT ============ -->
+  <div class="grid lg:grid-cols-[220px_1fr] gap-12 pb-28">
+
+    <!-- side nav -->
+    <nav class="doc-nav hidden lg:block sticky top-10 self-start border-l" style="border-color:var(--line-onpaper)">
+      <a href="#overview">Overview</a>
+      <a href="#information-we-collect">Information we collect</a>
+      <a href="#how-we-use-it">How we use it</a>
+      <a href="#payments">Payments &amp; mobile money</a>
+      <a href="#sharing">How we share information</a>
+      <a href="#security">Data storage &amp; security</a>
+      <a href="#retention">Data retention</a>
+      <a href="#your-rights">Your rights</a>
+      <a href="#cookies">Cookies</a>
+      <a href="#children">Children's privacy</a>
+      <a href="#changes">Changes to this policy</a>
+      <a href="#contact">Contact us</a>
+    </nav>
+
+    <!-- prose -->
+    <div class="max-w-2xl">
+
+      <section id="overview" class="prose-section mb-14">
+        <h2>Overview</h2>
+        <p>LikeAds ("we," "us," "our") operates a self-serve advertising platform connecting local businesses ("advertisers") with owners of outdoor and digital display screens ("screen partners") in Cotonou, Benin. This policy explains what information we collect when you use LikeAds — through our website, our sign-up flow, or your account — and how we use, share, and protect it.</p>
+        <p>By creating an account or submitting information through LikeAds, you agree to the practices described in this policy. If you don't agree, please don't use the platform.</p>
+      </section>
+
+      <section id="information-we-collect" class="prose-section mb-14">
+        <h2>Information we collect</h2>
+        <p>We collect information you provide directly when you sign up, plus a small amount of information your device sends automatically.</p>
+
+        <h3>If you sign up as an advertiser</h3>
+        <ul>
+          <li>Business name</li>
+          <li>Business category (e.g. restaurant, pharmacy, salon, retail, event)</li>
+          <li>The area(s) in Cotonou you want your ad to run</li>
+          <li>Your full name, phone number, and email address</li>
+        </ul>
+
+        <h3>If you sign up as a screen partner</h3>
+        <ul>
+          <li>Network or business name</li>
+          <li>Number of screens you operate</li>
+          <li>Screen type(s) (e.g. LED billboard, transparent LCD, indoor display)</li>
+          <li>Screen location(s)</li>
+          <li>Your full name, phone number, and email address</li>
+        </ul>
+
+        <h3>Account information</h3>
+        <ul>
+          <li>Email address and password, if you create an account directly</li>
+          <li>Basic profile information (such as your name and email) if you choose to continue with Google, Apple, or Facebook instead</li>
+        </ul>
+
+        <h3>Information collected automatically</h3>
+        <p>Like most websites, our servers and hosting provider may automatically log standard technical information — such as browser type, device type, and general usage patterns — when you visit LikeAds. We use this only to keep the platform working reliably and secure; we do not currently use third-party advertising trackers.</p>
+      </section>
+
+      <section id="how-we-use-it" class="prose-section mb-14">
+        <h2>How we use it</h2>
+        <ul>
+          <li>To create and manage your advertiser or screen-partner account</li>
+          <li>To match advertisers with relevant, available screens</li>
+          <li>To let screen partners review and approve ads before they air, as described on our site</li>
+          <li>To calculate and pay out revenue share owed to screen partners</li>
+          <li>To contact you about your account, a submission, or your campaign</li>
+          <li>To notify you when LikeAds launches or when features become available in your area</li>
+          <li>To maintain the security and proper functioning of the platform</li>
+        </ul>
+        <p>We do not use your information to make automated decisions that have a legal or similarly significant effect on you.</p>
+      </section>
+
+      <section id="payments" class="prose-section mb-14">
+        <h2>Payments &amp; mobile money</h2>
+        <p>Advertisers fund campaigns using third-party mobile money services, including MTN MoMo, Moov Money, and Wave. When you make a payment, that transaction is processed directly by the relevant mobile money provider under its own privacy policy and terms — LikeAds does not store your mobile money PIN or full account credentials. We only receive confirmation that a payment was made, along with the amount and campaign it relates to.</p>
+      </section>
+
+      <section id="sharing" class="prose-section mb-14">
+        <h2>How we share information</h2>
+        <p>We don't sell your personal information. We share it only in the following situations:</p>
+        <ul>
+          <li><strong>With screen partners</strong> — advertisers' ad creative and campaign details (not full contact information) are shared with the relevant screen partner so they can review and approve the ad before it airs.</li>
+          <li><strong>With payment providers</strong> — as described above, to process mobile money transactions.</li>
+          <li><strong>With service providers</strong> — companies that help us operate LikeAds (such as cloud hosting and form-submission tools), bound to only use your information to provide that service to us.</li>
+          <li><strong>For legal reasons</strong> — if required to comply with applicable law, regulation, or a valid legal request.</li>
+          <li><strong>With your consent</strong> — in any other case, only if you've told us it's okay.</li>
+        </ul>
+      </section>
+
+      <section id="security" class="prose-section mb-14">
+        <h2>Data storage &amp; security</h2>
+        <p>We use reputable, secure cloud-based tools to store and process the information described above, with access limited to those who need it to operate LikeAds. No method of storage or transmission over the internet is 100% secure, so while we work to protect your information, we can't guarantee absolute security.</p>
+      </section>
+
+      <section id="retention" class="prose-section mb-14">
+        <h2>Data retention</h2>
+        <p>We keep your information for as long as your account is active or as needed to provide you the platform, comply with our legal obligations, resolve disputes, and enforce our agreements. If you ask us to delete your account, we'll remove or anonymize your personal information except where we're required or permitted to keep it for legal reasons.</p>
+      </section>
+
+      <section id="your-rights" class="prose-section mb-14">
+        <h2>Your rights</h2>
+        <p>Depending on applicable law, you may have the right to:</p>
+        <ul>
+          <li>Access the personal information we hold about you</li>
+          <li>Ask us to correct information that's inaccurate or incomplete</li>
+          <li>Ask us to delete your information</li>
+          <li>Object to or ask us to restrict certain processing</li>
+          <li>Withdraw consent, where we're relying on it, at any time</li>
+        </ul>
+        <p>To exercise any of these rights, contact us using the details at the bottom of this page. We'll respond within a reasonable timeframe.</p>
+      </section>
+
+      <section id="cookies" class="prose-section mb-14">
+        <h2>Cookies</h2>
+        <p>LikeAds uses only the minimal cookies or local storage necessary to keep you logged in and remember basic preferences as you move through the site. We do not currently use third-party advertising or analytics cookies. If that changes, we'll update this policy.</p>
+      </section>
+
+      <section id="children" class="prose-section mb-14">
+        <h2>Children's privacy</h2>
+        <p>LikeAds is intended for business owners and screen operators, and is not directed at children. We don't knowingly collect personal information from anyone under 18. If you believe a child has provided us with personal information, please contact us and we'll remove it.</p>
+      </section>
+
+      <section id="changes" class="prose-section mb-14">
+        <h2>Changes to this policy</h2>
+        <p>We may update this policy from time to time — for example, as LikeAds launches new features or as our legal obligations change. We'll update the "Last updated" date at the top of this page, and where changes are significant, we'll make a reasonable effort to let you know directly.</p>
+      </section>
+
+      <section id="contact" class="prose-section">
+        <h2>Contact us</h2>
+        <p>If you have questions about this policy or how we handle your information, reach us at:</p>
+        <p>
+          <strong>[LikeAds Technologies]</strong><br>
+          [Registered address, Cotonou, Benin]<br>
+          <a href="mailto:privacy@likeads.example" class="inline-link">[privacy@likeads.example]</a>
+        </p>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  // highlight the active section in the side nav as the reader scrolls
+  const sections = document.querySelectorAll('.prose-section');
+  const navLinks = document.querySelectorAll('.doc-nav a');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.doc-nav a[href="#${entry.target.id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px' });
+  sections.forEach(section => io.observe(section));
+</script>
+
+</body>
+</html>
