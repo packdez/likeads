@@ -185,7 +185,17 @@
   @keyframes spin{ to{ transform: rotate(360deg); } }
   .spinner{ width: 14px; height: 14px; border: 2px solid rgba(245,243,238,.35); border-top-color: #F5F3EE; border-radius: 50%; animation: spin .7s linear infinite; }
 
+  /* ---------- agreement checkbox ---------- */
+  .agree-row{ display: flex; align-items: flex-start; gap: 10px; }
+  .agree-row input[type="checkbox"]{
+    width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; cursor: pointer;
+    accent-color: var(--ink);
+  }
+  .agree-row label{ font-size: 13.5px; line-height: 1.55; color: var(--muted-onpaper); cursor: pointer; }
+  .agree-row a{ color: var(--text-onpaper); text-decoration: underline; text-underline-offset: 2px; }
+
   /* ---------- success screen ---------- */
+  
   .success-icon{
     width: 64px; height: 64px; border-radius: 50%; background: var(--amber-soft);
     display: grid; place-items: center; margin: 0 auto;
@@ -336,10 +346,17 @@
                   <p class="field-error" id="con-phone-error">Enter a valid phone number.</p>
                 </div>
                 <div>
-                  <label class="field-label" for="con-email">Email address</label>
-                  <input id="con-email" type="email" class="field-input" placeholder="name@example.com" required>
-                  <p class="field-error" id="con-email-error">Enter a valid email address.</p>
-                </div>
+  <label class="field-label" for="con-email">Email address</label>
+  <input id="con-email" type="email" class="field-input" placeholder="name@example.com" required>
+  <p class="field-error" id="con-email-error">Enter a valid email address.</p>
+</div>
+<div>
+  <div class="agree-row">
+    <input type="checkbox" id="con-agree">
+    <label for="con-agree">I agree to LikeAds' <a href="terms" target="_blank">Terms of Service</a> and <a href="privacy" target="_blank">Privacy Policy</a>.</label>
+  </div>
+  <p class="field-error" id="con-agree-error">You need to agree before continuing.</p>
+</div>
               </div>
             </form>
           </section>
@@ -616,14 +633,20 @@
 
   /* ---------- step 3: contact ---------- */
   async function validateAndSubmitContact() {
-    const form = document.getElementById('contact-form');
-    if (!form.reportValidity()) return false;
+  const form = document.getElementById('contact-form');
+  if (!form.reportValidity()) return false;
 
-    const emailOk = isValidEmail(emailInput.value);
-    const phoneOk = isValidPhone(phoneInput.value);
-    setFieldError(emailInput, emailError, !emailOk);
-    setFieldError(phoneInput, phoneError, !phoneOk);
-    if (!emailOk || !phoneOk) return false;
+  const emailOk = isValidEmail(emailInput.value);
+  const phoneOk = isValidPhone(phoneInput.value);
+  setFieldError(emailInput, emailError, !emailOk);
+  setFieldError(phoneInput, phoneError, !phoneOk);
+
+  const agreeCheckbox = document.getElementById('con-agree');
+  const agreeError = document.getElementById('con-agree-error');
+  const agreeOk = agreeCheckbox.checked;
+  agreeError.classList.toggle('show', !agreeOk);
+
+  if (!emailOk || !phoneOk || !agreeOk) return false;
 
     answers.fullName = document.getElementById('con-full-name').value.trim();
     answers.phone = phoneInput.value.trim();
