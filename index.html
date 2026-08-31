@@ -165,7 +165,7 @@
   background: radial-gradient(circle at 50% 50%, rgba(232,169,58,0.08), transparent 65%);
 }
 .approve-btn{
-  width: 30%; aspect-ratio: 1; max-width: 72px; border-radius: 50%;
+  width: 20%; aspect-ratio: 1; max-width: 48px; border-radius: 50%;
   background: var(--amber); display: grid; place-items: center; position: relative;
 }
 .approve-btn svg{ width: 46%; height: 46%; }
@@ -181,6 +181,12 @@
 
 .locations-visual{ width: 100%; height: 100%; }
 .locations-visual svg{ width: 100%; height: 100%; display: block; }
+
+.side-card-caption{
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 16px; font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(245,243,238,0.4); pointer-events: none;
+}
   
   /* ---------- billboard live-screen mockup (center card content) ---------- */
   .billboard-screen{
@@ -394,10 +400,12 @@
       </svg>
     </div>
   </div>
+  <span class="side-card-caption">Approved advert</span>
 </div>
 
 <!-- right peeking card: live locations (visual only) -->
 <div class="mock-card hidden md:flex w-[clamp(180px,20vw,240px)] h-[clamp(230px,26vw,300px)] absolute right-0 translate-x-1/3 rotate-[4deg] z-0 overflow-hidden">
+  <span class="side-card-caption">Outdoor screens</span>
   <div class="locations-visual">
     <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
       <circle class="net-dot" cx="70" cy="70" r="5"/>
