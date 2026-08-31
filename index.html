@@ -152,12 +152,36 @@
     box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
     background: linear-gradient(160deg,#17181c,#0c0d10);
   }
-  .mock-card-side{
-    display:flex; flex-direction:column; justify-content:flex-end; padding:20px;
-    background: repeating-linear-gradient(135deg, rgba(245,243,238,0.03) 0px, rgba(245,243,238,0.03) 10px, transparent 10px, transparent 20px), linear-gradient(160deg,#1c1d22,#0c0d10);
-    border: 1px dashed var(--line-onink);
-  }
 
+  .mock-card-side{
+  display:flex; flex-direction:column; justify-content:flex-end; padding:20px;
+  background: repeating-linear-gradient(135deg, rgba(245,243,238,0.03) 0px, rgba(245,243,238,0.03) 10px, transparent 10px, transparent 20px), linear-gradient(160deg,#1c1d22,#0c0d10);
+  border: 1px dashed var(--line-onink);
+}
+
+/* ---------- side-card visuals: approval moment (left) + live locations (right) ---------- */
+.approval-visual{
+  width: 100%; height: 100%; display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 50%, rgba(232,169,58,0.08), transparent 65%);
+}
+.approve-btn{
+  width: 30%; aspect-ratio: 1; max-width: 72px; border-radius: 50%;
+  background: var(--amber); display: grid; place-items: center; position: relative;
+}
+.approve-btn svg{ width: 46%; height: 46%; }
+.approve-ring{
+  position: absolute; inset: -18%; border: 1.5px solid var(--amber);
+  border-radius: 50%; opacity: .5; animation: approvepulse 2.2s ease-out infinite;
+}
+.approve-ring.delay{ animation-delay: 1.1s; }
+@keyframes approvepulse{
+  0%{ transform: scale(0.75); opacity: .55; }
+  100%{ transform: scale(1.7); opacity: 0; }
+}
+
+.locations-visual{ width: 100%; height: 100%; }
+.locations-visual svg{ width: 100%; height: 100%; display: block; }
+  
   /* ---------- billboard live-screen mockup (center card content) ---------- */
   .billboard-screen{
     position: relative; border-radius: 14px; overflow: hidden;
@@ -359,20 +383,35 @@
     <div class="reveal relative z-10 mt-10 sm:mt-14 max-w-6xl mx-auto px-5">
       <div class="relative flex items-center justify-center">
 
-        <!-- left peeking card -->
-<div class="mock-card hidden md:flex w-[240px] h-[300px] absolute left-0 -translate-x-1/3 rotate-[-4deg] z-0 overflow-hidden flex-col justify-end p-5">
-  <img src="https://raw.githubusercontent.com/packdez/sparAds/refs/heads/main/demo/leftIMG.jpg" alt="" class="absolute inset-0 w-full h-full object-cover">
-  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-  <span class="relative text-[10px] tracked uppercase text-white/70 mb-1">Partner dashboard</span>
-  <span class="relative font-tight font-semibold text-[15px] text-white">Approve ads in 1 click</span>
+<!-- left peeking card: approval moment (visual only) -->
+<div class="mock-card hidden md:flex w-[clamp(180px,20vw,240px)] h-[clamp(230px,26vw,300px)] absolute left-0 -translate-x-1/3 rotate-[-4deg] z-0 overflow-hidden">
+  <div class="approval-visual">
+    <div class="approve-btn">
+      <span class="approve-ring"></span>
+      <span class="approve-ring delay"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1a1305" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+  </div>
 </div>
 
-        <!-- right peeking card -->
-        <div class="mock-card hidden md:flex w-[240px] h-[300px] absolute right-0 translate-x-1/3 rotate-[4deg] z-0 overflow-hidden flex-col justify-end p-5">
-  <img src="https://raw.githubusercontent.com/packdez/sparAds/refs/heads/main/demo/3.jpg" alt="" class="absolute inset-0 w-full h-full object-cover">
-  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-  <span class="relative text-[10px] tracked uppercase text-white/70 mb-1">Screen network</span>
-  <span class="relative font-tight font-semibold text-[15px] text-white">Live map of Cotonou</span>
+<!-- right peeking card: live locations (visual only) -->
+<div class="mock-card hidden md:flex w-[clamp(180px,20vw,240px)] h-[clamp(230px,26vw,300px)] absolute right-0 translate-x-1/3 rotate-[4deg] z-0 overflow-hidden">
+  <div class="locations-visual">
+    <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+      <circle class="net-dot" cx="70" cy="70" r="5"/>
+      <circle class="net-pulse" cx="70" cy="70" r="5" style="animation-delay:0s"/>
+      <circle class="net-dot" cx="165" cy="95" r="5"/>
+      <circle class="net-pulse net-pulse-amber" cx="165" cy="95" r="5" style="animation-delay:.8s"/>
+      <circle class="net-dot" cx="105" cy="160" r="5"/>
+      <circle class="net-pulse" cx="105" cy="160" r="5" style="animation-delay:1.6s"/>
+      <circle class="net-dot" cx="180" cy="210" r="5"/>
+      <circle class="net-pulse net-pulse-amber" cx="180" cy="210" r="5" style="animation-delay:.4s"/>
+      <circle class="net-dot" cx="60" cy="230" r="5"/>
+      <circle class="net-pulse" cx="60" cy="230" r="5" style="animation-delay:1.2s"/>
+    </svg>
+  </div>
 </div>
 
         <!-- center card: live screen mockup -->
