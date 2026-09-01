@@ -165,6 +165,9 @@
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 58%, transparent 80%);
   mask-image: linear-gradient(to bottom, black 0%, black 58%, transparent 80%);
 }
+.phone-mock-inline{
+  width: min(260px, 72vw); margin: 0 auto;
+}
 .phone-frame{
   background: linear-gradient(160deg, #2A2930, #131217);
   border-radius: 38px; padding: 16px;
@@ -672,12 +675,41 @@
 </div>
 
   <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
-    <div class="reveal max-w-xl mb-16">
-      <div class="text-[12px] tracked uppercase faint-onink mb-3">How to advertise</div>
-      <h2 class="font-tight font-normal text-[30px] sm:text-[38px]">Three steps between you and showing on an outdoor screen.</h2>
-    </div>
+<div class="reveal max-w-xl mb-10">
+  <div class="text-[12px] tracked uppercase faint-onink mb-3">How to advertise</div>
+  <h2 class="font-tight font-normal text-[30px] sm:text-[38px]">Three steps between you and showing on an outdoor screen.</h2>
+</div>
 
-    <div class="grid md:grid-cols-3">
+<!-- mobile/tablet version: sits in normal flow after the heading, not as a background element -->
+<div class="reveal phone-mock-inline lg:hidden mb-16">
+  <div class="phone-frame">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <div class="dash-mock-top">
+        <span class="dash-mock-brand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M9 20h6"/></svg></span>
+        <span class="dash-mock-brand">sparAds</span>
+        <span class="dash-mock-bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+        <span class="dash-mock-avatar">
+          <span class="dash-mock-avatar-circle">AK</span>
+          <span class="dash-mock-avatar-name"><div class="name">Amina Kponou</div><div class="acc">ACC-4417</div></span>
+        </span>
+      </div>
+      <div class="dash-mock-row">
+        <span class="dash-mock-pill on">EN</span>
+        <span class="dash-mock-pill">FR</span>
+      </div>
+      <div class="dash-mock-cta"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>New campaign</div>
+      <div class="dash-mock-nav">
+        <div class="dash-mock-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview</div>
+        <div class="dash-mock-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>Campaigns</div>
+        <div class="dash-mock-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M9 20h6"/></svg>Screen inventory</div>
+      </div>
+    </div>
+    <div class="phone-home-indicator"></div>
+  </div>
+</div>
+
+<div class="grid md:grid-cols-3">
       <div class="reveal step-row md:border-t md:border-b-0 py-8 md:py-10 md:pr-8">
         <span class="text-[12px] tracked uppercase faint-onink">01</span>
         <h3 class="font-tight font-semibold text-[19px] mt-4 mb-2.5">Launch from your device</h3>
