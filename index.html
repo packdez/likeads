@@ -160,13 +160,35 @@
 }
 
 /* ---------- ambient background video (How to advertise section) ---------- */
-.section-video-bg{
-  position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+/* ---------- coded dashboard mockup, sitting behind the header, cropped before the steps ---------- */
+.dash-mock-wrap{
+  position: absolute; top: 0; right: 0; bottom: 0; width: 46%; max-width: 420px;
+  overflow: hidden; pointer-events: none; z-index: 0;
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 78%);
+  mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 78%);
 }
-.section-video-bg img{
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: contain;
+.dash-mock{
+  position: absolute; top: 40px; right: -30px; width: 300px;
+  background: #fff; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+  font-family: 'Inter', sans-serif;
 }
+.dash-mock-top{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px 10px; }
+.dash-mock-brand{ display:flex; align-items:center; gap:7px; font-weight:700; font-size:13.5px; color:#0B0B0C; }
+.dash-mock-brand svg{ width:16px; height:16px; }
+.dash-mock-search{ margin:0 16px 12px; background:#F3F1EC; border-radius:8px; padding:8px 10px; font-size:11.5px; color:#8A8578; }
+.dash-mock-row{ display:flex; align-items:center; gap:6px; margin:0 16px 14px; }
+.dash-mock-pill{ font-size:10px; font-weight:600; padding:4px 8px; border-radius:6px; background:#F3F1EC; color:#8A8578; }
+.dash-mock-pill.on{ background:#0B0B0C; color:#fff; }
+.dash-mock-avatar{ margin-left:auto; display:flex; align-items:center; gap:6px; }
+.dash-mock-avatar-circle{ width:20px; height:20px; border-radius:50%; background:var(--amber); display:grid; place-items:center; font-size:9px; font-weight:700; color:#1a1305; }
+.dash-mock-cta{ margin:0 16px 14px; background:var(--amber); color:#1a1305; font-weight:700; font-size:12px; text-align:center; padding:9px; border-radius:9px; }
+.dash-mock-nav{ padding:0 10px 16px; }
+.dash-mock-item{ display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:8px; font-size:12px; color:#4A473F; }
+.dash-mock-item.active{ background:#F3F1EC; color:#0B0B0C; font-weight:600; }
+.dash-mock-item .dot{ width:5px; height:5px; border-radius:50%; background:#C9C4B6; flex-shrink:0; }
+.dash-mock-item.active .dot{ background:var(--amber); }
+</parameter>
 
 /* ---------- side-card visuals: approval moment (left) + live locations (right) ---------- */
   
@@ -574,9 +596,33 @@
 <!-- ============ HOW TO ADVERTISE ============ -->
 <section id="how-to-advertise" class="section-ink relative overflow-hidden py-24 md:py-32">
 
-<!-- ambient background photo, faded at every edge, sitting behind all content in this section -->
-<div class="section-video-bg" aria-hidden="true">
-  <img src="https://raw.githubusercontent.com/packdez/sparAds/refs/heads/main/demo/111.jpg" alt="phone to launch campaign">
+<!-- coded dashboard mockup, sitting behind the header, fading out before the step grid -->
+<div class="dash-mock-wrap" aria-hidden="true">
+  <div class="dash-mock">
+    <div class="dash-mock-top">
+      <span class="dash-mock-brand">
+        <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="4" width="24" height="15" rx="3" stroke="#0B0B0C" stroke-width="1.8"/><circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/></svg>
+        LikeAds
+      </span>
+    </div>
+    <div class="dash-mock-search">Search campaigns, screens, invoices</div>
+    <div class="dash-mock-row">
+      <span class="dash-mock-pill on">EN</span>
+      <span class="dash-mock-pill">FR</span>
+      <span class="dash-mock-avatar">
+        <span class="dash-mock-avatar-circle">RL</span>
+      </span>
+    </div>
+    <div class="dash-mock-cta">+ New campaign</div>
+    <div class="dash-mock-nav">
+      <div class="dash-mock-item active"><span class="dot"></span> Overview</div>
+      <div class="dash-mock-item"><span class="dot"></span> Campaigns</div>
+      <div class="dash-mock-item"><span class="dot"></span> Screen inventory</div>
+      <div class="dash-mock-item"><span class="dot"></span> Wallet</div>
+      <div class="dash-mock-item"><span class="dot"></span> Reports</div>
+      <div class="dash-mock-item"><span class="dot"></span> Settings</div>
+    </div>
+  </div>
 </div>
 
   <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
