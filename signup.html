@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create your LikeAds account</title>
-<meta name="description" content="Sign up as an advertiser or a screen partner on LikeAds — launching soon in Cotonou.">
+<title>Create your sparAds account</title>
+<meta name="description" content="Sign up as an advertiser or a screen partner on sparAds — launching soon in Cotonou.">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B0B0C'/><text x='16' y='17' text-anchor='middle' dominant-baseline='central' font-family='Arial, Helvetica, sans-serif' font-weight='900' font-size='23' fill='%23E8A93A'>S</text></svg>">
+  
 <style>
   :root{
     --ink: #0B0B0C;
@@ -215,13 +216,10 @@
       <header class="flex items-center justify-between py-6 sm:py-8">
   <a href="https://sparads.com/" class="flex items-center gap-2.5">
     <span class="logo-mark">
-      <svg viewBox="0 0 26 26" fill="none">
-        <rect x="1" y="4" width="24" height="15" rx="3" stroke="#17140F" stroke-width="1.6"/>
-        <rect x="9" y="22" width="8" height="1.6" rx="0.8" fill="#17140F"/>
-        <circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/>
-      </svg>
+      <svg class="mb-6" viewBox="0 0 90 20" width="120" height="27" xmlns="http://www.w3.org/2000/svg">
+    <text x="0" y="16" font-family="Inter Tight, sans-serif" font-weight="800" font-size="18" fill="#17140F">spar<tspan fill="#E8A93A">Ads</tspan></text>
+  </svg>
     </span>
-    <span class="font-tight font-semibold text-[16.5px]">LikeAds</span>
   </a>
   <a href="login" class="top-link text-[13px] tracked uppercase font-medium">Log in</a>
 </header>
@@ -235,7 +233,7 @@
           <section class="step active" data-step="role">
             <div class="wizard-grid">
               <div class="step-question">
-                <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">How will you use LikeAds?</h1>
+                <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">How will you use sparAds?</h1>
                 <p class="text-[14.5px]" style="color:var(--muted-onpaper)">We'll tailor a couple of quick questions to get you set up.</p>
               </div>
               <div class="flex flex-col gap-4">
@@ -298,7 +296,7 @@
             <form id="partner-details-form" class="wizard-grid" novalidate>
               <div class="step-question">
                 <h1 class="font-tight font-semibold text-[26px] sm:text-[32px] mb-3">Tell us about your screens.</h1>
-                <p class="text-[14.5px]" style="color:var(--muted-onpaper)">This becomes your network profile on LikeAds to manage all your locations.</p>
+                <p class="text-[14.5px]" style="color:var(--muted-onpaper)">This becomes your network profile on sparAds to manage all your locations.</p>
               </div>
               <div class="space-y-7">
                 <div>
@@ -353,7 +351,7 @@
 <div>
   <div class="agree-row">
     <input type="checkbox" id="con-agree">
-    <label for="con-agree">I agree to LikeAds' <a href="terms" target="_blank">Terms of Service</a> and <a href="privacy" target="_blank">Privacy Policy</a>.</label>
+    <label for="con-agree">I agree to sparAds' <a href="terms" target="_blank">Terms of Service</a> and <a href="privacy" target="_blank">Privacy Policy</a>.</label>
   </div>
   <p class="field-error" id="con-agree-error">You need to agree before continuing.</p>
 </div>
@@ -369,10 +367,10 @@
               </div>
               <h1 class="font-tight font-semibold text-[28px] sm:text-[32px] mb-3">You're on the list.</h1>
               <p style="color:var(--muted-onpaper)" class="text-[15px] max-w-sm mx-auto leading-relaxed">
-                LikeAds is launching soon in Cotonou. We'll notify you the moment we're live, so you can be among the first on the network.
+                sparAds is launching soon in Cotonou. We'll notify you the moment we're live, so you can be among the first on the network.
               </p>
               <a href="https://sparads.com/" class="top-link inline-flex items-center gap-1.5 text-[13px] tracked uppercase font-medium mt-8">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to LikeAds
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to sparAds
               </a>
             </div>
           </section>
@@ -406,7 +404,7 @@
     <div class="image-panel active" data-image="role">
       <img src="https://raw.githubusercontent.com/packdez/agency/refs/heads/main/assets/appsConnect.png" alt="" class="absolute inset-0 w-full h-full object-cover">
       <div class="image-panel-tag">Photo placeholder</div>
-      <div class="image-panel-caption">A business owner and a screen partner, side by side — LikeAds connects both.</div>
+      <div class="image-panel-caption">A business owner and a screen partner, side by side — sparAds connects both.</div>
       <div class="image-panel-note">Replace this panel's image with real photography.</div>
     </div>
     <div class="image-panel" data-image="advertiser-details">
@@ -430,7 +428,7 @@
     <div class="image-panel" data-image="done">
       <img src="https://raw.githubusercontent.com/packdez/agency/refs/heads/main/assets/emailDelivered.png" alt="" class="absolute inset-0 w-full h-full object-cover">
       <div class="image-panel-tag">Photo placeholder</div>
-      <div class="image-panel-caption">Cotonou at golden hour — where LikeAds launches first.</div>
+      <div class="image-panel-caption">Cotonou at golden hour — where sparAds launches first.</div>
       <div class="image-panel-note">Suggested: a skyline or street shot of Cotonou.</div>
     </div>
   </div>
