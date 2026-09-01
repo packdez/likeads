@@ -171,23 +171,31 @@
   position: absolute; top: 40px; right: -30px; width: 300px;
   background: #fff; border-radius: 14px; overflow: hidden;
   box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif; border: 1px solid #ECEAE3;
 }
-.dash-mock-top{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px 10px; }
-.dash-mock-brand{ display:flex; align-items:center; gap:7px; font-weight:700; font-size:13.5px; color:#0B0B0C; }
-.dash-mock-brand svg{ width:16px; height:16px; }
-.dash-mock-search{ margin:0 16px 12px; background:#F3F1EC; border-radius:8px; padding:8px 10px; font-size:11.5px; color:#8A8578; }
+.dash-mock-top{ display:flex; align-items:center; gap:7px; padding:14px 16px 12px; }
+.dash-mock-brand-icon{ width:22px; height:22px; border-radius:6px; background:#2F6FE0; display:grid; place-items:center; flex-shrink:0; }
+.dash-mock-brand-icon svg{ width:13px; height:13px; }
+.dash-mock-brand{ font-weight:700; font-size:14px; color:#0B0B0C; }
+.dash-mock-search{ margin:0 16px 12px; background:#F3F1EC; border-radius:8px; padding:8px 10px; font-size:11px; color:#9A9587; display:flex; align-items:center; gap:6px; }
+.dash-mock-search svg{ width:12px; height:12px; flex-shrink:0; color:#B5B0A2; }
 .dash-mock-row{ display:flex; align-items:center; gap:6px; margin:0 16px 14px; }
-.dash-mock-pill{ font-size:10px; font-weight:600; padding:4px 8px; border-radius:6px; background:#F3F1EC; color:#8A8578; }
+.dash-mock-pill{ font-size:9.5px; font-weight:600; padding:4px 7px; border-radius:6px; background:#F3F1EC; color:#8A8578; }
 .dash-mock-pill.on{ background:#0B0B0C; color:#fff; }
+.dash-mock-bell{ width:22px; height:22px; border-radius:6px; background:#F3F1EC; display:grid; place-items:center; flex-shrink:0; }
+.dash-mock-bell svg{ width:11px; height:11px; color:#8A8578; }
 .dash-mock-avatar{ margin-left:auto; display:flex; align-items:center; gap:6px; }
-.dash-mock-avatar-circle{ width:20px; height:20px; border-radius:50%; background:var(--amber); display:grid; place-items:center; font-size:9px; font-weight:700; color:#1a1305; }
-.dash-mock-cta{ margin:0 16px 14px; background:var(--amber); color:#1a1305; font-weight:700; font-size:12px; text-align:center; padding:9px; border-radius:9px; }
+.dash-mock-avatar-circle{ width:22px; height:22px; border-radius:50%; background:#2F6FE0; display:grid; place-items:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0; }
+.dash-mock-avatar-name{ line-height:1.25; }
+.dash-mock-avatar-name .name{ font-size:10.5px; font-weight:600; color:#0B0B0C; }
+.dash-mock-avatar-name .acc{ font-size:8.5px; color:#9A9587; }
+.dash-mock-cta{ margin:0 16px 14px; background:#2F6FE0; color:#fff; font-weight:600; font-size:12px; text-align:center; padding:9px; border-radius:9px; display:flex; align-items:center; justify-content:center; gap:6px; }
 .dash-mock-nav{ padding:0 10px 16px; }
 .dash-mock-item{ display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:8px; font-size:12px; color:#4A473F; }
-.dash-mock-item.active{ background:#F3F1EC; color:#0B0B0C; font-weight:600; }
-.dash-mock-item .dot{ width:5px; height:5px; border-radius:50%; background:#C9C4B6; flex-shrink:0; }
-.dash-mock-item.active .dot{ background:var(--amber); }
+.dash-mock-item svg{ width:13px; height:13px; flex-shrink:0; }
+.dash-mock-item.active{ background:#EFF4FF; color:#2F6FE0; font-weight:600; }
+.dash-mock-gap{ height:12px; }
+  
 </parameter>
 
 /* ---------- side-card visuals: approval moment (left) + live locations (right) ---------- */
@@ -598,31 +606,69 @@
 
 <!-- coded dashboard mockup, sitting behind the header, fading out before the step grid -->
 <div class="dash-mock-wrap" aria-hidden="true">
+  
+  
   <div class="dash-mock">
-    <div class="dash-mock-top">
-      <span class="dash-mock-brand">
-        <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="4" width="24" height="15" rx="3" stroke="#0B0B0C" stroke-width="1.8"/><circle cx="13" cy="11.5" r="2.6" fill="#E8A93A"/></svg>
-        LikeAds
+  <div class="dash-mock-top">
+    <span class="dash-mock-brand-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M9 20h6"/></svg>
+    </span>
+    <span class="dash-mock-brand">sparAds</span>
+  </div>
+
+  <div class="dash-mock-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+    Search campaigns, screens, invoices
+  </div>
+
+  <div class="dash-mock-row">
+    <span class="dash-mock-pill on">EN</span>
+    <span class="dash-mock-pill">FR</span>
+    <span class="dash-mock-bell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+    </span>
+    <span class="dash-mock-avatar">
+      <span class="dash-mock-avatar-circle">AK</span>
+      <span class="dash-mock-avatar-name">
+        <div class="name">Amina Kponou</div>
+        <div class="acc">ACC-4417</div>
       </span>
+    </span>
+  </div>
+
+  <div class="dash-mock-cta">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    New campaign
+  </div>
+
+  <div class="dash-mock-nav">
+    <div class="dash-mock-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Overview
     </div>
-    <div class="dash-mock-search">Search campaigns, screens, invoices</div>
-    <div class="dash-mock-row">
-      <span class="dash-mock-pill on">EN</span>
-      <span class="dash-mock-pill">FR</span>
-      <span class="dash-mock-avatar">
-        <span class="dash-mock-avatar-circle">RL</span>
-      </span>
+    <div class="dash-mock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+      Campaigns
     </div>
-    <div class="dash-mock-cta">+ New campaign</div>
-    <div class="dash-mock-nav">
-      <div class="dash-mock-item active"><span class="dot"></span> Overview</div>
-      <div class="dash-mock-item"><span class="dot"></span> Campaigns</div>
-      <div class="dash-mock-item"><span class="dot"></span> Screen inventory</div>
-      <div class="dash-mock-item"><span class="dot"></span> Wallet</div>
-      <div class="dash-mock-item"><span class="dot"></span> Reports</div>
-      <div class="dash-mock-item"><span class="dot"></span> Settings</div>
+    <div class="dash-mock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M9 20h6"/></svg>
+      Screen inventory
+    </div>
+    <div class="dash-mock-gap"></div>
+    <div class="dash-mock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      Wallet
+    </div>
+    <div class="dash-mock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+      Reports
+    </div>
+    <div class="dash-mock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      Settings
     </div>
   </div>
+</div>
 </div>
 
   <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
