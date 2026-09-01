@@ -177,7 +177,8 @@
 }
 .phone-home-indicator{ width: 64px; height: 4px; background: #000; border-radius: 3px; margin: 8px auto 0; opacity: .8; }
 .phone-screen svg{ width: 13px; height: 13px; flex-shrink: 0; }
-.dash-mock-top{ display:flex; align-items:center; gap:7px; padding:14px 16px 12px; }
+.dash-mock-top{ display:flex; align-items:center; gap:9px; padding:16px 16px 14px; }
+.dash-mock-top .dash-mock-avatar{ margin-left:auto; }
 .dash-mock-brand-icon{ width:22px; height:22px; border-radius:6px; background:#2F6FE0; display:grid; place-items:center; flex-shrink:0; }
 .dash-mock-brand-icon svg{ width:13px; height:13px; }
 .dash-mock-brand{ font-weight:700; font-size:14px; color:#0B0B0C; }
@@ -615,32 +616,27 @@
     <div class="phone-notch"></div>
     <div class="phone-screen">
     <div class="dash-mock-top">
-    <span class="dash-mock-brand-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M9 20h6"/></svg>
+  <span class="dash-mock-brand-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M9 20h6"/></svg>
+  </span>
+  <span class="dash-mock-brand">sparAds</span>
+  <span class="dash-mock-bell">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+  </span>
+  <span class="dash-mock-avatar">
+    <span class="dash-mock-avatar-circle">AK</span>
+    <span class="dash-mock-avatar-name">
+      <div class="name">Amina Kponou</div>
+      <div class="acc">ACC-4417</div>
     </span>
-    <span class="dash-mock-brand">sparAds</span>
-  </div>
+  </span>
+</div>
 
-  <div class="dash-mock-search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-    Search campaigns, screens, invoices
-  </div>
-
-  <div class="dash-mock-row">
-    <span class="dash-mock-pill on">EN</span>
-    <span class="dash-mock-pill">FR</span>
-    <span class="dash-mock-bell">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-    </span>
-    <span class="dash-mock-avatar">
-      <span class="dash-mock-avatar-circle">AK</span>
-      <span class="dash-mock-avatar-name">
-        <div class="name">Amina Kponou</div>
-        <div class="acc">ACC-4417</div>
-      </span>
-    </span>
-  </div>
-
+<div class="dash-mock-row">
+  <span class="dash-mock-pill on">EN</span>
+  <span class="dash-mock-pill">FR</span>
+</div>
+      
   <div class="dash-mock-cta">
     <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
     New campaign
