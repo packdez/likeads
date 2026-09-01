@@ -160,7 +160,7 @@
 }
 
 .phone-mock-wrap{
-  position: absolute; top: 24px; right: 48px; width: 300px;
+  position: absolute; top: 24px; right: clamp(24px, 4vw, 64px); width: clamp(220px, 22vw, 300px);
   pointer-events: none; z-index: 0;
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 58%, transparent 80%);
   mask-image: linear-gradient(to bottom, black 0%, black 58%, transparent 80%);
@@ -609,10 +609,10 @@
 </section>
 
 <!-- ============ HOW TO ADVERTISE ============ -->
-<section id="how-to-advertise" class="section-ink relative overflow-hidden py-24 md:py-32">
+<section id="how-to-advertise" class="section-ink relative overflow-hidden py-16 sm:py-24 md:py-32">
 
 <!-- coded dashboard mockup, sitting behind the header, fading out before the step grid -->
-<div class="phone-mock-wrap" aria-hidden="true">
+<div class="phone-mock-wrap hidden lg:block" aria-hidden="true">
   <div class="phone-frame">
     <div class="phone-notch"></div>
     <div class="phone-screen">
