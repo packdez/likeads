@@ -164,14 +164,21 @@
 .dash-mock-wrap{
   position: absolute; top: 0; right: 0; bottom: 0; width: 46%; max-width: 420px;
   overflow: hidden; pointer-events: none; z-index: 0;
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 78%);
-  mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 78%);
+  -webkit-mask-image:
+    linear-gradient(to bottom, black 0%, black 55%, transparent 78%),
+    linear-gradient(to left, black 0%, black 55%, transparent 92%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, black 0%, black 55%, transparent 78%),
+    linear-gradient(to left, black 0%, black 55%, transparent 92%);
+  mask-composite: intersect;
 }
 .dash-mock{
-  position: absolute; top: 40px; right: -30px; width: 300px; max-width: 300px;
+  position: absolute; top: 40px; right: 30px; width: 300px; max-width: 300px;
   background: #fff; border-radius: 14px; overflow: hidden;
   box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
   font-family: 'Inter', sans-serif; border: 1px solid #ECEAE3;
+  opacity: 0.92;
 }
 .dash-mock svg{ width: 13px; height: 13px; flex-shrink: 0; }
 .dash-mock-top{ display:flex; align-items:center; gap:7px; padding:14px 16px 12px; }
