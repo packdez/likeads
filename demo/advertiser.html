@@ -7,20 +7,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B0B0C'/><text x='16' y='17' text-anchor='middle' dominant-baseline='central' font-family='Arial, Helvetica, sans-serif' font-weight='900' font-size='23' fill='%23E8A93A'>S</text></svg>">
+ 
+ <style>
   *{box-sizing:border-box}
   html,body{margin:0;background:#F4F6F9;color:#0F1826;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   #root{min-height:100vh}
   button{font-family:inherit}
-  a{color:#1B5FD9;text-decoration:none}
-  a:hover{color:#134AAE}
+  a{color:#8A5A12;text-decoration:none}
+  a:hover{color:#6B4310}
   input,select{font-family:inherit}
   input::placeholder{color:#98A3B4}
   input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;width:100%;height:24px}
-  input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:99px;background:linear-gradient(90deg,#1B5FD9,#A9C6F4)}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8.5px;border-radius:50%;background:#fff;border:5px solid #1B5FD9;box-shadow:0 1px 4px rgba(15,24,38,.28);cursor:grab}
-  input[type=range]::-moz-range-track{height:5px;border-radius:99px;background:linear-gradient(90deg,#1B5FD9,#A9C6F4)}
-  input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:5px solid #1B5FD9;box-shadow:0 1px 4px rgba(15,24,38,.28);cursor:grab;border-radius:50%}
+  input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:99px;background:linear-gradient(90deg,#E8A93A,#F4DDA9)}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8.5px;border-radius:50%;background:#fff;border:5px solid #E8A93A;box-shadow:0 1px 4px rgba(15,24,38,.28);cursor:grab}
+  input[type=range]::-moz-range-track{height:5px;border-radius:99px;background:linear-gradient(90deg,#E8A93A,#F4DDA9)}
+  input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:5px solid #E8A93A;box-shadow:0 1px 4px rgba(15,24,38,.28);cursor:grab;border-radius:50%}
   @keyframes ping{0%{transform:scale(1);opacity:.4}70%{transform:scale(2.3);opacity:0}100%{opacity:0}}
   @keyframes riseIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   ::-webkit-scrollbar{height:10px;width:10px}
@@ -47,7 +49,7 @@ const {useState, useEffect, useRef, useMemo, useCallback} = React;
    CONSTANTS / DESIGN TOKENS
 ========================================================= */
 const P = {
-  blue:'#1B5FD9', blueDark:'#134AAE', blueSoft:'#EBF2FE', blueLine:'#CDDFFB',
+  blue:'#E8A93A', blueDark:'#8A5A12', blueSoft:'#FBF0DB', blueLine:'#F1D9A4',
   ink:'#0F1826', body:'#3B475C', mute:'#65728A', dim:'#8794A6', line:'#DCE1E8', line2:'#EDF0F4',
   bg:'#F4F6F9', green:'#12794A', greenSoft:'#E6F6EE', amber:'#B4740E', amberSoft:'#FDF3E2'
 };
@@ -379,10 +381,10 @@ function ScreenMap({ lang, t, selected, onToggle, mini }){
                 <div style={{
                   padding: on ? '7px 11px' : '6px 9px', borderRadius:8, display:'flex', alignItems:'center', gap:6,
                   background: on ? P.blue : '#fff', border:'1px solid '+(on?P.blue:'#CBD4E0'),
-                  boxShadow: on ? '0 4px 12px rgba(27,95,217,.34)' : '0 1px 3px rgba(15,24,38,.13)',
-                  font:(on?'800 11.5px/1':'600 10.5px/1')+" 'Manrope'", color:on?'#fff':P.body, whiteSpace:'nowrap'
+                  boxShadow: on ? '0 4px 12px rgba(232,169,58,.34)' : '0 1px 3px rgba(15,24,38,.13)',
+                  font:(on?'800 11.5px/1':'600 10.5px/1')+" 'Manrope'", color:on?P.ink:P.body, whiteSpace:'nowrap'
                 }}>
-                  {on && <Icon name="check" size={11} color="#fff" sw={3}/>}
+                  {on && <Icon name="check" size={11} color={P.ink} sw={3}/>}
                   <span style={{ width:5, height:5, borderRadius:'50%', background:on?'#fff':P.green, display:on?'none':'inline-block' }}/>
                   {fr ? s.shortFr : s.short}
                 </div>
@@ -410,8 +412,8 @@ function ScreenList({ lang, selected, onToggle }){
             style={{ display:'flex', alignItems:'center', gap:11, padding:11, borderRadius:9, cursor:'pointer',
               background:on?P.blueSoft:'#fff', border:'1px solid '+(on?P.blue:P.line) }}>
             <div style={{ width:20, height:20, borderRadius:5, flex:'none', display:'flex', alignItems:'center', justifyContent:'center',
-              background:on?P.blue:'#fff', border:'1px solid '+(on?P.blue:'#CBD4E0'), color:'#fff' }}>
-              {on && <Icon name="check" size={12} color="#fff" sw={3}/>}
+              background:on?P.blue:'#fff', border:'1px solid '+(on?P.blue:'#CBD4E0'), color:P.ink }}>
+              {on && <Icon name="check" size={12} color={P.ink} sw={3}/>}
             </div>
             <div style={{ flex:1, minWidth:0 }}>
               <div style={{ font:"700 12.5px/1.3 'Manrope'", color:on?P.blueDark:P.ink, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{fr?s.shortFr:s.short}</div>
@@ -598,10 +600,11 @@ function App(){
           </div>
         )}
         <div style={{ padding:'10px clamp(14px,2.4vw,22px)', minHeight:60, display:'flex', alignItems:'center', flexWrap:'wrap', gap:'10px clamp(10px,1.8vw,18px)' }}>
-          <div onClick={()=>go('overview')} style={{ display:'flex', alignItems:'center', gap:9, cursor:'pointer', flex:'none' }}>
-            <div style={{ width:30, height:30, borderRadius:9, background:P.blue, display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="monitor" size={17} color="#fff" sw={2}/></div>
-            <span style={{ font:"800 18.5px/1 'Manrope'", letterSpacing:'-.025em' }}>sparAds</span>
-          </div>
+          <div onClick={()=>go('overview')} style={{ display:'flex', alignItems:'center', cursor:'pointer', flex:'none' }}>
+  <svg viewBox="0 0 90 20" width="100" height="22" xmlns="http://www.w3.org/2000/svg">
+    <text x="0" y="16" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="18" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
+  </svg>
+</div>
           <div style={{ width:1, height:26, background:'#E4E8ED', flex:'none' }}/>
           <div style={{ flex:'1 1 220px', minWidth:0, display:'flex', alignItems:'center', gap:9, padding:'0 12px', borderRadius:9, background:P.bg, border:'1px solid '+(searchFocus?P.blue:P.line) }}>
             <Icon name="search" size={15} color="#8794A6" sw={1.9}/>
@@ -617,7 +620,7 @@ function App(){
               <Icon name="bell" size={16} color={notifOpen?P.blue:'#65728A'} sw={1.9}/>
             </button>
             <div style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line }}>
-              <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:'#fff' }}>AK</div>
+              <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:P.ink }}>AK</div>
               <div style={{ display:'flex', flexDirection:'column', gap:3 }}>
                 <span style={{ font:"700 11.5px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>Amina Kponou</span>
                 <span style={{ font:"500 9.5px/1 'JetBrains Mono',monospace", color:'#8794A6', whiteSpace:'nowrap' }}>ACC-4417</span>
@@ -631,7 +634,7 @@ function App(){
 
         {/* SIDEBAR */}
         <nav style={{ flex:'1 1 226px', maxWidth:'100%', alignSelf:'stretch', background:'#fff', borderRight:'1px solid '+P.line, borderBottom:'1px solid '+P.line, padding:'16px 12px 20px', display:'flex', flexWrap:'wrap', gap:4, alignContent:'flex-start' }}>
-          <button className="btn" onClick={openNewWizard} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 13px/1 'Manrope'", marginBottom:8 }}>
+          <button className="btn" onClick={openNewWizard} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'", marginBottom:8 }}>
             <Icon name="plus" size={15} color="#fff" sw={2.2}/>{t.newCampaign}
           </button>
           {navDefs.map((d,i) => {
@@ -790,7 +793,7 @@ function App(){
                 <h1 style={{ margin:0, font:"800 clamp(21px,3vw,27px)/1.2 'Manrope'", letterSpacing:'-.03em' }}>{t.navCampaigns}</h1>
                 <p style={{ margin:'7px 0 0', font:"500 13px/1.5 'Manrope'", color:P.mute }}>{campaigns.length} {t.campaignsSubA} {liveCamps.length} {t.campaignsSubB}</p>
               </div>
-              <button className="btn" onClick={openNewWizard} style={{ display:'flex', alignItems:'center', gap:8, padding:'12px 18px', border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 13px/1 'Manrope'" }}>
+              <button className="btn" onClick={openNewWizard} style={{ display:'flex', alignItems:'center', gap:8, padding:'12px 18px', border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'" }}>
                 <Icon name="plus" size={15} color="#fff" sw={2.2}/>{t.newCampaign}
               </button>
             </div>
@@ -847,7 +850,7 @@ function App(){
                             </button>
                           )}
                           <button className="btn" onClick={ev=>{ev.stopPropagation(); const dup={...c, id:'d'+Date.now(), status:'sched', imp:0, spend:0}; setCampaigns(prev=>prev.concat(dup)); flash(t.toastDup);}} style={{ padding:'11px 16px', borderRadius:8, border:'1px solid '+P.line, background:'#fff', font:"700 12px/1 'Manrope'", color:P.ink }}>{t.duplicate}</button>
-                          <button className="btn" onClick={ev=>{ev.stopPropagation(); go('reports');}} style={{ padding:'11px 16px', borderRadius:8, border:'none', background:P.blue, color:'#fff', font:"700 12px/1 'Manrope'" }}>{t.navReports}</button>
+                          <button className="btn" onClick={ev=>{ev.stopPropagation(); go('reports');}} style={{ padding:'11px 16px', borderRadius:8, border:'none', background:P.blue, color:P.ink, font:"700 12px/1 'Manrope'" }}>{t.navReports}</button>
                         </div>
                       </div>
                     )}
@@ -919,7 +922,7 @@ function App(){
                     </div>
                   ))}
                 </div>
-                <button className="btn" onClick={()=>startFromScreen(selScreen)} style={{ width:'100%', padding:15, border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 13.5px/1 'Manrope'" }}>{t.bookScreen}</button>
+                <button className="btn" onClick={()=>startFromScreen(selScreen)} style={{ width:'100%', padding:15, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13.5px/1 'Manrope'" }}>{t.bookScreen}</button>
               </aside>
             </div>
           </section>
@@ -937,7 +940,7 @@ function App(){
                   <div style={{ margin:'14px 0 6px', font:"800 clamp(28px,4vw,38px)/1 'Manrope'", letterSpacing:'-.035em' }}>{money(balance)}</div>
                   <div style={{ font:"500 11.5px/1 'JetBrains Mono',monospace", color:'#8794A6' }}>MTN MoMo ···· 8412</div>
                   <div style={{ display:'flex', gap:9, marginTop:20, flexWrap:'wrap' }}>
-                    <button className="btn" onClick={()=>setModal('topup')} style={{ flex:'1 1 130px', padding:13, border:'none', borderRadius:8, background:P.blue, color:'#fff', font:"800 12.5px/1 'Manrope'" }}>{t.topUp}</button>
+                    <button className="btn" onClick={()=>setModal('topup')} style={{ flex:'1 1 130px', padding:13, border:'none', borderRadius:8, background:P.blue, color:P.ink, font:"800 12.5px/1 'Manrope'" }}>{t.topUp}</button>
                     <button className="btn" onClick={()=>go('reports')} style={{ flex:'1 1 110px', padding:13, border:'1px solid rgba(255,255,255,.2)', borderRadius:8, background:'transparent', color:'#fff', font:"700 12.5px/1 'Manrope'" }}>{t.viewReports}</button>
                   </div>
                 </div>
@@ -1074,7 +1077,7 @@ function App(){
                       const on = lang===l[1];
                       return (
                         <div key={l[1]} onClick={()=>setLang(l[1])} style={{ display:'flex', alignItems:'center', gap:11, padding:13, borderRadius:10, cursor:'pointer', background:on?P.blueSoft:'#fff', border:'1px solid '+(on?P.blue:P.line) }}>
-                          <span style={{ width:32, height:32, borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', background:on?P.blue:P.bg, color:on?'#fff':P.dim, font:"800 11px/1 'Manrope'" }}>{l[2]}</span>
+                          <span style={{ width:32, height:32, borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', background:on?P.blue:P.bg, color:on?P.ink:P.dim, font:"800 11px/1 'Manrope'" }}>{l[2]}</span>
                           <span style={{ flex:1, font:"700 12.5px/1 'Manrope'", color:on?P.blueDark:P.ink }}>{l[0]}</span>
                           {on && <Icon name="check" size={16} color={P.blue} sw={2.4}/>}
                         </div>
@@ -1090,7 +1093,7 @@ function App(){
                   <div style={{ display:'flex', flexDirection:'column', gap:11 }}>
                     {[['Amina Kponou','Owner','Propriétaire'],['Yaovi D.','Editor','Éditeur'],['Rachelle A.','Analyst','Analyste']].map((m,i)=>(
                       <div key={i} style={{ display:'flex', alignItems:'center', gap:11 }}>
-                        <div style={{ width:30, height:30, borderRadius:'50%', background:[P.blue,'#7FA9EE','#C3CBD7'][i], color:'#fff', font:"800 10.5px/30px 'Manrope'", textAlign:'center', flex:'none' }}>{m[0].split(' ').map(w=>w[0]).join('')}</div>
+                        <div style={{ width:30, height:30, borderRadius:'50%', background:[P.blue,'#7FA9EE','#C3CBD7'][i], color:i===0?P.ink:'#fff', font:"800 10.5px/30px 'Manrope'", textAlign:'center', flex:'none' }}>{m[0].split(' ').map(w=>w[0]).join('')}</div>
                         <div style={{ flex:1, minWidth:0 }}>
                           <div style={{ font:"700 12.5px/1.2 'Manrope'" }}>{m[0]}</div>
                           <div style={{ marginTop:3, font:"500 10.5px/1 'Manrope'", color:P.dim }}>{fr?m[2]:m[1]}</div>
@@ -1129,7 +1132,7 @@ function App(){
                     const active = step===i+1, doneStep = step>i+1;
                     return (
                       <div key={i} onClick={()=>doneStep && setStep(i+1)} style={{ flex:'1 1 168px', display:'flex', alignItems:'center', gap:10, padding:'12px 14px', borderRadius:10, background:'#fff', border:'1px solid '+(active?P.blue:P.line), cursor:doneStep?'pointer':'default' }}>
-                        <span style={{ width:21, height:21, borderRadius:'50%', flex:'none', display:'flex', alignItems:'center', justifyContent:'center', background:active||doneStep?P.blue:P.line2, color:active||doneStep?'#fff':P.dim, font:"800 10.5px/1 'Manrope'" }}>{doneStep?'✓':i+1}</span>
+                        <span style={{ width:21, height:21, borderRadius:'50%', flex:'none', display:'flex', alignItems:'center', justifyContent:'center', background:active||doneStep?P.blue:P.line2, color:active||doneStep?P.ink:P.dim, font:"800 10.5px/1 'Manrope'" }}>{doneStep?'✓':i+1}</span>
                         <span style={{ font:(active?'800':'600')+" 12.5px/1.2 'Manrope'", color:active?P.ink:P.mute, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{s}</span>
                       </div>
                     );
@@ -1173,7 +1176,7 @@ function App(){
                       <span style={{ color:P.mute }}>{t.baseRate} ({fr?'total':'combined'})</span>
                       <span>{money(wScreens.reduce((s,id)=>s+SCREEN_BY_ID[id].rate,0))}</span>
                     </div>
-                    <button className="btn" onClick={tryNext} style={{ width:'100%', marginTop:'auto', padding:15, border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 13.5px/1 'Manrope'" }}>{t.continue}</button>
+                    <button className="btn" onClick={tryNext} style={{ width:'100%', marginTop:'auto', padding:15, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13.5px/1 'Manrope'" }}>{t.continue}</button>
                   </aside>
                 </div>
                 <div style={{ marginTop:14 }}>
@@ -1200,7 +1203,7 @@ function App(){
                         {Array.from({length:30},(_,k)=>{
                           const d=k+1, inR=d>=wStart&&d<=wEnd, edge=d===wStart||d===wEnd;
                           return (
-                            <div key={d} onClick={()=>{ d<=wStart ? setWStart(d) : setWEnd(d); }} style={{ aspectRatio:'1 / 1', minHeight:30, maxHeight:40, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', background:edge?P.blue:inR?P.blueSoft:'transparent', color:edge?'#fff':inR?P.blueDark:P.mute, font:(edge?'800':'600')+" 12.5px/1 'Manrope'" }}>{d}</div>
+                            <div key={d} onClick={()=>{ d<=wStart ? setWStart(d) : setWEnd(d); }} style={{ aspectRatio:'1 / 1', minHeight:30, maxHeight:40, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', background:edge?P.blue:inR?P.blueSoft:'transparent', color:edge?P.ink:inR?P.blueDark:P.mute, font:(edge?'800':'600')+" 12.5px/1 'Manrope'" }}>{d}</div>
                           );
                         })}
                       </div>
@@ -1215,8 +1218,8 @@ function App(){
                         {SLOTS.map((s,i)=>{
                           const on = wParts.includes(i);
                           return (
-                            <div key={i} onClick={()=>setWParts(p=>p.includes(i)?p.filter(x=>x!==i):p.concat(i))} style={{ padding:'12px 13px', borderRadius:9, cursor:'pointer', display:'flex', alignItems:'flex-start', gap:10, background:on?'#F5F9FF':'#fff', border:'1px solid '+(on?P.blue:P.line) }}>
-                              <span style={{ width:16, height:16, marginTop:1, borderRadius:4, flex:'none', display:'flex', alignItems:'center', justifyContent:'center', background:on?P.blue:'#fff', border:'1px solid '+(on?P.blue:'#CBD4E0'), color:'#fff', font:"800 10px/1 'Manrope'" }}>{on?'✓':''}</span>
+                            <div key={i} onClick={()=>setWParts(p=>p.includes(i)?p.filter(x=>x!==i):p.concat(i))} style={{ padding:'12px 13px', borderRadius:9, cursor:'pointer', display:'flex', alignItems:'flex-start', gap:10, background:on?P.blueSoft:'#fff', border:'1px solid '+(on?P.blue:P.line) }}>
+                              <span style={{ width:16, height:16, marginTop:1, borderRadius:4, flex:'none', display:'flex', alignItems:'center', justifyContent:'center', background:on?P.blue:'#fff', border:'1px solid '+(on?P.blue:'#CBD4E0'), color:P.ink, font:"800 10px/1 'Manrope'" }}>{on?'✓':''}</span>
                               <div>
                                 <div style={{ font:"700 12.5px/1.2 'Manrope'", color:on?P.blueDark:P.ink }}>{fr?s.fr:s.en}</div>
                                 <div style={{ marginTop:5, font:"500 10.5px/1 'JetBrains Mono',monospace", color:P.dim }}>{s.t}</div>
@@ -1258,7 +1261,7 @@ function App(){
                         <span style={{ font:"800 clamp(20px,2.6vw,24px)/1 'Manrope'", letterSpacing:'-.03em' }}>{money(cost.total)}</span>
                       </div>
                     </div>
-                    <button className="btn" onClick={()=>setStep(3)} style={{ width:'100%', padding:16, border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 14px/1 'Manrope'" }}>{t.continue}</button>
+                    <button className="btn" onClick={()=>setStep(3)} style={{ width:'100%', padding:16, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 14px/1 'Manrope'" }}>{t.continue}</button>
                   </div>
                 </div>
               </div>
@@ -1270,7 +1273,7 @@ function App(){
                 <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'flex-start' }}>
                   <div style={{ flex:'1.3 1 340px', minWidth:0, ...card('clamp(16px,2.2vw,22px)') }}>
                     <div style={{ font:"700 14px/1 'Manrope'", marginBottom:14 }}>{t.creative}</div>
-                    <div style={{ border:'2px dashed #BCD1F1', borderRadius:11, background:'#F7FAFE', padding:'clamp(24px,3.6vw,40px) clamp(16px,3vw,26px)', textAlign:'center' }}>
+                    <div style={{ border:'2px dashed #F1D9A4', borderRadius:11, background:'#FDF8EE', padding:'clamp(24px,3.6vw,40px) clamp(16px,3vw,26px)', textAlign:'center' }}>
                       <div style={{ width:50, height:50, margin:'0 auto 14px', borderRadius:13, background:P.blueSoft, border:'1px solid '+P.blueLine, display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="upload" size={22} color={P.blue} sw={2}/></div>
                       <div style={{ font:"700 clamp(13.5px,1.8vw,15px)/1.55 'Manrope'", maxWidth:360, margin:'0 auto' }}>{t.dropzone}</div>
                       <div style={{ marginTop:9, font:"500 11px/1 'JetBrains Mono',monospace", color:'#8794A6' }}>{t.dropzoneHint}</div>
@@ -1294,8 +1297,8 @@ function App(){
                         {NETS.map((p,i)=>{
                           const on = i===wPay;
                           return (
-                            <div key={i} onClick={()=>setWPay(i)} style={{ padding:'14px 8px', borderRadius:9, textAlign:'center', cursor:'pointer', position:'relative', background:on?'#F5F9FF':'#fff', border:'1px solid '+(on?P.blue:P.line) }}>
-                              {on && <div style={{ position:'absolute', top:6, right:6, width:13, height:13, borderRadius:'50%', background:P.blue, color:'#fff', font:"800 8.5px/13px 'Manrope'" }}>✓</div>}
+                            <div key={i} onClick={()=>setWPay(i)} style={{ padding:'14px 8px', borderRadius:9, textAlign:'center', cursor:'pointer', position:'relative', background:on?P.blueSoft:'#fff', border:'1px solid '+(on?P.blue:P.line) }}>
+                              {on && <div style={{ position:'absolute', top:6, right:6, width:13, height:13, borderRadius:'50%', background:P.blue, color:P.ink, font:"800 8.5px/13px 'Manrope'" }}>✓</div>}
                               <div style={{ width:30, height:30, margin:'0 auto 8px', borderRadius:8, background:p.c, color:'#fff', font:"800 10.5px/30px 'Manrope'" }}>{p.i}</div>
                               <div style={{ font:"700 10.5px/1.25 'Manrope'", color:on?P.blueDark:P.mute }}>{p.n}</div>
                             </div>
@@ -1303,7 +1306,7 @@ function App(){
                         })}
                       </div>
                       <div style={{ marginTop:16, font:"700 12px/1 'Manrope'", color:P.body }}>{t.momoNumber}</div>
-                      <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:10, padding:'0 14px', borderRadius:9, background:'#fff', border:'1px solid '+(phoneFocus?P.blue:P.line), boxShadow:phoneFocus?'0 0 0 3px rgba(27,95,217,.15)':'none' }}>
+                      <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:10, padding:'0 14px', borderRadius:9, background:'#fff', border:'1px solid '+(phoneFocus?P.blue:P.line), boxShadow:phoneFocus?'0 0 0 3px rgba(232,169,58,.15)':'none' }}>
                         <span style={{ font:"600 13.5px/1 'JetBrains Mono',monospace", color:P.mute }}>+229</span>
                         <span style={{ width:1, height:20, background:'#E4E8ED' }}/>
                         <input type="tel" value={wPhone} onChange={e=>setWPhone(e.target.value)} onFocus={()=>setPhoneFocus(true)} onBlur={()=>setPhoneFocus(false)} placeholder={t.momoPlaceholder} style={{ flex:1, minWidth:0, background:'transparent', border:'none', outline:'none', padding:'14px 0', font:"600 13.5px/1 'Manrope'", color:P.ink }}/>
@@ -1323,9 +1326,9 @@ function App(){
                         <span style={{ font:"700 12.5px/1 'Manrope'" }}>{t.totalDue}</span><span style={{ font:"800 clamp(19px,2.4vw,22px)/1 'Manrope'", letterSpacing:'-.02em', color:P.blue }}>{money(cost.total)}</span>
                       </div>
                       {editingId ? (
-                        <button className="btn" onClick={saveEdit} style={{ width:'100%', marginTop:16, padding:17, border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 clamp(14px,1.9vw,15.5px)/1 'Manrope'" }}>{t.saveChanges}</button>
+                        <button className="btn" onClick={saveEdit} style={{ width:'100%', marginTop:16, padding:17, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 clamp(14px,1.9vw,15.5px)/1 'Manrope'" }}>{t.saveChanges}</button>
                       ) : (
-                        <button className="btn" onClick={authorize} style={{ width:'100%', marginTop:16, padding:17, border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 clamp(14px,1.9vw,15.5px)/1 'Manrope'" }}>{t.authorize}</button>
+                        <button className="btn" onClick={authorize} style={{ width:'100%', marginTop:16, padding:17, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 clamp(14px,1.9vw,15.5px)/1 'Manrope'" }}>{t.authorize}</button>
                       )}
                       <div style={{ marginTop:10, textAlign:'center', font:"500 10.5px/1 'JetBrains Mono',monospace", color:'#98A3B4' }}>{NETS[wPay].n} · sparAds SA</div>
                     </div>
@@ -1347,12 +1350,12 @@ function App(){
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:9, padding:'13px 15px', borderRadius:9, background:'#F5F9FF', border:'1px solid '+P.blueLine }}>
+                <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:9, padding:'13px 15px', borderRadius:9, background:P.blueSoft, border:'1px solid '+P.blueLine }}>
                   <span style={{ width:6, height:6, borderRadius:'50%', background:P.blue, flex:'none' }}/>
                   <span style={{ font:"600 11.5px/1.4 'Manrope'", color:P.blueDark }}>{t.smsReceipt} · SPR-{Math.floor(1000+Math.random()*9000)}</span>
                 </div>
                 <div style={{ display:'flex', gap:10, flexWrap:'wrap', marginTop:20 }}>
-                  <button className="btn" onClick={()=>{setWizardOpen(false); go('campaigns');}} style={{ flex:'1 1 200px', padding:16, border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 13.5px/1 'Manrope'" }}>{t.seeCampaigns}</button>
+                  <button className="btn" onClick={()=>{setWizardOpen(false); go('campaigns');}} style={{ flex:'1 1 200px', padding:16, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13.5px/1 'Manrope'" }}>{t.seeCampaigns}</button>
                   <button className="btn" onClick={openNewWizard} style={{ flex:'1 1 160px', padding:16, border:'1px solid '+P.line, borderRadius:9, background:'#fff', color:P.ink, font:"700 13px/1 'Manrope'" }}>{t.addAnother}</button>
                 </div>
               </div>
@@ -1391,7 +1394,7 @@ function App(){
               <span style={{ font:"800 15px/1 'Manrope'" }}>{money(topup)}</span>
             </div>
             <div style={{ display:'flex', gap:9, marginTop:18, flexWrap:'wrap' }}>
-              <button className="btn" onClick={()=>{ setBalance(b=>b+topup); setTx(prev=>[{ en:'Wallet top-up · '+NETS[0].n, fr:'Recharge · '+NETS[0].n, d:'Today', v:topup, k:'in' }, ...prev]); setModal(null); flash(t.toastTopUp); }} style={{ flex:'1 1 180px', padding:15, border:'none', borderRadius:9, background:P.blue, color:'#fff', font:"800 13px/1 'Manrope'" }}>{t.confirmTopUp}</button>
+              <button className="btn" onClick={()=>{ setBalance(b=>b+topup); setTx(prev=>[{ en:'Wallet top-up · '+NETS[0].n, fr:'Recharge · '+NETS[0].n, d:'Today', v:topup, k:'in' }, ...prev]); setModal(null); flash(t.toastTopUp); }} style={{ flex:'1 1 180px', padding:15, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'" }}>{t.confirmTopUp}</button>
               <button className="btn" onClick={()=>setModal(null)} style={{ flex:'0 1 110px', padding:15, borderRadius:9, border:'1px solid '+P.line, background:'#fff', font:"700 12.5px/1 'Manrope'", color:P.body }}>{t.cancel}</button>
             </div>
           </div>
