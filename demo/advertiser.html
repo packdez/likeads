@@ -1210,6 +1210,7 @@ function App(){
                         {/* step 1: select screens — one view at a time, map or list */}
             {step===1 && (
               <div style={{ animation:'riseIn .22s ease' }}>
+                    <div style={{ font:"700 13.5px/1 'Manrope'", color:P.ink, marginBottom:9 }}>{fr?'Choisir les emplacements':'Select locations'}</div>
                 <div style={{ display:'inline-flex', border:'1px solid '+P.line, borderRadius:9, overflow:'hidden', marginBottom:12 }}>
                   <button className="btn" onClick={()=>setScreenViewMode('map')} style={{ display:'flex', alignItems:'center', gap:7, padding:'9px 15px', border:'none', background:screenViewMode==='map'?P.blueSoft:'#fff', color:screenViewMode==='map'?P.blueDark:P.mute, font:"700 12.5px/1 'Manrope'" }}>
                     <Icon name="pin" size={14} color={screenViewMode==='map'?P.blue:'#8794A6'} sw={2}/>{fr?'Carte':'Map'}
@@ -1218,6 +1219,8 @@ function App(){
                     <Icon name="grid" size={14} color={screenViewMode==='list'?P.blue:'#8794A6'} sw={2}/>{fr?'Liste':'List'}
                   </button>
                 </div>
+
+               
                 <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'flex-start' }}>
                   <div style={{ flex:'1.7 1 380px', minWidth:0 }}>
                     {screenViewMode==='map' ? (
