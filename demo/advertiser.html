@@ -36,10 +36,11 @@
    @media (max-width:640px){
     .sidebarNav .navBtn{flex:1 1 100% !important}
     .headerRow{gap:8px !important}
-    .searchBar{order:3;flex:1 1 100% !important;margin-top:8px}
+    .searchBar{display:none !important}
     .logoDivider{display:none}
     .langToggle{display:none}
-    .userChip{padding:2px !important;border:none !important}
+        .userChip{padding:2px !important;border:none !important}
+    .headerRow{justify-content:space-between !important}
     .avatarNameFull{display:none !important}
     .avatarNameShort{display:inline !important}
     .notifBtnDesktop{display:none !important}
@@ -635,15 +636,17 @@ function App(){
           </div>
         )}
                 <div className="headerRow" style={{ padding:'10px clamp(14px,2.4vw,22px)', minHeight:60, display:'flex', alignItems:'center', flexWrap:'wrap', gap:'10px clamp(10px,1.8vw,18px)' }}>
-          <button className="btn hamburgerBtn" onClick={()=>setNavOpen(o=>!o)} style={{ width:36, height:36, borderRadius:9, alignItems:'center', justifyContent:'center', border:'1px solid '+P.line, background:'#fff', flex:'none' }}>
-            <Icon name={navOpen ? 'close' : 'menu'} size={17} color={P.ink} sw={2}/>
-          </button>
-          <div onClick={()=>go('overview')} style={{ display:'flex', alignItems:'center', cursor:'pointer', flex:'none' }}>  <svg viewBox="0 0 90 20" width="100" height="22" xmlns="http://www.w3.org/2000/svg">
-    <text x="0" y="16" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="18" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
-  </svg>
-</div>
-          <div className="logoDivider" style={{ width:1, height:26, background:'#E4E8ED', flex:'none' }}/>
-          <div className="searchBar" style={{ flex:'1 1 220px', minWidth:0, display:'flex', alignItems:'center', gap:9, padding:'0 12px', borderRadius:9, background:P.bg, border:'1px solid '+(searchFocus?P.blue:P.line) }}>
+          <div style={{ display:'flex', alignItems:'center', gap:'10px clamp(10px,1.8vw,18px)', flex:'none' }}>
+            <button className="btn hamburgerBtn" onClick={()=>setNavOpen(o=>!o)} style={{ width:36, height:36, borderRadius:9, alignItems:'center', justifyContent:'center', border:'1px solid '+P.line, background:'#fff', flex:'none' }}>
+              <Icon name={navOpen ? 'close' : 'menu'} size={17} color={P.ink} sw={2}/>
+            </button>
+            <div onClick={()=>go('overview')} style={{ display:'flex', alignItems:'center', cursor:'pointer', flex:'none' }}>
+              <svg viewBox="0 0 90 20" width="100" height="22" xmlns="http://www.w3.org/2000/svg">
+                <text x="0" y="16" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="18" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
+              </svg>
+            </div>
+            <div className="logoDivider" style={{ width:1, height:26, background:'#E4E8ED', flex:'none' }}/>
+          </div> <div className="searchBar" style={{ flex:'1 1 220px', minWidth:0, display:'flex', alignItems:'center', gap:9, padding:'0 12px', borderRadius:9, background:P.bg, border:'1px solid '+(searchFocus?P.blue:P.line) }}>
            <Icon name="search" size={15} color="#8794A6" sw={1.9}/>
             <input value={query} onChange={e=>{setQuery(e.target.value); setPage('campaigns');}} onFocus={()=>setSearchFocus(true)} onBlur={()=>setSearchFocus(false)}
               placeholder={t.searchPlaceholder} style={{ flex:1, minWidth:0, background:'transparent', border:'none', outline:'none', padding:'11px 0', font:"600 12.5px/1 'Manrope'", color:P.ink }}/>
