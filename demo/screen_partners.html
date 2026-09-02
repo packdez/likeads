@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>sparAds — Partner Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B0B0C'/><text x='16' y='17' text-anchor='middle' dominant-baseline='central' font-family='Arial, Helvetica, sans-serif' font-weight='900' font-size='23' fill='%23E8A93A'>S</text></svg>">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#F4F6F9;color:#0F1826;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  #root{min-height:100vh}
+  button{font-family:inherit}
+  a{color:#8A5A12;text-decoration:none}
+  a:hover{color:#6B4310}
+  input,select{font-family:inherit}
+  input::placeholder{color:#98A3B4}
+  @keyframes riseIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeOut{from{opacity:1;max-height:200px}to{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin:0}}
+  @keyframes ping{0%{transform:scale(1);opacity:.45}70%{transform:scale(2.2);opacity:0}100%{opacity:0}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  ::-webkit-scrollbar{height:10px;width:10px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#CBD4E0;border-radius:99px}
+  .btn{cursor:pointer;border:none;font-family:inherit}
+  .btn:active{transform:translateY(1px)}
+  .cardHover{transition:transform .18s ease, box-shadow .18s ease}
+  .cardHover:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(15,24,38,.12)}
+  @media (max-width:640px){
+    .searchCol{display:none !important}
+    .avatarNameFull{display:none !important}
+    .avatarNameShort{display:inline !important}
+    .notifBtnDesktop{display:none !important}
+    .userChip{padding:2px !important;border:none !important}
+    .sidebarLogo{display:flex !important}
+    .newTaskDesktop{display:none !important}
+    .sidebarNav{
+      position:fixed; top:0; left:0; bottom:0; width:82%; max-width:300px;
+      transform:translateX(-100%); transition:transform .25s ease;
+      z-index:80; overflow-y:auto; box-shadow:0 0 30px rgba(15,24,38,.25);
+    }
+    .sidebarNav.navOpen{transform:translateX(0)}
+    .hamburgerBtn{display:flex !important}
+    .headerRow{justify-content:space-between !important; gap:8px !important}
+  }
+  .hamburgerBtn{display:none}
+  .sidebarNav{display:flex}
+  .navBackdrop{position:fixed; inset:0; background:rgba(15,24,38,.45); z-index:75}
+  .avatarNameShort{display:none}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js" crossorigin></script>
+
+<script type="text/babel" data-presets="react" data-type="text/javascript">
+/** @jsx React.createElement */
+/** @jsxFrag React.Fragment */
+const {useState, useEffect, useRef, useMemo} = React;
+
+/* ===================== DESIGN TOKENS ===================== */
+const P = {
+  blue:'#E8A93A', blueDark:'#8A5A12', blueSoft:'#FBF0DB', blueLine:'#F1D9A4',
+  ink:'#0F1826', body:'#3B475C', mute:'#65728A', dim:'#8794A6', line:'#DCE1E8', line2:'#EDF0F4',
+  bg:'#F4F6F9', green:'#12794A', greenSoft:'#E6F6EE', red:'#C0392B', redSoft:'#FBEAE8'
+};
+const card = (p) => ({ background:'#fff', border:'1px solid '+P.line, borderRadius:13, padding:p||16 });
+
+/* ===================== ICONS ===================== */
+const ICONS = {
+  grid:['M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z'],
+  monitor:['M3 4h18v12H3z','M9 20h6','M12 16v4'],
+  inbox:['M22 12h-6l-2 3h-4l-2-3H2','M5.45 5.11 2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z'],
+  wallet:['M3 7h18v12H3z','M3 7l3-3h9l3 3','M16 13h2'],
+  chart:['M4 20V9','M10 20V4','M16 20v-7','M22 20H2'],
+  gear:['M12 9.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z','M19.4 13.5l1.7 1-2 3.4-1.9-.7a7.6 7.6 0 01-1.7 1l-.3 2h-4l-.3-2a7.6 7.6 0 01-1.7-1l-1.9.7-2-3.4 1.7-1a7 7 0 010-3l-1.7-1 2-3.4 1.9.7a7.6 7.6 0 011.7-1l.3-2h4l.3 2a7.6 7.6 0 011.7 1l1.9-.7 2 3.4-1.7 1a7 7 0 010 3z'],
+  search:['M11 18a7 7 0 100-14 7 7 0 000 14z','M20 20l-4-4'],
+  bell:['M18 15V10a6 6 0 10-12 0v5l-2 3h16z','M10 21h4'],
+  plus:['M12 5v14','M5 12h14'],
+  check:['M4 12.5l5 5L20 6.5'],
+  close:['M6 6l12 12','M18 6L6 18'],
+  shield:['M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5z','M9 12l2 2 4-4'],
+  users:['M8 11a4 4 0 100-8 4 4 0 000 8z','M2 21c0-3.3 2.7-6 6-6s6 2.7 6 6','M17 11a3 3 0 100-6','M17 15c2.8 0 5 2.2 5 5'],
+  clock:['M12 21a9 9 0 100-18 9 9 0 000 18z','M12 7.5V12l3.5 2'],
+  eye:['M12 5c5 0 9 7 9 7s-4 7-9 7-9-7-9-7 4-7 9-7z','M12 15a3 3 0 100-6 3 3 0 000 6z'],
+  edit:['M12 20h9','M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z'],
+  trash:['M3 6h18','M8 6V4h8v2','M6 6l1 14h10l1-14'],
+  menu:['M4 7h16','M4 12h16','M4 17h16'],
+  download:['M12 4v13','M6 11l6 6 6-6','M4 20h16'],
+  play:['M8 5v14l11-7z']
+};
+function Icon({ name, size=17, color='currentColor', sw=1.8 }){
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw}
+      strokeLinecap="round" strokeLinejoin="round" style={{ flex:'none' }}>
+      {(ICONS[name]||[]).map((d,i)=><path key={i} d={d}/>)}
+    </svg>
+  );
+}
+
+/* ===================== STORAGE ===================== */
+const LS = {
+  screens:'sparads_pt_screens_v1', queue:'sparads_pt_queue_v1', wallet:'sparads_pt_wallet_v1',
+  tx:'sparads_pt_tx_v1', lang:'sparads_pt_lang_v1', settings:'sparads_pt_settings_v1'
+};
+function loadLS(k,f){ try{ const r=localStorage.getItem(k); return r===null?f:JSON.parse(r); }catch(e){ return f; } }
+function saveLS(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+/* ===================== SEED DATA ===================== */
+const DEFAULT_SCREENS = [
+  { id:'s1', name:'Cadjehoun / St Michel', type:'Indoor · 4K', status:'live', fill:91, impToday:2140 },
+  { id:'s2', name:'Erevan Market', type:'Outdoor · P8', status:'live', fill:76, impToday:3860 },
+  { id:'s3', name:'Vedoko Junction', type:'Outdoor · P8', status:'live', fill:88, impToday:1590 },
+  { id:'s4', name:'Ganhi Business District', type:'Indoor · 2K', status:'pending', fill:0, impToday:0 },
+  { id:'s5', name:'Zongo Market', type:'Outdoor · P8', status:'offline', fill:0, impToday:0 }
+];
+const NAMES = ['Chez Rachelle Traiteur','Pharmacie du Phare','Boutique Wax & Co','Studio Kponou','Salon Aurore','Épicerie Bonheur'];
+function seedQueue(){
+  return [
+    { id:'q1', biz:'Chez Rachelle Traiteur', screen:'Erevan Market', budget:8000, days:3, submitted:'2 hours ago' },
+    { id:'q2', biz:'Pharmacie du Phare', screen:'Cadjehoun / St Michel', budget:5400, days:1, submitted:'5 hours ago' },
+    { id:'q3', biz:'Boutique Wax & Co', screen:'Vedoko Junction', budget:12000, days:5, submitted:'Yesterday' }
+  ];
+}
+function seedTx(){
+  return [
+    { id:'t1', label:'Payout — MoMo transfer', amount:-42000, d:'Aug 28' },
+    { id:'t2', label:'Ad slot — Chez Rachelle Traiteur', amount:6800, d:'Aug 27' },
+    { id:'t3', label:'Ad slot — Pharmacie du Phare', amount:4590, d:'Aug 26' },
+    { id:'t4', label:'Ad slot — Studio Kponou', amount:5100, d:'Aug 25' }
+  ];
+}
+
+/* ===================== TRANSLATIONS ===================== */
+const T = {
+  en:{
+    brand:'sparAds', overview:'Overview', screens:'My Screens', approvals:'Approvals', wallet:'Wallet', reports:'Reports', settings:'Settings',
+    goodMorning:'Good morning', partnerOf:'Screen Partner', searchPh:'Search screens, requests…',
+    liveScreens:'Live screens', fillRate:'Avg. fill rate', pendingReq:'Pending requests', payout:'Payout, this week',
+    beforeAfter:'Unsold airtime, before / after', before:'Before sparAds', after:'With sparAds',
+    recentReq:'Recent requests', viewAll:'View all', noReq:'No pending requests right now.',
+    addScreen:'Add screen', screenName:'Screen name', screenType:'Screen type', save:'Save screen', cancel:'Cancel',
+    approve:'Approve', decline:'Decline', budgetLbl:'Budget', daysLbl:'days', submittedLbl:'Submitted',
+    approvedToast:'Ad approved — now live', declinedToast:'Request declined',
+    balance:'Available balance', requestPayout:'Request payout', txHistory:'Transaction history',
+    payoutRequested:'Payout requested — funds arrive in 1–2 days',
+    impressions7:'Impressions, last 7 days', fillByScreen:'Fill rate by screen',
+    networkProfile:'Network profile', momoNumber:'Payout number (MoMo)', teamTitle:'Team', invite:'Invite',
+    langTitle:'Language', saved:'Settings saved', status:{live:'Live',pending:'Pending',offline:'Offline'},
+    newReqToast:'New ad request received', simBanner:'This portal runs on live simulated data, saved to your browser.'
+  },
+  fr:{
+    brand:'sparAds', overview:'Aperçu', screens:'Mes écrans', approvals:'Approbations', wallet:'Portefeuille', reports:'Rapports', settings:'Paramètres',
+    goodMorning:'Bonjour', partnerOf:'Partenaire écran', searchPh:'Rechercher écrans, demandes…',
+    liveScreens:'Écrans actifs', fillRate:'Taux de remplissage', pendingReq:'Demandes en attente', payout:'Paiement, cette semaine',
+    beforeAfter:'Temps d\'antenne invendu, avant / après', before:'Avant sparAds', after:'Avec sparAds',
+    recentReq:'Demandes récentes', viewAll:'Tout voir', noReq:'Aucune demande en attente.',
+    addScreen:'Ajouter un écran', screenName:'Nom de l\'écran', screenType:'Type d\'écran', save:'Enregistrer', cancel:'Annuler',
+    approve:'Approuver', decline:'Refuser', budgetLbl:'Budget', daysLbl:'jours', submittedLbl:'Soumis',
+    approvedToast:'Publicité approuvée — en direct', declinedToast:'Demande refusée',
+    balance:'Solde disponible', requestPayout:'Demander un paiement', txHistory:'Historique des transactions',
+    payoutRequested:'Paiement demandé — fonds sous 1 à 2 jours',
+    impressions7:'Impressions, 7 derniers jours', fillByScreen:'Taux de remplissage par écran',
+    networkProfile:'Profil du réseau', momoNumber:'Numéro de paiement (MoMo)', teamTitle:'Équipe', invite:'Inviter',
+    langTitle:'Langue', saved:'Paramètres enregistrés', status:{live:'Actif',pending:'En attente',offline:'Hors ligne'},
+    newReqToast:'Nouvelle demande reçue', simBanner:'Ce portail utilise des données simulées en direct, enregistrées sur votre navigateur.'
+  }
+};
+
+function money(n){ return (n<0?'-':'') + Math.abs(n).toLocaleString('en-US') + ' CFA'; }
+function StatusPill({ s, t }){
+  const map = { live:{bg:P.greenSoft,c:P.green}, pending:{bg:P.blueSoft,c:P.blueDark}, offline:{bg:P.line2,c:P.dim} };
+  const m = map[s]||map.offline;
+  return <span style={{ padding:'3px 9px', borderRadius:99, background:m.bg, color:m.c, font:"700 10.5px/1.6 'Manrope'" }}>{t.status[s]}</span>;
+}
+
+/* ===================== APP ===================== */
+function App(){
+  const [lang, setLang] = useState(()=>loadLS(LS.lang,'en'));
+  const fr = lang==='fr'; const t = T[lang];
+  const [page, setPage] = useState('overview');
+  const [navOpen, setNavOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [toast, setToast] = useState('');
+  const [screens, setScreens] = useState(()=>loadLS(LS.screens, DEFAULT_SCREENS));
+  const [queue, setQueue] = useState(()=>loadLS(LS.queue, seedQueue()));
+  const [balance, setBalance] = useState(()=>loadLS(LS.wallet, 86000));
+  const [tx, setTx] = useState(()=>loadLS(LS.tx, seedTx()));
+  const [addOpen, setAddOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newType, setNewType] = useState('Outdoor · P8');
+  const [query, setQuery] = useState('');
+  const [decidingId, setDecidingId] = useState(null);
+
+  useEffect(()=>saveLS(LS.lang, lang),[lang]);
+  useEffect(()=>saveLS(LS.screens, screens),[screens]);
+  useEffect(()=>saveLS(LS.queue, queue),[queue]);
+  useEffect(()=>saveLS(LS.wallet, balance),[balance]);
+  useEffect(()=>saveLS(LS.tx, tx),[tx]);
+  useEffect(()=>{ document.body.style.overflow = navOpen ? 'hidden' : ''; return ()=>{ document.body.style.overflow=''; }; },[navOpen]);
+
+  function flash(msg){ setToast(msg); setTimeout(()=>setToast(''), 2800); }
+
+  /* --- live simulation: a new request occasionally arrives, wallet ticks up on live screens --- */
+  const nextId = useRef(4);
+  useEffect(()=>{
+    const iv = setInterval(()=>{
+      setQueue(q=>{
+        if(q.length>=6) return q;
+        const biz = NAMES[Math.floor(Math.random()*NAMES.length)];
+        const live = screens.filter(s=>s.status==='live');
+        if(!live.length) return q;
+        const scr = live[Math.floor(Math.random()*live.length)];
+        const item = { id:'q'+(nextId.current++), biz, screen:scr.name, budget:Math.round((3000+Math.random()*10000)/100)*100, days:1+Math.floor(Math.random()*5), submitted:fr?'À l\'instant':'Just now' };
+        flash(t.newReqToast+' — '+biz);
+        return q.concat(item);
+      });
+    }, 26000);
+    return ()=>clearInterval(iv);
+  },[screens, fr, t]);
+
+  useEffect(()=>{
+    const iv = setInterval(()=>{
+      setScreens(list => list.map(s => s.status==='live' ? { ...s, impToday: s.impToday + Math.floor(Math.random()*9)+1 } : s));
+    }, 4000);
+    return ()=>clearInterval(iv);
+  },[]);
+
+  function decide(id, ok){
+    const item = queue.find(q=>q.id===id);
+    setDecidingId(id);
+    setTimeout(()=>{
+      setQueue(q=>q.filter(x=>x.id!==id));
+      setDecidingId(null);
+      if(ok && item){
+        setBalance(b=>b + Math.round(item.budget*0.7));
+        setTx(prev=>[{ id:'t'+Date.now(), label:'Ad slot — '+item.biz, amount:Math.round(item.budget*0.7), d:fr?'Aujourd\'hui':'Today' }, ...prev]);
+        setScreens(list=>list.map(s=> s.name===item.screen ? { ...s, fill:Math.min(99, s.fill+Math.floor(Math.random()*6)+2) } : s));
+        flash(t.approvedToast);
+      } else {
+        flash(t.declinedToast);
+      }
+    }, 260);
+  }
+
+  function addScreen(e){
+    e.preventDefault();
+    if(!newName.trim()) return;
+    setScreens(list=>list.concat({ id:'s'+Date.now(), name:newName.trim(), type:newType, status:'pending', fill:0, impToday:0 }));
+    setNewName(''); setAddOpen(false);
+    flash(fr?'Écran ajouté — en attente de vérification':'Screen added — pending verification');
+  }
+
+  const liveCount = screens.filter(s=>s.status==='live').length;
+  const avgFill = Math.round(screens.filter(s=>s.status==='live').reduce((a,s)=>a+s.fill,0) / Math.max(1,liveCount));
+  const weekPayout = tx.filter(x=>x.amount>0).slice(0,6).reduce((a,x)=>a+x.amount,0);
+
+  const navDefs = [
+    ['overview','grid',t.overview], ['screens','monitor',t.screens],
+    ['approvals','inbox',t.approvals, queue.length], null,
+    ['wallet','wallet',t.wallet], ['reports','chart',t.reports], null,
+    ['settings','gear',t.settings]
+  ];
+
+  const filteredScreens = screens.filter(s=> s.name.toLowerCase().includes(query.toLowerCase()));
+  const filteredQueue = queue.filter(q=> q.biz.toLowerCase().includes(query.toLowerCase()) || q.screen.toLowerCase().includes(query.toLowerCase()));
+
+  const NavList = ({compact}) => (
+    <>
+      {navDefs.map((d,i)=>{
+        if(!d) return <div key={'sep'+i} style={{ flex:'1 1 100%', height:1, background:P.line2, margin:'10px 0' }}/>;
+        const on = page===d[0];
+        return (
+          <button key={d[0]} className="btn navBtn" onClick={()=>{ setPage(d[0]); setNavOpen(false); }}
+            style={{ flex:'1 1 152px', display:'flex', alignItems:'center', gap:10, textAlign:'left', padding:'11px 12px', borderRadius:9, border:'none',
+              background:on?P.blueSoft:'transparent', color:on?P.blueDark:P.body, font:(on?'800':'600')+" 12.5px/1 'Manrope'" }}>
+            <Icon name={d[1]} size={17} color={on?P.blue:'#8794A6'} sw={on?2:1.7}/>
+            <span style={{ flex:1 }}>{d[2]}</span>
+            {d[3]>0 && <span style={{ padding:'2px 7px', borderRadius:99, background:on?'#fff':P.line2, font:"800 10px/1.4 'Manrope'", color:P.blueDark }}>{d[3]}</span>}
+          </button>
+        );
+      })}
+    </>
+  );
+
+  return (
+    <div style={{ display:'flex', flexDirection:'column', minHeight:'100vh' }}>
+
+      <header style={{ position:'sticky', top:0, zIndex:40, background:'#fff', borderBottom:'1px solid '+P.line }}>
+        <div className="headerRow" style={{ padding:'10px clamp(14px,2.4vw,22px)', minHeight:60, display:'flex', alignItems:'center', flexWrap:'wrap', gap:'10px clamp(10px,1.8vw,18px)' }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flex:'none', width:226, boxSizing:'border-box', marginLeft:'calc(-1 * clamp(14px,2.4vw,22px))', paddingLeft:'clamp(14px,2.4vw,22px)' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+              <button className="btn hamburgerBtn" onClick={()=>setNavOpen(o=>!o)} style={{ width:36, height:36, borderRadius:9, alignItems:'center', justifyContent:'center', border:'1px solid '+P.line, background:'#fff', flex:'none' }}>
+                <Icon name={navOpen?'close':'menu'} size={17} color={P.ink} sw={2}/>
+              </button>
+              <div onClick={()=>setPage('overview')} style={{ display:'flex', alignItems:'center', cursor:'pointer', flex:'none' }}>
+                <svg viewBox="0 0 90 20" width="100" height="22" xmlns="http://www.w3.org/2000/svg">
+                  <text x="0" y="16" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="18" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
+                </svg>
+              </div>
+            </div>
+            <div style={{ width:1, height:26, background:'#E4E8ED', flex:'none' }}/>
+          </div>
+
+          <div className="searchCol" style={{ flex:'1 1 220px', minWidth:0, display:'flex', alignItems:'center', gap:9, padding:'0 12px', borderRadius:9, background:P.bg, border:'1px solid '+P.line, marginLeft:'clamp(16px,2.6vw,28px)' }}>
+            <Icon name="search" size={15} color="#8794A6" sw={1.9}/>
+            <input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t.searchPh}
+              style={{ flex:1, minWidth:0, background:'transparent', border:'none', outline:'none', padding:'11px 0', font:"600 12.5px/1 'Manrope'", color:P.ink }}/>
+          </div>
+
+          <button className="btn notifBtnDesktop" onClick={()=>setNotifOpen(o=>!o)} style={{ position:'relative', width:36, height:36, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', border:'1px solid '+(notifOpen?P.blue:P.line), background:notifOpen?P.blueSoft:'#fff' }}>
+            <Icon name="bell" size={16} color={notifOpen?P.blue:'#65728A'} sw={1.9}/>
+            {queue.length>0 && <span style={{ position:'absolute', top:6, right:6, width:7, height:7, borderRadius:'50%', background:P.blue }}/>}
+          </button>
+
+          <div className="userChip" onClick={()=>setUserMenuOpen(o=>!o)} style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line, cursor:'pointer', position:'relative' }}>
+            <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:P.ink, flex:'none' }}>CB</div>
+            <div className="avatarNameFull" style={{ display:'flex', flexDirection:'column', gap:3 }}>
+              <span style={{ font:"700 11.5px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>Canal Com Bénin</span>
+              <span style={{ font:"500 9.5px/1 'JetBrains Mono',monospace", color:'#8794A6', whiteSpace:'nowrap' }}>PARTNER-118</span>
+            </div>
+            <span className="avatarNameShort" style={{ font:"700 12px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>Canal Com</span>
+            {userMenuOpen && (
+              <div onClick={ev=>ev.stopPropagation()} style={{ position:'absolute', top:40, right:0, background:'#fff', border:'1px solid '+P.line, borderRadius:11, boxShadow:'0 14px 30px rgba(15,24,38,.18)', padding:12, minWidth:190, zIndex:90 }}>
+                <div style={{ font:"700 12.5px/1.3 'Manrope'", color:P.ink }}>Canal Com Bénin</div>
+                <div style={{ marginTop:2, font:"500 10px/1 'JetBrains Mono',monospace", color:'#8794A6' }}>PARTNER-118</div>
+                <button className="btn" onClick={()=>{ setNotifOpen(o=>!o); setUserMenuOpen(false); }} style={{ width:'100%', marginTop:10, paddingTop:10, borderTop:'1px solid '+P.line2, display:'flex', alignItems:'center', gap:9, background:'transparent', padding:'10px 2px 2px' }}>
+                  <Icon name="bell" size={15} color={P.mute} sw={1.9}/><span style={{ font:"600 12.5px/1 'Manrope'", color:P.ink }}>{fr?'Notifications':'Notifications'}</span>
+                </button>
+                <div style={{ marginTop:10, display:'flex', border:'1px solid '+P.line, borderRadius:8, overflow:'hidden' }}>
+                  <button className="btn" onClick={()=>{ setLang('en'); setUserMenuOpen(false); }} style={{ flex:1, padding:'7px 0', border:'none', background:!fr?P.blue:'#fff', color:!fr?P.ink:P.mute, font:"800 12px/1 'Manrope'" }}>EN</button>
+                  <button className="btn" onClick={()=>{ setLang('fr'); setUserMenuOpen(false); }} style={{ flex:1, padding:'7px 0', border:'none', background:fr?P.blue:'#fff', color:fr?P.ink:P.mute, font:"800 12px/1 'Manrope'" }}>FR</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {notifOpen && (
+          <div style={{ borderTop:'1px solid '+P.line2, padding:'14px clamp(14px,2.4vw,22px)' }}>
+            {queue.length ? (
+              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                {queue.slice(0,3).map(q=>(
+                  <div key={q.id} style={{ display:'flex', gap:10, alignItems:'flex-start', padding:'10px 12px', borderRadius:9, background:P.bg }}>
+                    <span style={{ width:6, height:6, borderRadius:'50%', background:P.blue, marginTop:5, flex:'none' }}/>
+                    <div>
+                      <div style={{ font:"600 12px/1.4 'Manrope'", color:P.ink }}>{q.biz} · {money(q.budget)}</div>
+                      <div style={{ marginTop:2, font:"500 10.5px/1 'Manrope'", color:P.dim }}>{q.screen} · {q.submitted}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : <div style={{ font:"500 12.5px/1.5 'Manrope'", color:P.dim }}>{t.noReq}</div>}
+          </div>
+        )}
+      </header>
+
+      <div style={{ flex:1, display:'flex', flexWrap:'wrap', alignItems:'flex-start' }}>
+        {navOpen && <div className="navBackdrop" onClick={()=>setNavOpen(false)}/>}
+
+        <nav className={"sidebarNav" + (navOpen?" navOpen":"")} style={{ flex:'1 1 226px', maxWidth:'100%', alignSelf:'stretch', background:'#fff', borderRight:'1px solid '+P.line, borderBottom:'1px solid '+P.line, padding:'16px 12px 20px', flexWrap:'wrap', gap:4, alignContent:'flex-start' }}>
+          <div className="sidebarLogo" style={{ flex:'1 1 100%', display:'none', alignItems:'center', justifyContent:'space-between', gap:10, paddingBottom:14, marginBottom:12, borderBottom:'1px solid '+P.line2 }}>
+            <svg viewBox="0 0 90 20" width="88" height="19" xmlns="http://www.w3.org/2000/svg">
+              <text x="0" y="15" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="17" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
+            </svg>
+            <button className="btn" onClick={()=>{ setAddOpen(true); setNavOpen(false); }} style={{ display:'inline-flex', alignItems:'center', gap:6, padding:'7px 11px', border:'none', borderRadius:7, background:P.blue, color:P.ink, font:"800 12px/1 'Manrope'", whiteSpace:'nowrap', flex:'none' }}>
+              <Icon name="plus" size={13} color={P.ink} sw={2.4}/>{t.addScreen}
+            </button>
+          </div>
+          <button className="btn newTaskDesktop" onClick={()=>setAddOpen(true)} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'", marginBottom:8 }}>
+            <Icon name="plus" size={15} color={P.ink} sw={2.2}/>{t.addScreen}
+          </button>
+          <NavList/>
+          <div style={{ flex:'1 1 100%', height:1, background:P.line2, margin:'12px 0' }}/>
+          <div style={{ flex:'1 1 100%', padding:13, borderRadius:10, background:P.ink }}>
+            <div style={{ display:'flex', alignItems:'center', gap:7 }}><Icon name="wallet" size={15} color="#93A1B5" sw={1.9}/><span style={{ font:"700 10px/1 'Manrope'", letterSpacing:'.1em', textTransform:'uppercase', color:'#93A1B5' }}>{t.balance}</span></div>
+            <div style={{ marginTop:10, font:"800 20px/1 'Manrope'", letterSpacing:'-.025em', color:'#fff' }}>{money(balance)}</div>
+            <button className="btn" onClick={()=>{ setPage('wallet'); setNavOpen(false); }} style={{ width:'100%', marginTop:11, padding:10, border:'none', borderRadius:7, background:'rgba(255,255,255,.12)', color:'#fff', font:"700 11.5px/1 'Manrope'" }}>{t.requestPayout}</button>
+          </div>
+        </nav>
+
+        <main style={{ flex:'999 1 600px', minWidth:0, padding:'clamp(16px,2.6vw,28px) clamp(14px,2.6vw,30px) 56px' }}>
+
+          {/* ---------- OVERVIEW ---------- */}
+          {page==='overview' && (
+            <section style={{ animation:'riseIn .22s ease' }}>
+              <div style={{ marginBottom:6, font:"600 12px/1.4 'Manrope'", color:P.dim }}>{t.brand} / {t.overview}</div>
+              <h1 style={{ margin:0, font:"800 clamp(22px,3.2vw,28px)/1.2 'Manrope'", letterSpacing:'-.03em' }}>{t.goodMorning}, Canal Com</h1>
+              <p style={{ margin:'7px 0 20px', font:"500 13px/1.5 'Manrope'", color:P.mute }}>{liveCount} {fr?'écrans actifs · ':'screens live · '}{queue.length} {t.pendingReq.toLowerCase()}</p>
+
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,160px),1fr))', gap:12, marginBottom:16 }}>
+                {[[t.liveScreens,liveCount,'monitor'],[t.fillRate,avgFill+'%','chart'],[t.pendingReq,queue.length,'inbox'],[t.payout,money(weekPayout),'wallet']].map((k,i)=>(
+                  <div key={i} className="cardHover" style={{ ...card(16) }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:7, marginBottom:8 }}>
+                      <Icon name={k[2]} size={14} color={P.dim} sw={1.9}/>
+                      <span style={{ font:"700 10px/1.2 'Manrope'", letterSpacing:'.06em', textTransform:'uppercase', color:P.dim }}>{k[0]}</span>
+                    </div>
+                    <div style={{ font:"800 22px/1 'Manrope'", letterSpacing:'-.02em' }}>{k[1]}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'flex-start' }}>
+                <div style={{ flex:'1.3 1 320px', minWidth:0, ...card(18) }}>
+                  <div style={{ font:"700 10px/1.2 'Manrope'", letterSpacing:'.08em', textTransform:'uppercase', color:P.dim, marginBottom:14 }}>{t.beforeAfter}</div>
+                  <div style={{ marginBottom:14 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', font:"600 12.5px/1 'Manrope'", marginBottom:6 }}><span style={{color:P.mute}}>{t.before}</span><span style={{color:P.dim}}>38%</span></div>
+                    <div style={{ height:8, borderRadius:99, background:P.line2, overflow:'hidden' }}><div style={{ width:'38%', height:'100%', background:'#C7CDD6' }}/></div>
+                  </div>
+                  <div>
+                    <div style={{ display:'flex', justifyContent:'space-between', font:"600 12.5px/1 'Manrope'", marginBottom:6 }}><span style={{color:P.mute}}>{t.after}</span><span style={{color:P.blueDark}}>{avgFill}%</span></div>
+                    <div style={{ height:8, borderRadius:99, background:P.line2, overflow:'hidden' }}><div style={{ width:avgFill+'%', height:'100%', background:P.blue, transition:'width .6s ease' }}/></div>
+                  </div>
+                </div>
+
+                <div style={{ flex:'1 1 280px', minWidth:0, ...card(18) }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', marginBottom:12 }}>
+                    <span style={{ font:"700 14px/1 'Manrope'" }}>{t.recentReq}</span>
+                    <span onClick={()=>setPage('approvals')} style={{ font:"700 11.5px/1 'Manrope'", color:P.blue, cursor:'pointer' }}>{t.viewAll} →</span>
+                  </div>
+                  {queue.length===0 ? (
+                    <div style={{ padding:14, borderRadius:9, background:P.bg, border:'1px dashed '+P.line, font:"500 12px/1.5 'Manrope'", color:P.dim }}>{t.noReq}</div>
+                  ) : (
+                    <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                      {queue.slice(0,3).map(q=>(
+                        <div key={q.id} style={{ display:'flex', alignItems:'center', gap:10, padding:'9px 11px', borderRadius:9, background:P.bg }}>
+                          <div style={{ flex:1, minWidth:0 }}>
+                            <div style={{ font:"700 12px/1.3 'Manrope'", color:P.ink, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{q.biz}</div>
+                            <div style={{ marginTop:2, font:"500 10.5px/1 'Manrope'", color:P.dim }}>{q.screen}</div>
+                          </div>
+                          <span style={{ font:"700 11.5px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>{money(q.budget)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* ---------- MY SCREENS ---------- */}
+          {page==='screens' && (
+            <section style={{ animation:'riseIn .22s ease' }}>
+              <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:14, flexWrap:'wrap', marginBottom:16 }}>
+                <div>
+                  <h1 style={{ margin:0, font:"800 clamp(21px,3vw,27px)/1.2 'Manrope'", letterSpacing:'-.03em' }}>{t.screens}</h1>
+                  <p style={{ margin:'7px 0 0', font:"500 13px/1.5 'Manrope'", color:P.mute }}>{screens.length} {fr?'écrans dans votre réseau':'screens in your network'}</p>
+                </div>
+                <button className="btn" onClick={()=>setAddOpen(true)} style={{ display:'flex', alignItems:'center', gap:8, padding:'12px 18px', border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'" }}>
+                  <Icon name="plus" size={15} color={P.ink} sw={2.2}/>{t.addScreen}
+                </button>
+              </div>
+
+              <div style={{ display:'grid', gap:10 }}>
+                {filteredScreens.map(s=>(
+                  <div key={s.id} className="cardHover" style={{ ...card(16), display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
+                    <div style={{ width:44, height:44, borderRadius:10, background:P.bg, display:'flex', alignItems:'center', justifyContent:'center', flex:'none', position:'relative' }}>
+                      <Icon name="monitor" size={19} color={P.mute} sw={1.8}/>
+                      {s.status==='live' && <span style={{ position:'absolute', top:-2, right:-2, width:9, height:9, borderRadius:'50%', background:P.green, border:'2px solid #fff' }}/>}
+                    </div>
+                    <div style={{ flex:'1 1 160px', minWidth:0 }}>
+                      <div style={{ font:"700 13.5px/1.3 'Manrope'", color:P.ink }}>{s.name}</div>
+                      <div style={{ marginTop:3, font:"500 11.5px/1.4 'Manrope'", color:P.dim }}>{s.type}</div>
+                    </div>
+                    <div style={{ flex:'1 1 120px', minWidth:100 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', font:"600 10.5px/1 'Manrope'", marginBottom:4 }}><span style={{color:P.dim}}>{t.fillRate}</span><span style={{color:P.ink}}>{s.fill}%</span></div>
+                      <div style={{ height:5, borderRadius:99, background:P.line2, overflow:'hidden' }}><div style={{ width:s.fill+'%', height:'100%', background:P.blue, transition:'width .5s ease' }}/></div>
+                    </div>
+                    <div style={{ font:"600 11.5px/1.4 'JetBrains Mono',monospace", color:P.mute, flex:'none' }}>{s.impToday.toLocaleString('en-US')} {fr?'vues auj.':'imp. today'}</div>
+                    <StatusPill s={s.status} t={t}/>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ---------- APPROVALS ---------- */}
+          {page==='approvals' && (
+            <section style={{ animation:'riseIn .22s ease' }}>
+              <h1 style={{ margin:0, font:"800 clamp(21px,3vw,27px)/1.2 'Manrope'", letterSpacing:'-.03em' }}>{t.approvals}</h1>
+              <p style={{ margin:'7px 0 18px', font:"500 13px/1.5 'Manrope'", color:P.mute }}>{fr?'Chaque publicité est vérifiée avant sa diffusion.':'Every ad is reviewed before it airs on your screens.'}</p>
+
+              {filteredQueue.length===0 ? (
+                <div style={{ ...card(30), textAlign:'center' }}>
+                  <div style={{ width:44, height:44, margin:'0 auto 14px', borderRadius:12, background:P.bg, display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="shield" size={20} color="#98A3B4" sw={1.8}/></div>
+                  <div style={{ font:"700 13px/1.4 'Manrope'", color:P.ink }}>{t.noReq}</div>
+                </div>
+              ) : (
+                <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+                  {filteredQueue.map(q=>(
+                    <div key={q.id} style={{ ...card(16), display:'flex', alignItems:'center', gap:14, flexWrap:'wrap',
+                      animation: decidingId===q.id ? 'fadeOut .25s ease forwards' : 'slideUp .3s ease' }}>
+                      <div style={{ width:52, height:36, borderRadius:6, flex:'none', background:'repeating-linear-gradient(135deg,#F1EEE4 0 6px,#E7E1D2 6px 12px)' }}/>
+                      <div style={{ flex:'1 1 180px', minWidth:0 }}>
+                        <div style={{ font:"700 13.5px/1.3 'Manrope'", color:P.ink }}>{q.biz}</div>
+                        <div style={{ marginTop:3, font:"500 11.5px/1.4 'Manrope'", color:P.dim }}>{q.screen} · {q.days} {t.daysLbl} · {t.submittedLbl} {q.submitted}</div>
+                      </div>
+                      <div style={{ font:"800 13.5px/1 'Manrope'", color:P.ink, flex:'none' }}>{money(q.budget)}</div>
+                      <div style={{ display:'flex', gap:8, flex:'none' }}>
+                        <button className="btn" onClick={()=>decide(q.id,false)} style={{ padding:'10px 14px', borderRadius:8, border:'1px solid '+P.line, background:'#fff', font:"700 12px/1 'Manrope'", color:P.red }}>{t.decline}</button>
+                        <button className="btn" onClick={()=>decide(q.id,true)} style={{ display:'flex', alignItems:'center', gap:6, padding:'10px 16px', borderRadius:8, border:'none', background:P.blue, color:P.ink, font:"800 12px/1 'Manrope'" }}>
+                          <Icon name="check" size={13} color={P.ink} sw={2.6}/>{t.approve}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ---------- WALLET ---------- */}
+          {page==='wallet' && (
+            <section style={{ animation:'riseIn .22s ease' }}>
+              <h1 style={{ margin:0, font:"800 clamp(21px,3vw,27px)/1.2 'Manrope'", letterSpacing:'-.03em' }}>{t.wallet}</h1>
+              <div style={{ display:'flex', gap:12, flexWrap:'wrap', marginTop:16, alignItems:'flex-start' }}>
+                <div style={{ flex:'1 1 260px', ...card(20) }}>
+                  <div style={{ font:"700 10px/1.2 'Manrope'", letterSpacing:'.08em', textTransform:'uppercase', color:P.dim, marginBottom:10 }}>{t.balance}</div>
+                  <div style={{ font:"800 30px/1 'Manrope'", letterSpacing:'-.02em' }}>{money(balance)}</div>
+                  <button className="btn" onClick={()=>{ flash(t.payoutRequested); }} style={{ width:'100%', marginTop:16, padding:14, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'" }}>{t.requestPayout}</button>
+                </div>
+                <div style={{ flex:'1.4 1 340px', minWidth:0, ...card(20) }}>
+                  <div style={{ font:"700 14px/1 'Manrope'", marginBottom:12 }}>{t.txHistory}</div>
+                  <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
+                    {tx.map((x,i)=>(
+                      <div key={x.id} style={{ display:'flex', justifyContent:'space-between', gap:10, padding:'11px 2px', borderTop:i?'1px solid '+P.line2:'none' }}>
+                        <div>
+                          <div style={{ font:"600 12.5px/1.3 'Manrope'", color:P.ink }}>{x.label}</div>
+                          <div style={{ marginTop:2, font:"500 10.5px/1 'Manrope'", color:P.dim }}>{x.d}</div>
+                        </div>
+                        <span style={{ font:"700 12.5px/1 'JetBrains Mono',monospace", color:x.amount<0?P.red:P.green, flex:'none' }}>{x.amount<0?'':'+'}{money(x.amount)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* ---------- REPORTS ---------- */}
+          {page==='reports' && (
+            <section style={{ animation:'riseIn .22s ease' }}>
+              <h1 style={{ margin:0, font:"800 clamp(21px,3vw,27px)/1.2 'Manrope'", letterSpacing:'-.03em' }}>{t.reports}</h1>
+              <div style={{ display:'flex', gap:12, flexWrap:'wrap', marginTop:16, alignItems:'flex-start' }}>
+                <div style={{ flex:'1.3 1 340px', minWidth:0, ...card(20) }}>
+                  <div style={{ font:"700 14px/1 'Manrope'", marginBottom:16 }}>{t.impressions7}</div>
+                  <div style={{ display:'flex', alignItems:'flex-end', gap:8, height:140 }}>
+                    {[62,74,58,81,69,88,95].map((h,i)=>(
+                      <div key={i} style={{ flex:1, height:h+'%', borderRadius:'5px 5px 2px 2px', background:i===6?P.blue:'#F1D9A4', transition:'height .5s ease' }}/>
+                    ))}
+                  </div>
+                  <div style={{ display:'flex', justifyContent:'space-between', marginTop:8 }}>
+                    {(fr?['L','M','M','J','V','S','D']:['M','T','W','T','F','S','S']).map((d,i)=><span key={i} style={{ flex:1, textAlign:'center', font:"700 9.5px/1 'Manrope'", color:P.dim }}>{d}</span>)}
+                  </div>
+                </div>
+                <div style={{ flex:'1 1 260px', minWidth:0, ...card(20) }}>
+                  <div style={{ font:"700 14px/1 'Manrope'", marginBottom:14 }}>{t.fillByScreen}</div>
+                  <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+                    {screens.filter(s=>s.status==='live').map(s=>(
+                      <div key={s.id}>
+                        <div style={{ display:'flex', justifyContent:'space-between', font:"600 12px/1 'Manrope'", marginBottom:5 }}><span style={{color:P.mute, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:150}}>{s.name}</span><span style={{color:P.ink}}>{s.fill}%</span></div>
+                        <div style={{ height:6, borderRadius:99, background:P.line2, overflow:'hidden' }}><div style={{ width:s.fill+'%', height:'100%', background:P.blue, transition:'width .5s ease' }}/></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* ---------- SETTINGS ---------- */}
+          {page==='settings' && (
+            <section style={{ animation:'riseIn .22s ease', maxWidth:640 }}>
+              <h1 style={{ margin:0, font:"800 clamp(21px,3vw,27px)/1.2 'Manrope'", letterSpacing:'-.03em' }}>{t.settings}</h1>
+              <div style={{ marginTop:16, display:'flex', flexDirection:'column', gap:12 }}>
+                <div style={card(20)}>
+                  <div style={{ font:"700 14px/1 'Manrope'", marginBottom:14 }}>{t.networkProfile}</div>
+                  <label style={{ font:"700 11px/1.4 'Manrope'", color:P.dim, textTransform:'uppercase', letterSpacing:'.05em' }}>{t.screenName}</label>
+                  <input defaultValue="Canal Com Bénin" style={{ width:'100%', marginTop:6, marginBottom:14, padding:'11px 12px', borderRadius:8, border:'1px solid '+P.line, outline:'none', font:"600 13px/1 'Manrope'" }}/>
+                  <label style={{ font:"700 11px/1.4 'Manrope'", color:P.dim, textTransform:'uppercase', letterSpacing:'.05em' }}>{t.momoNumber}</label>
+                  <input defaultValue="+229 97 00 00 00" style={{ width:'100%', marginTop:6, padding:'11px 12px', borderRadius:8, border:'1px solid '+P.line, outline:'none', font:"600 13px/1 'Manrope'" }}/>
+                  <button className="btn" onClick={()=>flash(t.saved)} style={{ marginTop:16, padding:'11px 18px', borderRadius:8, border:'none', background:P.blue, color:P.ink, font:"800 12.5px/1 'Manrope'" }}>{fr?'Enregistrer':'Save'}</button>
+                </div>
+                <div style={card(20)}>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
+                    <span style={{ font:"700 14px/1 'Manrope'" }}>{t.teamTitle}</span>
+                    <span style={{ font:"700 11.5px/1 'Manrope'", color:P.blue, cursor:'pointer' }}>{t.invite}</span>
+                  </div>
+                  {[['Canal Com Bénin', fr?'Propriétaire':'Owner'],['Yaovi D.', fr?'Éditeur':'Editor']].map((m,i)=>(
+                    <div key={i} style={{ display:'flex', alignItems:'center', gap:11, padding:'8px 0' }}>
+                      <div style={{ width:30, height:30, borderRadius:'50%', background:i===0?P.blue:'#DDE3EA', color:i===0?P.ink:P.body, font:"800 10.5px/30px 'Manrope'", textAlign:'center', flex:'none' }}>{m[0].split(' ').map(w=>w[0]).join('')}</div>
+                      <div><div style={{ font:"700 12.5px/1.2 'Manrope'" }}>{m[0]}</div><div style={{ marginTop:2, font:"500 10.5px/1 'Manrope'", color:P.dim }}>{m[1]}</div></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+        </main>
+      </div>
+
+      <footer style={{ background:'#fff', borderTop:'1px solid '+P.line }}>
+        <div style={{ padding:'12px clamp(14px,2.6vw,30px)', display:'flex', alignItems:'center', gap:9, font:"500 11px/1.5 'Manrope'", color:P.dim }}>
+          <Icon name="shield" size={13} color={P.dim} sw={1.8}/><span>{t.simBanner}</span>
+        </div>
+      </footer>
+
+      {/* ADD SCREEN MODAL */}
+      {addOpen && (
+        <div onClick={()=>setAddOpen(false)} style={{ position:'fixed', inset:0, zIndex:60, background:'rgba(15,24,38,.45)', display:'flex', alignItems:'center', justifyContent:'center', padding:18 }}>
+          <form onSubmit={addScreen} onClick={ev=>ev.stopPropagation()} style={{ width:'100%', maxWidth:400, background:'#fff', borderRadius:15, padding:'clamp(20px,3vw,28px)', animation:'riseIn .2s ease' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 }}>
+              <div style={{ font:"800 17px/1.25 'Manrope'", letterSpacing:'-.02em' }}>{t.addScreen}</div>
+              <button type="button" className="btn" onClick={()=>setAddOpen(false)} style={{ border:'none', background:P.bg, borderRadius:8, width:30, height:30, display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="close" size={15} color={P.body} sw={2}/></button>
+            </div>
+            <label style={{ font:"700 11px/1.4 'Manrope'", color:P.dim, textTransform:'uppercase', letterSpacing:'.05em' }}>{t.screenName}</label>
+            <input required value={newName} onChange={e=>setNewName(e.target.value)} placeholder={fr?'ex. Marché Zongo':'e.g. Zongo Market'} style={{ width:'100%', marginTop:6, marginBottom:14, padding:'11px 12px', borderRadius:8, border:'1px solid '+P.line, outline:'none', font:"600 13px/1 'Manrope'" }}/>
+            <label style={{ font:"700 11px/1.4 'Manrope'", color:P.dim, textTransform:'uppercase', letterSpacing:'.05em' }}>{t.screenType}</label>
+            <select value={newType} onChange={e=>setNewType(e.target.value)} style={{ width:'100%', marginTop:6, padding:'11px 12px', borderRadius:8, border:'1px solid '+P.line, outline:'none', font:"600 13px/1 'Manrope'", background:'#fff' }}>
+              <option>Outdoor · P8</option><option>Outdoor · P10</option><option>Indoor · 2K</option><option>Indoor · 4K</option>
+            </select>
+            <div style={{ display:'flex', gap:9, marginTop:20 }}>
+              <button type="submit" className="btn" style={{ flex:1, padding:14, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'" }}>{t.save}</button>
+              <button type="button" className="btn" onClick={()=>setAddOpen(false)} style={{ padding:'14px 18px', borderRadius:9, border:'1px solid '+P.line, background:'#fff', font:"700 12.5px/1 'Manrope'", color:P.body }}>{t.cancel}</button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* TOAST */}
+      <div style={{ position:'fixed', left:16, bottom:18, right:16, zIndex:70, display:'flex', justifyContent:'center', pointerEvents:'none', opacity:toast?1:0, transform:toast?'translateY(0)':'translateY(10px)', transition:'all .22s ease' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, maxWidth:420, padding:'13px 16px', borderRadius:11, background:P.ink, color:'#fff', font:"600 12.5px/1.4 'Manrope'", boxShadow:'0 12px 30px rgba(15,24,38,.28)' }}>
+          <Icon name="check" size={15} color="#7BE3AE" sw={2.4}/><span>{toast}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>
