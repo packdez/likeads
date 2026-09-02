@@ -34,13 +34,15 @@
 
   
    @media (max-width:640px){
-    .avatarName{display:none}
     .sidebarNav .navBtn{flex:1 1 100% !important}
     .headerRow{gap:8px !important}
     .searchBar{order:3;flex:1 1 100% !important;margin-top:8px}
     .logoDivider{display:none}
     .langToggle{display:none}
     .userChip{padding:2px !important;border:none !important}
+    .avatarNameFull{display:none !important}
+    .avatarNameShort{display:inline !important}
+    
     .sidebarLogo{display:flex !important}
     .sidebarNav{
       position:fixed; top:0; left:0; bottom:0; width:82%; max-width:300px;
@@ -53,6 +55,7 @@
   .hamburgerBtn{display:none}
   .sidebarNav{display:flex}
   .navBackdrop{position:fixed; inset:0; background:rgba(15,24,38,.45); z-index:75}
+  .avatarNameShort{display:none}
  
  </style>
 </head>
@@ -465,7 +468,8 @@ function App(){
   const [toast, setToast] = useState('');
   const [modal, setModal] = useState(null); // 'topup' | null
   const [notifOpen, setNotifOpen] = useState(false);
-    const [navOpen, setNavOpen] = useState(false);
+     const [navOpen, setNavOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   useEffect(() => {
     document.body.style.overflow = navOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -651,12 +655,23 @@ function App(){
             <button className="btn" onClick={()=>setNotifOpen(o=>!o)} style={{ position:'relative', width:36, height:36, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', border:'1px solid '+(notifOpen?P.blue:P.line), background:notifOpen?P.blueSoft:'#fff' }}>
               <Icon name="bell" size={16} color={notifOpen?P.blue:'#65728A'} sw={1.9}/>
             </button>
-                        <div className="userChip" style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line }}>
+                             <div className="userChip" onClick={()=>setUserMenuOpen(o=>!o)} style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line, cursor:'pointer', position:'relative' }}>
               <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:P.ink, flex:'none' }}>AK</div>
-                         <div className="avatarName" style={{ display:'flex', flexDirection:'column', gap:3 }}>
+              <div className="avatarNameFull" style={{ display:'flex', flexDirection:'column', gap:3 }}>
                 <span style={{ font:"700 11.5px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>Amina Kponou</span>
                 <span style={{ font:"500 9.5px/1 'JetBrains Mono',monospace", color:'#8794A6', whiteSpace:'nowrap' }}>ACC-4417</span>
               </div>
+              <span className="avatarNameShort" style={{ font:"700 12px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>Amina</span>
+              {userMenuOpen && (
+                <div className="userDropdown" onClick={ev=>ev.stopPropagation()} style={{ position:'absolute', top:40, right:0, background:'#fff', border:'1px solid '+P.line, borderRadius:11, boxShadow:'0 14px 30px rgba(15,24,38,.18)', padding:12, minWidth:180, zIndex:90 }}>
+                  <div style={{ font:"700 12.5px/1.3 'Manrope'", color:P.ink }}>Amina Kponou</div>
+                  <div style={{ marginTop:2, font:"500 10px/1 'JetBrains Mono',monospace", color:'#8794A6' }}>ACC-4417</div>
+                  <div style={{ marginTop:10, paddingTop:10, borderTop:'1px solid '+P.line2, display:'flex', border:'1px solid '+P.line, borderRadius:8, overflow:'hidden' }}>
+                    <button className="btn" onClick={()=>{setLang('en'); setUserMenuOpen(false);}} style={{ ...langBtn(!fr), flex:1 }}>EN</button>
+                    <button className="btn" onClick={()=>{setLang('fr'); setUserMenuOpen(false);}} style={{ ...langBtn(fr), flex:1 }}>FR</button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
