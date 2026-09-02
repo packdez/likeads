@@ -29,8 +29,19 @@
   ::-webkit-scrollbar-track{background:transparent}
   ::-webkit-scrollbar-thumb{background:#CBD4E0;border-radius:99px}
   .mapScroll::-webkit-scrollbar-thumb{background:#B9C6DA}
-  .btn{cursor:pointer;border:none;font-family:inherit}
+    .btn{cursor:pointer;border:none;font-family:inherit}
   .btn:active{transform:translateY(1px)}
+    @media (max-width:640px){
+    .avatarName{display:none}
+    .sidebarNav .navBtn{flex:1 1 100% !important}
+    .headerRow{gap:8px !important}
+    .searchBar{order:3;flex:1 1 100% !important;margin-top:8px}
+    .sidebarNav{display:none}
+    .sidebarNav.navOpen{display:flex}
+    .hamburgerBtn{display:flex !important}
+  }
+   .hamburgerBtn{display:none}
+  .sidebarNav{display:flex}
 </style>
 </head>
 <body>
@@ -281,7 +292,8 @@ const ICONS = {
   eye:['M12 5c5 0 9 7 9 7s-4 7-9 7-9-7-9-7 4-7 9-7z','M12 15a3 3 0 100-6 3 3 0 000 6z'],
   move:['M12 2v20','M2 12h20','M5 9l-3 3 3 3','M19 9l3 3-3 3','M9 5l3-3 3 3','M9 19l3 3 3-3'],
   edit:['M12 20h9','M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z'],
-  trash:['M3 6h18','M8 6V4h8v2','M6 6l1 14h10l1-14']
+    trash:['M3 6h18','M8 6V4h8v2','M6 6l1 14h10l1-14'],
+  menu:['M4 7h16','M4 12h16','M4 17h16']
 };
 function Icon({ name, size=17, color='currentColor', sw=1.8, style }){
   return (
@@ -441,7 +453,8 @@ function App(){
   const [toast, setToast] = useState('');
   const [modal, setModal] = useState(null); // 'topup' | null
   const [notifOpen, setNotifOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [navOpen, setNavOpen] = useState(false);
+ const [query, setQuery] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
   const [filter, setFilter] = useState('all');
   const [openRow, setOpenRow] = useState(null);
@@ -599,14 +612,16 @@ function App(){
             </div>
           </div>
         )}
-        <div style={{ padding:'10px clamp(14px,2.4vw,22px)', minHeight:60, display:'flex', alignItems:'center', flexWrap:'wrap', gap:'10px clamp(10px,1.8vw,18px)' }}>
-          <div onClick={()=>go('overview')} style={{ display:'flex', alignItems:'center', cursor:'pointer', flex:'none' }}>
-  <svg viewBox="0 0 90 20" width="100" height="22" xmlns="http://www.w3.org/2000/svg">
+                <div className="headerRow" style={{ padding:'10px clamp(14px,2.4vw,22px)', minHeight:60, display:'flex', alignItems:'center', flexWrap:'wrap', gap:'10px clamp(10px,1.8vw,18px)' }}>
+          <button className="btn hamburgerBtn" onClick={()=>setNavOpen(o=>!o)} style={{ width:36, height:36, borderRadius:9, alignItems:'center', justifyContent:'center', border:'1px solid '+P.line, background:'#fff', flex:'none' }}>
+            <Icon name={navOpen ? 'close' : 'menu'} size={17} color={P.ink} sw={2}/>
+          </button>
+          <div onClick={()=>go('overview')} style={{ display:'flex', alignItems:'center', cursor:'pointer', flex:'none' }}>  <svg viewBox="0 0 90 20" width="100" height="22" xmlns="http://www.w3.org/2000/svg">
     <text x="0" y="16" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="18" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
   </svg>
 </div>
           <div style={{ width:1, height:26, background:'#E4E8ED', flex:'none' }}/>
-          <div style={{ flex:'1 1 220px', minWidth:0, display:'flex', alignItems:'center', gap:9, padding:'0 12px', borderRadius:9, background:P.bg, border:'1px solid '+(searchFocus?P.blue:P.line) }}>
+          <div className="searchBar" style={{ flex:'1 1 220px', minWidth:0, display:'flex', alignItems:'center', gap:9, padding:'0 12px', borderRadius:9, background:P.bg, border:'1px solid '+(searchFocus?P.blue:P.line) }}>
             <Icon name="search" size={15} color="#8794A6" sw={1.9}/>
             <input value={query} onChange={e=>{setQuery(e.target.value); setPage('campaigns');}} onFocus={()=>setSearchFocus(true)} onBlur={()=>setSearchFocus(false)}
               placeholder={t.searchPlaceholder} style={{ flex:1, minWidth:0, background:'transparent', border:'none', outline:'none', padding:'11px 0', font:"600 12.5px/1 'Manrope'", color:P.ink }}/>
@@ -621,7 +636,7 @@ function App(){
             </button>
             <div style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line }}>
               <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:P.ink }}>AK</div>
-              <div style={{ display:'flex', flexDirection:'column', gap:3 }}>
+              <div className="avatarName" style={{ display:'flex', flexDirection:'column', gap:3 }}>
                 <span style={{ font:"700 11.5px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>Amina Kponou</span>
                 <span style={{ font:"500 9.5px/1 'JetBrains Mono',monospace", color:'#8794A6', whiteSpace:'nowrap' }}>ACC-4417</span>
               </div>
@@ -633,16 +648,16 @@ function App(){
       <div style={{ flex:1, display:'flex', flexWrap:'wrap', alignItems:'flex-start' }}>
 
         {/* SIDEBAR */}
-        <nav style={{ flex:'1 1 226px', maxWidth:'100%', alignSelf:'stretch', background:'#fff', borderRight:'1px solid '+P.line, borderBottom:'1px solid '+P.line, padding:'16px 12px 20px', display:'flex', flexWrap:'wrap', gap:4, alignContent:'flex-start' }}>
+        <nav className={"sidebarNav" + (navOpen ? " navOpen" : "")} style={{ flex:'1 1 226px', maxWidth:'100%', alignSelf:'stretch', background:'#fff', borderRight:'1px solid '+P.line, borderBottom:'1px solid '+P.line, padding:'16px 12px 20px', flexWrap:'wrap', gap:4, alignContent:'flex-start' }}>
           <button className="btn" onClick={openNewWizard} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'", marginBottom:8 }}>
             <Icon name="plus" size={15} color="#fff" sw={2.2}/>{t.newCampaign}
           </button>
           {navDefs.map((d,i) => {
             if(!d) return <div key={'sep'+i} style={{ flex:'1 1 100%', height:1, background:P.line2, margin:'10px 0' }}/>;
             const on = page===d[0] || (d[0]==='campaigns' && page==='wizard');
-            return (
-              <button key={d[0]} className="btn" onClick={()=>go(d[0])} style={{ flex:'1 1 152px', display:'flex', alignItems:'center', gap:10, textAlign:'left', padding:'11px 12px', borderRadius:9, border:'none', background:on?P.blueSoft:'transparent', color:on?P.blueDark:P.body, font:(on?'800':'600')+" 12.5px/1 'Manrope'" }}>
-                <Icon name={d[1]} size={17} color={on?P.blue:'#8794A6'} sw={on?2:1.7}/><span>{d[2]}</span>
+                        return (
+              <button key={d[0]} className="btn navBtn" onClick={()=>{go(d[0]); setNavOpen(false);}} style={{ flex:'1 1 152px', display:'flex', alignItems:'center', gap:10, textAlign:'left', padding:'11px 12px', borderRadius:9, border:'none', background:on?P.blueSoft:'transparent', color:on?P.blueDark:P.body, font:(on?'800':'600')+" 12.5px/1 'Manrope'" }}>
+               <Icon name={d[1]} size={17} color={on?P.blue:'#8794A6'} sw={on?2:1.7}/><span>{d[2]}</span>
               </button>
             );
           })}
