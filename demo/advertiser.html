@@ -45,7 +45,8 @@
     .avatarNameShort{display:inline !important}
     .notifBtnDesktop{display:none !important}
     
-    .sidebarLogo{display:flex !important}
+     .sidebarLogo{display:flex !important}
+    .newCampaignDesktop{display:none !important}
     .sidebarNav{
       position:fixed; top:0; left:0; bottom:0; width:82%; max-width:300px;
       transform:translateX(-100%); transition:transform .25s ease;
@@ -685,13 +686,16 @@ function App(){
 
         {/* SIDEBAR */}
                 <nav className={"sidebarNav" + (navOpen ? " navOpen" : "")} style={{ flex:'1 1 226px', maxWidth:'100%', alignSelf:'stretch', background:'#fff', borderRight:'1px solid '+P.line, borderBottom:'1px solid '+P.line, padding:'16px 12px 20px', flexWrap:'wrap', gap:4, alignContent:'flex-start' }}>
-          <div className="sidebarLogo" style={{ flex:'1 1 100%', display:'none', alignItems:'center', paddingBottom:14, marginBottom:12, borderBottom:'1px solid '+P.line2 }}>
-            <svg viewBox="0 0 90 20" width="92" height="20" xmlns="http://www.w3.org/2000/svg">
-              <text x="0" y="16" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="18" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
+                    <div className="sidebarLogo" style={{ flex:'1 1 100%', display:'none', alignItems:'center', justifyContent:'space-between', gap:10, paddingBottom:14, marginBottom:12, borderBottom:'1px solid '+P.line2 }}>
+            <svg viewBox="0 0 90 20" width="88" height="19" xmlns="http://www.w3.org/2000/svg">
+              <text x="0" y="15" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="17" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
             </svg>
+            <button className="btn" onClick={openNewWizard} style={{ display:'inline-flex', alignItems:'center', gap:6, padding:'7px 11px', border:'none', borderRadius:7, background:P.blue, color:P.ink, font:"800 12px/1 'Manrope'", whiteSpace:'nowrap', flex:'none' }}>
+              <Icon name="plus" size={13} color={P.ink} sw={2.4}/>{t.newCampaign}
+            </button>
           </div>
-          <button className="btn" onClick={openNewWizard} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'", marginBottom:8 }}>
-     <Icon name="plus" size={15} color={P.ink} sw={2.2}/>{t.newCampaign}
+          <button className="btn newCampaignDesktop" onClick={openNewWizard} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'", marginBottom:8 }}>
+            <Icon name="plus" size={15} color={P.ink} sw={2.2}/>{t.newCampaign}
           </button>
           {navDefs.map((d,i) => {
             if(!d) return <div key={'sep'+i} style={{ flex:'1 1 100%', height:1, background:P.line2, margin:'10px 0' }}/>;
