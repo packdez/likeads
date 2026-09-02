@@ -33,11 +33,15 @@
   .btn:active{transform:translateY(1px)}
 
   
-  @media (max-width:640px){
+   @media (max-width:640px){
     .avatarName{display:none}
     .sidebarNav .navBtn{flex:1 1 100% !important}
     .headerRow{gap:8px !important}
     .searchBar{order:3;flex:1 1 100% !important;margin-top:8px}
+    .logoDivider{display:none}
+    .langToggle{display:none}
+    .userChip{padding:2px !important;border:none !important}
+    .sidebarLogo{display:flex !important}
     .sidebarNav{
       position:fixed; top:0; left:0; bottom:0; width:82%; max-width:300px;
       transform:translateX(-100%); transition:transform .25s ease;
@@ -461,7 +465,12 @@ function App(){
   const [toast, setToast] = useState('');
   const [modal, setModal] = useState(null); // 'topup' | null
   const [notifOpen, setNotifOpen] = useState(false);
-  const [navOpen, setNavOpen] = useState(false);
+    const [navOpen, setNavOpen] = useState(false);
+  useEffect(() => {
+    document.body.style.overflow = navOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [navOpen]);
+                                             
  const [query, setQuery] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
   const [filter, setFilter] = useState('all');
@@ -628,23 +637,23 @@ function App(){
     <text x="0" y="16" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="18" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
   </svg>
 </div>
-          <div style={{ width:1, height:26, background:'#E4E8ED', flex:'none' }}/>
+          <div className="logoDivider" style={{ width:1, height:26, background:'#E4E8ED', flex:'none' }}/>
           <div className="searchBar" style={{ flex:'1 1 220px', minWidth:0, display:'flex', alignItems:'center', gap:9, padding:'0 12px', borderRadius:9, background:P.bg, border:'1px solid '+(searchFocus?P.blue:P.line) }}>
-            <Icon name="search" size={15} color="#8794A6" sw={1.9}/>
+           <Icon name="search" size={15} color="#8794A6" sw={1.9}/>
             <input value={query} onChange={e=>{setQuery(e.target.value); setPage('campaigns');}} onFocus={()=>setSearchFocus(true)} onBlur={()=>setSearchFocus(false)}
               placeholder={t.searchPlaceholder} style={{ flex:1, minWidth:0, background:'transparent', border:'none', outline:'none', padding:'11px 0', font:"600 12.5px/1 'Manrope'", color:P.ink }}/>
           </div>
-          <div style={{ marginLeft:'auto', flex:'none', display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
-            <div style={{ display:'flex', border:'1px solid '+P.line, borderRadius:8, overflow:'hidden' }}>
+                    <div style={{ marginLeft:'auto', flex:'none', display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
+            <div className="langToggle" style={{ display:'flex', border:'1px solid '+P.line, borderRadius:8, overflow:'hidden' }}>
               <button className="btn" onClick={()=>setLang('en')} style={langBtn(!fr)}>EN</button>
               <button className="btn" onClick={()=>setLang('fr')} style={langBtn(fr)}>FR</button>
             </div>
             <button className="btn" onClick={()=>setNotifOpen(o=>!o)} style={{ position:'relative', width:36, height:36, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', border:'1px solid '+(notifOpen?P.blue:P.line), background:notifOpen?P.blueSoft:'#fff' }}>
               <Icon name="bell" size={16} color={notifOpen?P.blue:'#65728A'} sw={1.9}/>
             </button>
-            <div style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line }}>
-              <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:P.ink }}>AK</div>
-              <div className="avatarName" style={{ display:'flex', flexDirection:'column', gap:3 }}>
+                        <div className="userChip" style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line }}>
+              <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:P.ink, flex:'none' }}>AK</div>
+                         <div className="avatarName" style={{ display:'flex', flexDirection:'column', gap:3 }}>
                 <span style={{ font:"700 11.5px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>Amina Kponou</span>
                 <span style={{ font:"500 9.5px/1 'JetBrains Mono',monospace", color:'#8794A6', whiteSpace:'nowrap' }}>ACC-4417</span>
               </div>
@@ -658,9 +667,14 @@ function App(){
         {navOpen && <div className="navBackdrop" onClick={()=>setNavOpen(false)}/>}
 
         {/* SIDEBAR */}
-        <nav className={"sidebarNav" + (navOpen ? " navOpen" : "")} style={{ flex:'1 1 226px', maxWidth:'100%', alignSelf:'stretch', background:'#fff', borderRight:'1px solid '+P.line, borderBottom:'1px solid '+P.line, padding:'16px 12px 20px', flexWrap:'wrap', gap:4, alignContent:'flex-start' }}>
-         <button className="btn" onClick={openNewWizard} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'", marginBottom:8 }}>
-           <Icon name="plus" size={15} color="#fff" sw={2.2}/>{t.newCampaign}
+                <nav className={"sidebarNav" + (navOpen ? " navOpen" : "")} style={{ flex:'1 1 226px', maxWidth:'100%', alignSelf:'stretch', background:'#fff', borderRight:'1px solid '+P.line, borderBottom:'1px solid '+P.line, padding:'16px 12px 20px', flexWrap:'wrap', gap:4, alignContent:'flex-start' }}>
+          <div className="sidebarLogo" style={{ flex:'1 1 100%', display:'none', alignItems:'center', paddingBottom:14, marginBottom:12, borderBottom:'1px solid '+P.line2 }}>
+            <svg viewBox="0 0 90 20" width="92" height="20" xmlns="http://www.w3.org/2000/svg">
+              <text x="0" y="16" fontFamily="Manrope, sans-serif" fontWeight="800" fontSize="18" fill={P.ink}>spar<tspan fill={P.blue}>Ads</tspan></text>
+            </svg>
+          </div>
+          <button className="btn" onClick={openNewWizard} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'", marginBottom:8 }}>
+     <Icon name="plus" size={15} color="#fff" sw={2.2}/>{t.newCampaign}
           </button>
           {navDefs.map((d,i) => {
             if(!d) return <div key={'sep'+i} style={{ flex:'1 1 100%', height:1, background:P.line2, margin:'10px 0' }}/>;
