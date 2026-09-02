@@ -42,6 +42,7 @@
     .userChip{padding:2px !important;border:none !important}
     .avatarNameFull{display:none !important}
     .avatarNameShort{display:inline !important}
+    .notifBtnDesktop{display:none !important}
     
     .sidebarLogo{display:flex !important}
     .sidebarNav{
@@ -647,16 +648,11 @@ function App(){
             <input value={query} onChange={e=>{setQuery(e.target.value); setPage('campaigns');}} onFocus={()=>setSearchFocus(true)} onBlur={()=>setSearchFocus(false)}
               placeholder={t.searchPlaceholder} style={{ flex:1, minWidth:0, background:'transparent', border:'none', outline:'none', padding:'11px 0', font:"600 12.5px/1 'Manrope'", color:P.ink }}/>
           </div>
-                    <div style={{ marginLeft:'auto', flex:'none', display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
-            <div className="langToggle" style={{ display:'flex', border:'1px solid '+P.line, borderRadius:8, overflow:'hidden' }}>
-              <button className="btn" onClick={()=>setLang('en')} style={langBtn(!fr)}>EN</button>
-              <button className="btn" onClick={()=>setLang('fr')} style={langBtn(fr)}>FR</button>
-            </div>
-            <button className="btn" onClick={()=>setNotifOpen(o=>!o)} style={{ position:'relative', width:36, height:36, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', border:'1px solid '+(notifOpen?P.blue:P.line), background:notifOpen?P.blueSoft:'#fff' }}>
+                        <button className="btn notifBtnDesktop" onClick={()=>setNotifOpen(o=>!o)} style={{ position:'relative', width:36, height:36, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', border:'1px solid '+(notifOpen?P.blue:P.line), background:notifOpen?P.blueSoft:'#fff' }}>
               <Icon name="bell" size={16} color={notifOpen?P.blue:'#65728A'} sw={1.9}/>
             </button>
-                             <div className="userChip" onClick={()=>setUserMenuOpen(o=>!o)} style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line, cursor:'pointer', position:'relative' }}>
-              <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:P.ink, flex:'none' }}>AK</div>
+                        <div className="userChip" onClick={()=>setUserMenuOpen(o=>!o)} style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 12px 5px 5px', borderRadius:99, border:'1px solid '+P.line, cursor:'pointer', position:'relative' }}>
+                      <div style={{ width:27, height:27, borderRadius:'50%', background:P.blue, display:'flex', alignItems:'center', justifyContent:'center', font:"800 10.5px/1 'Manrope'", color:P.ink, flex:'none' }}>AK</div>
               <div className="avatarNameFull" style={{ display:'flex', flexDirection:'column', gap:3 }}>
                 <span style={{ font:"700 11.5px/1 'Manrope'", color:P.ink, whiteSpace:'nowrap' }}>Amina Kponou</span>
                 <span style={{ font:"500 9.5px/1 'JetBrains Mono',monospace", color:'#8794A6', whiteSpace:'nowrap' }}>ACC-4417</span>
@@ -666,7 +662,11 @@ function App(){
                 <div className="userDropdown" onClick={ev=>ev.stopPropagation()} style={{ position:'absolute', top:40, right:0, background:'#fff', border:'1px solid '+P.line, borderRadius:11, boxShadow:'0 14px 30px rgba(15,24,38,.18)', padding:12, minWidth:180, zIndex:90 }}>
                   <div style={{ font:"700 12.5px/1.3 'Manrope'", color:P.ink }}>Amina Kponou</div>
                   <div style={{ marginTop:2, font:"500 10px/1 'JetBrains Mono',monospace", color:'#8794A6' }}>ACC-4417</div>
-                  <div style={{ marginTop:10, paddingTop:10, borderTop:'1px solid '+P.line2, display:'flex', border:'1px solid '+P.line, borderRadius:8, overflow:'hidden' }}>
+                                    <button className="btn" onClick={()=>{setNotifOpen(o=>!o); setUserMenuOpen(false);}} style={{ width:'100%', marginTop:10, paddingTop:10, borderTop:'1px solid '+P.line2, display:'flex', alignItems:'center', gap:9, background:'transparent', padding:'10px 2px 2px' }}>
+                    <Icon name="bell" size={15} color={P.mute} sw={1.9}/>
+                    <span style={{ font:"600 12.5px/1 'Manrope'", color:P.ink }}>{t.notifTitle}</span>
+                  </button>
+                  <div style={{ marginTop:10, display:'flex', border:'1px solid '+P.line, borderRadius:8, overflow:'hidden' }}>
                     <button className="btn" onClick={()=>{setLang('en'); setUserMenuOpen(false);}} style={{ ...langBtn(!fr), flex:1 }}>EN</button>
                     <button className="btn" onClick={()=>{setLang('fr'); setUserMenuOpen(false);}} style={{ ...langBtn(fr), flex:1 }}>FR</button>
                   </div>
