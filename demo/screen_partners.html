@@ -95,7 +95,10 @@ const ICONS = {
   download:['M12 4v13','M6 11l6 6 6-6','M4 20h16'],
   play:['M8 5v14l11-7z'],
   arrowUp:['M12 19V5','M5 12l7-7 7 7'],
-  arrowDown:['M12 5v14','M19 12l-7 7-7-7']
+  arrowDown:['M12 5v14','M19 12l-7 7-7-7'],
+  chevronDown:['M6 9l6 6 6-6'],
+  chevronLeft:['M15 18l-6-6 6-6'],
+  chevronRight:['M9 18l6-6-6-6']
 };
 function Icon({ name, size=17, color='currentColor', sw=1.8 }){
   return (
@@ -130,11 +133,26 @@ const DEFAULT_ADVERTISERS = [
   { biz:'Studio Kponou', spend:15100, bookings:1, tag:'new' }
 ];
 const NAMES = ['Chez Rachelle Traiteur','Pharmacie du Phare','Boutique Wax & Co','Studio Kponou','Salon Aurore','Épicerie Bonheur'];
+const NETWORKS = ['MTN MoMo','Moov Money','Wave'];
+const DAYPARTS_EN = ['Morning (6am–9am)','Midday (11am–2pm)','Evening (5pm–9pm)'];
+const DAYPARTS_FR = ['Matin (6h–9h)','Midi (11h–14h)','Soir (17h–21h)'];
+const SAMPLE_VIDEO = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
 function seedQueue(){
   return [
-    { id:'q1', biz:'Chez Rachelle Traiteur', screen:'Erevan Market', budget:8000, days:3, submitted:'2 hours ago' },
-    { id:'q2', biz:'Pharmacie du Phare', screen:'Cadjehoun / St Michel', budget:5400, days:1, submitted:'5 hours ago' },
-    { id:'q3', biz:'Boutique Wax & Co', screen:'Vedoko Junction', budget:12000, days:5, submitted:'Yesterday' }
+    { id:'q1', biz:'Chez Rachelle Traiteur', screen:'Erevan Market', budget:8000, days:3, submitted:'2 hours ago',
+      campaignName:'Weekend Promo', dayparts:[0,2], loopsPerDay:22, network:'MTN MoMo', phone:'•• •• •• 41 02',
+      creativeType:'image', creativeImages:[
+        { name:'chez-rachelle-16x9-01.jpg', c1:'#2C3A4C', c2:'#151b28' },
+        { name:'chez-rachelle-16x9-02.jpg', c1:'#4A3B24', c2:'#241c10' }
+      ] },
+    { id:'q2', biz:'Pharmacie du Phare', screen:'Cadjehoun / St Michel', budget:5400, days:1, submitted:'5 hours ago',
+      campaignName:'Peak Hours Push', dayparts:[0], loopsPerDay:14, network:'Moov Money', phone:'•• •• •• 08 55',
+      creativeType:'image', creativeImages:[
+        { name:'pharmacie-du-phare-16x9-01.jpg', c1:'#3E4636', c2:'#232619' }
+      ] },
+    { id:'q3', biz:'Boutique Wax & Co', screen:'Vedoko Junction', budget:12000, days:5, submitted:'Yesterday',
+      campaignName:'New Collection Launch', dayparts:[1,2], loopsPerDay:30, network:'Wave', phone:'•• •• •• 77 19',
+      creativeType:'video', creativeVideo:{ name:'boutique-wax-15s.mp4', duration:'0:15', res:'1920×1080' } }
   ];
 }
 function seedTx(){
@@ -168,7 +186,10 @@ const T = {
     topScreens:'Top performing screens', topAdvertisers:'Top advertisers', nextPayout:'Next payout', viewWallet:'View wallet',
     pendingAlert:'pending requests awaiting review', offlineAlert:'is offline — check the connection', lowFillAlert:'screens are under 50% fill rate',
     reviewNow:'Review', checkNow:'Check', newTag:'New', repeatTag:'Repeat', bookingsLbl:'bookings', thisMonthLbl:'this month',
-    networkUptime:'Network uptime', last30:'last 30 days', allOperational:'All screens operational'
+    networkUptime:'Network uptime', last30:'last 30 days', allOperational:'All screens operational',
+    campaignDetails:'Campaign details', scheduleLbl:'Schedule', dayspartingLbl:'Dayparting', networkLbl:'Payment network',
+    loopsDayLbl:'Loops per day', creativeLbl:'Creative', reviewCreative:'Review creative', hideDetails:'Hide details', viewDetails:'View details',
+    imageFile:'Image', videoFile:'Video', frameOf:'of', playVideo:'Playing', closeModal:'Close'
   },
   fr:{
     brand:'sparAds', overview:'Aperçu', screens:'Mes écrans', approvals:'Approbations', wallet:'Portefeuille', reports:'Rapports', settings:'Paramètres',
@@ -190,7 +211,10 @@ const T = {
     topScreens:'Écrans les plus performants', topAdvertisers:'Meilleurs annonceurs', nextPayout:'Prochain paiement', viewWallet:'Voir le portefeuille',
     pendingAlert:'demandes en attente de vérification', offlineAlert:'est hors ligne — vérifiez la connexion', lowFillAlert:'écrans ont un taux de remplissage sous 50%',
     reviewNow:'Vérifier', checkNow:'Vérifier', newTag:'Nouveau', repeatTag:'Fidèle', bookingsLbl:'réservations', thisMonthLbl:'ce mois-ci',
-    networkUptime:'Disponibilité du réseau', last30:'30 derniers jours', allOperational:'Tous les écrans fonctionnent'
+    networkUptime:'Disponibilité du réseau', last30:'30 derniers jours', allOperational:'Tous les écrans fonctionnent',
+    campaignDetails:'Détails de la campagne', scheduleLbl:'Calendrier', dayspartingLbl:'Créneaux horaires', networkLbl:'Réseau de paiement',
+    loopsDayLbl:'Diffusions / jour', creativeLbl:'Créatif', reviewCreative:'Voir le créatif', hideDetails:'Masquer les détails', viewDetails:'Voir les détails',
+    imageFile:'Image', videoFile:'Vidéo', frameOf:'sur', playVideo:'Lecture', closeModal:'Fermer'
   }
 };
 
@@ -205,6 +229,7 @@ function StatusPill({ s, t }){
 function App(){
   const [lang, setLang] = useState(()=>loadLS(LS.lang,'en'));
   const fr = lang==='fr'; const t = T[lang];
+  const DAYPARTS = fr ? DAYPARTS_FR : DAYPARTS_EN;
   const [page, setPage] = useState('overview');
   const [navOpen, setNavOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -220,6 +245,9 @@ function App(){
   const [newType, setNewType] = useState('Outdoor · P8');
   const [query, setQuery] = useState('');
   const [decidingId, setDecidingId] = useState(null);
+  const [expandedId, setExpandedId] = useState(null);
+  const [mediaModal, setMediaModal] = useState(null);
+  const [mediaIndex, setMediaIndex] = useState(0);
 
   useEffect(()=>saveLS(LS.lang, lang),[lang]);
   useEffect(()=>saveLS(LS.screens, screens),[screens]);
@@ -241,7 +269,15 @@ function App(){
         const live = screens.filter(s=>s.status==='live');
         if(!live.length) return q;
         const scr = live[Math.floor(Math.random()*live.length)];
-        const item = { id:'q'+(nextId.current++), biz, screen:scr.name, budget:Math.round((3000+Math.random()*10000)/100)*100, days:1+Math.floor(Math.random()*5), submitted:fr?'À l\'instant':'Just now' };
+        const isVideo = Math.random()<0.35;
+        const dp = [0,1,2].filter(()=>Math.random()<0.5);
+        const item = { id:'q'+(nextId.current++), biz, screen:scr.name, budget:Math.round((3000+Math.random()*10000)/100)*100, days:1+Math.floor(Math.random()*5), submitted:fr?'À l\'instant':'Just now',
+          campaignName: fr?'Nouvelle campagne':'New campaign', dayparts: dp.length?dp:[0], loopsPerDay:10+Math.floor(Math.random()*25),
+          network: NETWORKS[Math.floor(Math.random()*NETWORKS.length)], phone:'•• •• •• '+(10+Math.floor(Math.random()*89)),
+          creativeType: isVideo?'video':'image',
+          creativeVideo: isVideo?{ name: biz.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-15s.mp4', duration:'0:15', res:'1920×1080' }:undefined,
+          creativeImages: isVideo?undefined:[{ name: biz.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-16x9-01.jpg', c1:'#33313D', c2:'#19181F' }]
+        };
         flash(t.newReqToast+' — '+biz);
         return q.concat(item);
       });
@@ -259,6 +295,8 @@ function App(){
   function decide(id, ok){
     const item = queue.find(q=>q.id===id);
     setDecidingId(id);
+    if(expandedId===id) setExpandedId(null);
+    if(mediaModal===id) setMediaModal(null);
     setTimeout(()=>{
       setQueue(q=>q.filter(x=>x.id!==id));
       setDecidingId(null);
@@ -636,23 +674,81 @@ function App(){
                 </div>
               ) : (
                 <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-                  {filteredQueue.map(q=>(
-                    <div key={q.id} style={{ ...card(16), display:'flex', alignItems:'center', gap:14, flexWrap:'wrap',
+                  {filteredQueue.map(q=>{
+                    const open = expandedId===q.id;
+                    return (
+                    <div key={q.id} style={{ background:'#fff', border:'1px solid '+P.line, borderRadius:13, overflow:'hidden',
                       animation: decidingId===q.id ? 'fadeOut .25s ease forwards' : 'slideUp .3s ease' }}>
-                      <div style={{ width:52, height:36, borderRadius:6, flex:'none', background:'repeating-linear-gradient(135deg,#F1EEE4 0 6px,#E7E1D2 6px 12px)' }}/>
-                      <div style={{ flex:'1 1 180px', minWidth:0 }}>
-                        <div style={{ font:"700 13.5px/1.3 'Manrope'", color:P.ink }}>{q.biz}</div>
-                        <div style={{ marginTop:3, font:"500 11.5px/1.4 'Manrope'", color:P.dim }}>{q.screen} · {q.days} {t.daysLbl} · {t.submittedLbl} {q.submitted}</div>
-                      </div>
-                      <div style={{ font:"800 13.5px/1 'Manrope'", color:P.ink, flex:'none' }}>{money(q.budget)}</div>
-                      <div style={{ display:'flex', gap:8, flex:'none' }}>
-                        <button className="btn" onClick={()=>decide(q.id,false)} style={{ padding:'10px 14px', borderRadius:8, border:'1px solid '+P.line, background:'#fff', font:"700 12px/1 'Manrope'", color:P.red }}>{t.decline}</button>
-                        <button className="btn" onClick={()=>decide(q.id,true)} style={{ display:'flex', alignItems:'center', gap:6, padding:'10px 16px', borderRadius:8, border:'none', background:P.blue, color:P.ink, font:"800 12px/1 'Manrope'" }}>
-                          <Icon name="check" size={13} color={P.ink} sw={2.6}/>{t.approve}
+                      <div onClick={()=>setExpandedId(open?null:q.id)} style={{ padding:16, display:'flex', alignItems:'center', gap:14, flexWrap:'wrap', cursor:'pointer' }}>
+                        <div style={{ width:52, height:36, borderRadius:6, flex:'none', background:'repeating-linear-gradient(135deg,#F1EEE4 0 6px,#E7E1D2 6px 12px)' }}/>
+                        <div style={{ flex:'1 1 180px', minWidth:0 }}>
+                          <div style={{ font:"700 13.5px/1.3 'Manrope'", color:P.ink }}>{q.biz}</div>
+                          <div style={{ marginTop:3, font:"500 11.5px/1.4 'Manrope'", color:P.dim }}>{q.screen} · {q.days} {t.daysLbl} · {t.submittedLbl} {q.submitted}</div>
+                        </div>
+                        <div style={{ font:"800 13.5px/1 'Manrope'", color:P.ink, flex:'none' }}>{money(q.budget)}</div>
+                        <div style={{ display:'flex', gap:8, flex:'none' }} onClick={ev=>ev.stopPropagation()}>
+                          <button className="btn" onClick={()=>decide(q.id,false)} style={{ padding:'10px 14px', borderRadius:8, border:'1px solid '+P.line, background:'#fff', font:"700 12px/1 'Manrope'", color:P.red }}>{t.decline}</button>
+                          <button className="btn" onClick={()=>decide(q.id,true)} style={{ display:'flex', alignItems:'center', gap:6, padding:'10px 16px', borderRadius:8, border:'none', background:P.blue, color:P.ink, font:"800 12px/1 'Manrope'" }}>
+                            <Icon name="check" size={13} color={P.ink} sw={2.6}/>{t.approve}
+                          </button>
+                        </div>
+                        <button className="btn" onClick={()=>setExpandedId(open?null:q.id)} style={{ width:30, height:30, borderRadius:8, border:'1px solid '+P.line, background:open?P.blueSoft:'#fff', display:'flex', alignItems:'center', justifyContent:'center', flex:'none' }}>
+                          <span style={{ display:'inline-flex', transform:open?'rotate(180deg)':'none', transition:'transform .2s ease' }}>
+                            <Icon name="chevronDown" size={15} color={open?P.blueDark:P.mute} sw={2.2}/>
+                          </span>
                         </button>
                       </div>
+
+                      {open && (
+                        <div style={{ padding:'0 16px 18px', animation:'riseIn .18s ease' }}>
+                          <div style={{ borderTop:'1px solid '+P.line2, paddingTop:16 }}>
+                            <div style={{ font:"700 10px/1.2 'Manrope'", letterSpacing:'.08em', textTransform:'uppercase', color:P.dim, marginBottom:12 }}>{t.campaignDetails}</div>
+                            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))', gap:14, marginBottom:16 }}>
+                              <div>
+                                <div style={{ font:"600 10.5px/1.3 'Manrope'", color:P.dim, marginBottom:4 }}>{fr?'Nom de la campagne':'Campaign name'}</div>
+                                <div style={{ font:"700 13px/1.3 'Manrope'", color:P.ink }}>{q.campaignName || (fr?'Sans titre':'Untitled')}</div>
+                              </div>
+                              <div>
+                                <div style={{ font:"600 10.5px/1.3 'Manrope'", color:P.dim, marginBottom:4 }}>{t.scheduleLbl}</div>
+                                <div style={{ font:"700 13px/1.3 'Manrope'", color:P.ink }}>{q.days} {t.daysLbl}</div>
+                              </div>
+                              <div>
+                                <div style={{ font:"600 10.5px/1.3 'Manrope'", color:P.dim, marginBottom:4 }}>{t.loopsDayLbl}</div>
+                                <div style={{ font:"700 13px/1.3 'Manrope'", color:P.ink, fontFamily:"'JetBrains Mono',monospace" }}>{q.loopsPerDay||'—'}</div>
+                              </div>
+                              <div>
+                                <div style={{ font:"600 10.5px/1.3 'Manrope'", color:P.dim, marginBottom:4 }}>{t.networkLbl}</div>
+                                <div style={{ font:"700 13px/1.3 'Manrope'", color:P.ink }}>{q.network||'—'} <span style={{ color:P.dim, fontWeight:500 }}>{q.phone}</span></div>
+                              </div>
+                            </div>
+
+                            <div style={{ marginBottom:16 }}>
+                              <div style={{ font:"600 10.5px/1.3 'Manrope'", color:P.dim, marginBottom:8 }}>{t.dayspartingLbl}</div>
+                              <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+                                {(q.dayparts||[]).map(i=>(
+                                  <span key={i} style={{ padding:'5px 10px', borderRadius:99, background:P.blueSoft, color:P.blueDark, font:"700 11px/1.4 'Manrope'" }}>{DAYPARTS[i]}</span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, padding:'12px 14px', borderRadius:10, background:P.bg, flexWrap:'wrap' }}>
+                              <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                                <div style={{ width:36, height:36, borderRadius:8, background:'#fff', border:'1px solid '+P.line, display:'flex', alignItems:'center', justifyContent:'center', flex:'none' }}>
+                                  <Icon name={q.creativeType==='video'?'play':'eye'} size={16} color={P.mute} sw={1.9}/>
+                                </div>
+                                <div>
+                                  <div style={{ font:"700 12px/1.3 'Manrope'", color:P.ink }}>{q.creativeType==='video'?t.videoFile:t.imageFile}{q.creativeType==='image' && q.creativeImages && q.creativeImages.length>1 ? ' · '+q.creativeImages.length : ''}</div>
+                                  <div style={{ marginTop:2, font:"500 10.5px/1 'JetBrains Mono',monospace", color:P.dim }}>{q.creativeType==='video' ? (q.creativeVideo && q.creativeVideo.name) : (q.creativeImages && q.creativeImages[0].name)}</div>
+                                </div>
+                              </div>
+                              <button className="btn" onClick={()=>{ setMediaModal(q.id); setMediaIndex(0); }} style={{ padding:'9px 15px', borderRadius:8, border:'1px solid '+P.line, background:'#fff', font:"700 12px/1 'Manrope'", color:P.ink, flex:'none' }}>{t.reviewCreative}</button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </section>
@@ -754,6 +850,64 @@ function App(){
           <Icon name="shield" size={13} color={P.dim} sw={1.8}/><span>{t.simBanner}</span>
         </div>
       </footer>
+
+      {/* CREATIVE REVIEW MODAL */}
+      {mediaModal && (()=>{
+        const item = queue.find(q=>q.id===mediaModal);
+        if(!item) return null;
+        const isVideo = item.creativeType==='video';
+        const images = item.creativeImages || [];
+        const frame = images[mediaIndex] || images[0];
+        return (
+          <div onClick={()=>setMediaModal(null)} style={{ position:'fixed', inset:0, zIndex:65, background:'rgba(15,24,38,.72)', display:'flex', alignItems:'center', justifyContent:'center', padding:18 }}>
+            <div onClick={ev=>ev.stopPropagation()} style={{ width:'100%', maxWidth:680, background:'#fff', borderRadius:16, overflow:'hidden', animation:'riseIn .2s ease' }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 18px', borderBottom:'1px solid '+P.line }}>
+                <div>
+                  <div style={{ font:"800 14.5px/1.3 'Manrope'" }}>{item.biz}</div>
+                  <div style={{ marginTop:2, font:"500 11px/1 'Manrope'", color:P.dim }}>{item.screen}</div>
+                </div>
+                <button className="btn" onClick={()=>setMediaModal(null)} style={{ border:'none', background:P.bg, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="close" size={16} color={P.body} sw={2}/></button>
+              </div>
+
+              <div style={{ position:'relative', width:'100%', aspectRatio:'16/9', background:'#0B0F19' }}>
+                {isVideo ? (
+                  <video key={mediaModal} controls autoPlay style={{ width:'100%', height:'100%', objectFit:'contain', display:'block' }}>
+                    <source src={SAMPLE_VIDEO} type="video/mp4"/>
+                  </video>
+                ) : (
+                  <>
+                    <div style={{ position:'absolute', inset:0, background:'linear-gradient(150deg,'+(frame?frame.c1:'#333')+','+(frame?frame.c2:'#111')+')', display:'flex', alignItems:'flex-end', padding:26 }}>
+                      <div>
+                        <div style={{ font:"700 10px/1.2 'Manrope'", letterSpacing:'.1em', textTransform:'uppercase', color:'rgba(255,255,255,.55)', marginBottom:6 }}>{fr?'Aperçu créatif':'Creative preview'}</div>
+                        <div style={{ font:"800 24px/1.15 'Manrope'", color:'#fff' }}>{item.biz}</div>
+                      </div>
+                    </div>
+                    {images.length>1 && (
+                      <>
+                        <button className="btn" onClick={()=>setMediaIndex(i=>(i-1+images.length)%images.length)} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', width:38, height:38, borderRadius:'50%', border:'none', background:'rgba(255,255,255,.9)', display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="chevronLeft" size={18} color={P.ink} sw={2.2}/></button>
+                        <button className="btn" onClick={()=>setMediaIndex(i=>(i+1)%images.length)} style={{ position:'absolute', right:12, top:'50%', transform:'translateY(-50%)', width:38, height:38, borderRadius:'50%', border:'none', background:'rgba(255,255,255,.9)', display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="chevronRight" size={18} color={P.ink} sw={2.2}/></button>
+                        <div style={{ position:'absolute', bottom:12, left:'50%', transform:'translateX(-50%)', display:'flex', gap:6 }}>
+                          {images.map((im,i)=>(
+                            <span key={i} style={{ width:6, height:6, borderRadius:'50%', background:i===mediaIndex?'#fff':'rgba(255,255,255,.4)' }}/>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+
+              <div style={{ padding:'14px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap' }}>
+                <div style={{ font:"600 12px/1.4 'JetBrains Mono',monospace", color:P.dim }}>
+                  {isVideo ? (item.creativeVideo && (item.creativeVideo.name+' · '+item.creativeVideo.duration+' · '+item.creativeVideo.res))
+                    : (frame && frame.name+' · '+(mediaIndex+1)+' '+t.frameOf+' '+images.length)}
+                </div>
+                <button className="btn" onClick={()=>setMediaModal(null)} style={{ padding:'9px 16px', borderRadius:8, border:'1px solid '+P.line, background:'#fff', font:"700 12px/1 'Manrope'", color:P.ink }}>{t.closeModal}</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ADD SCREEN MODAL */}
       {addOpen && (
