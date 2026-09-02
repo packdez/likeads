@@ -116,11 +116,11 @@ function saveLS(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e)
 
 /* ===================== SEED DATA ===================== */
 const DEFAULT_SCREENS = [
-  { id:'s1', name:'Cadjehoun / St Michel', type:'Indoor · 4K', status:'live', fill:91, impToday:2140, revenue:186000 },
-  { id:'s2', name:'Erevan Market', type:'Outdoor · P8', status:'live', fill:76, impToday:3860, revenue:214000 },
-  { id:'s3', name:'Vedoko Junction', type:'Outdoor · P8', status:'live', fill:88, impToday:1590, revenue:129000 },
-  { id:'s4', name:'Ganhi Business District', type:'Indoor · 2K', status:'pending', fill:0, impToday:0, revenue:0 },
-  { id:'s5', name:'Zongo Market', type:'Outdoor · P8', status:'offline', fill:0, impToday:0, revenue:41000 }
+  { id:'s1', name:'Cadjehoun / St Michel', type:'Indoor · 4K', status:'live', fill:91, impToday:2140, revenue:186000, uptime:99.4 },
+  { id:'s2', name:'Erevan Market', type:'Outdoor · P8', status:'live', fill:76, impToday:3860, revenue:214000, uptime:98.1 },
+  { id:'s3', name:'Vedoko Junction', type:'Outdoor · P8', status:'live', fill:88, impToday:1590, revenue:129000, uptime:99.0 },
+  { id:'s4', name:'Ganhi Business District', type:'Indoor · 2K', status:'pending', fill:0, impToday:0, revenue:0, uptime:0 },
+  { id:'s5', name:'Zongo Market', type:'Outdoor · P8', status:'offline', fill:0, impToday:0, revenue:41000, uptime:96.8 }
 ];
 const REVENUE_TREND = [21000,26500,19800,31200,28400,24900,33600,37200,29800,41500,38900,35100,44200,47800];
 const DEFAULT_ADVERTISERS = [
@@ -167,7 +167,8 @@ const T = {
     revenueTrend:'Revenue, last 14 days', needsAttention:'Needs your attention', allClear:'All clear — nothing needs your attention.',
     topScreens:'Top performing screens', topAdvertisers:'Top advertisers', nextPayout:'Next payout', viewWallet:'View wallet',
     pendingAlert:'pending requests awaiting review', offlineAlert:'is offline — check the connection', lowFillAlert:'screens are under 50% fill rate',
-    reviewNow:'Review', checkNow:'Check', newTag:'New', repeatTag:'Repeat', bookingsLbl:'bookings', thisMonthLbl:'this month'
+    reviewNow:'Review', checkNow:'Check', newTag:'New', repeatTag:'Repeat', bookingsLbl:'bookings', thisMonthLbl:'this month',
+    networkUptime:'Network uptime', last30:'last 30 days', allOperational:'All screens operational'
   },
   fr:{
     brand:'sparAds', overview:'Aperçu', screens:'Mes écrans', approvals:'Approbations', wallet:'Portefeuille', reports:'Rapports', settings:'Paramètres',
@@ -188,11 +189,12 @@ const T = {
     revenueTrend:'Revenus, 14 derniers jours', needsAttention:'Nécessite votre attention', allClear:'Tout est en ordre — rien à signaler.',
     topScreens:'Écrans les plus performants', topAdvertisers:'Meilleurs annonceurs', nextPayout:'Prochain paiement', viewWallet:'Voir le portefeuille',
     pendingAlert:'demandes en attente de vérification', offlineAlert:'est hors ligne — vérifiez la connexion', lowFillAlert:'écrans ont un taux de remplissage sous 50%',
-    reviewNow:'Vérifier', checkNow:'Vérifier', newTag:'Nouveau', repeatTag:'Fidèle', bookingsLbl:'réservations', thisMonthLbl:'ce mois-ci'
+    reviewNow:'Vérifier', checkNow:'Vérifier', newTag:'Nouveau', repeatTag:'Fidèle', bookingsLbl:'réservations', thisMonthLbl:'ce mois-ci',
+    networkUptime:'Disponibilité du réseau', last30:'30 derniers jours', allOperational:'Tous les écrans fonctionnent'
   }
 };
 
-function money(n){ return (n<0?'-':'') + Math.abs(n).toLocaleString('en-US') + ' CFA'; }
+function money(n){ n = Number(n)||0; return (n<0?'-':'') + Math.abs(n).toLocaleString('en-US') + ' CFA'; }
 function StatusPill({ s, t }){
   const map = { live:{bg:P.greenSoft,c:P.green}, pending:{bg:P.blueSoft,c:P.blueDark}, offline:{bg:P.line2,c:P.dim} };
   const m = map[s]||map.offline;
@@ -208,7 +210,7 @@ function App(){
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [toast, setToast] = useState('');
-  const [screens, setScreens] = useState(()=>loadLS(LS.screens, DEFAULT_SCREENS));
+  const [screens, setScreens] = useState(()=>loadLS(LS.screens, DEFAULT_SCREENS).map(s=>({ revenue:0, uptime:97, ...s })));
   const [queue, setQueue] = useState(()=>loadLS(LS.queue, seedQueue()));
   const [balance, setBalance] = useState(()=>loadLS(LS.wallet, 86000));
   const [tx, setTx] = useState(()=>loadLS(LS.tx, seedTx()));
@@ -291,7 +293,10 @@ function App(){
   const weekPayout = tx.filter(x=>x.amount>0).slice(0,6).reduce((a,x)=>a+x.amount,0);
   const monthRevenue = REVENUE_TREND.reduce((a,b)=>a+b,0);
   const topScreens = [...screens].filter(s=>s.status!=='pending').sort((a,b)=>b.revenue-a.revenue).slice(0,4);
-  const lowFillScreens = screens.filter(s=>s.status==='live' && s.fill<50).length;
+    const lowFillScreens = screens.filter(s=>s.status==='live' && s.fill<50).length;
+  const uptimeScreens = screens.filter(s=>s.status!=='pending');
+  const avgUptime = uptimeScreens.length ? (uptimeScreens.reduce((a,s)=>a+s.uptime,0)/uptimeScreens.length).toFixed(1) : '0.0';
+  const downScreens = screens.filter(s=>s.status==='offline');
   const nextPayoutDate = useMemo(()=>{
     const d = new Date(Date.now() + 7*86400000);
     return d.toLocaleDateString(fr?'fr-FR':'en-US', { month:'long', day:'numeric' });
@@ -503,8 +508,8 @@ function App(){
               </div>
 
               {/* top screens + top advertisers */}
-              <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'flex-start', marginBottom:12 }}>
-                <div style={{ flex:'1.2 1 320px', minWidth:0, ...card(18) }}>
+                <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'stretch', marginBottom:12 }}>
+                <div style={{ flex:'1.2 1 320px', minWidth:0, ...card(18), display:'flex', flexDirection:'column' }}>
                   <div style={{ font:"700 14px/1 'Manrope'", marginBottom:14 }}>{t.topScreens}</div>
                   <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
                     {topScreens.map((s,i)=>(
@@ -542,16 +547,31 @@ function App(){
 
               {/* unsold airtime + payout strip */}
               <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'stretch' }}>
-                <div style={{ flex:'1.2 1 320px', minWidth:0, ...card(18) }}>
-                  <div style={{ font:"700 10px/1.2 'Manrope'", letterSpacing:'.08em', textTransform:'uppercase', color:P.dim, marginBottom:14 }}>{t.beforeAfter}</div>
-                  <div style={{ marginBottom:14 }}>
-                    <div style={{ display:'flex', justifyContent:'space-between', font:"600 12.5px/1 'Manrope'", marginBottom:6 }}><span style={{color:P.mute}}>{t.before}</span><span style={{color:P.dim}}>38%</span></div>
-                    <div style={{ height:8, borderRadius:99, background:P.line2, overflow:'hidden' }}><div style={{ width:'38%', height:'100%', background:'#C7CDD6' }}/></div>
+                               <div style={{ flex:'1.2 1 320px', minWidth:0, ...card(18) }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:7, marginBottom:16 }}>
+                    <Icon name="shield" size={14} color={P.dim} sw={1.9}/>
+                    <span style={{ font:"700 10px/1.2 'Manrope'", letterSpacing:'.08em', textTransform:'uppercase', color:P.dim }}>{t.networkUptime}</span>
                   </div>
-                  <div>
-                    <div style={{ display:'flex', justifyContent:'space-between', font:"600 12.5px/1 'Manrope'", marginBottom:6 }}><span style={{color:P.mute}}>{t.after}</span><span style={{color:P.blueDark}}>{avgFill}%</span></div>
-                    <div style={{ height:8, borderRadius:99, background:P.line2, overflow:'hidden' }}><div style={{ width:avgFill+'%', height:'100%', background:P.blue, transition:'width .6s ease' }}/></div>
+                  <div style={{ display:'flex', alignItems:'baseline', gap:8, marginBottom:4 }}>
+                    <span style={{ font:"800 30px/1 'Manrope'", letterSpacing:'-.02em' }}>{avgUptime}%</span>
+                    <span style={{ font:"600 12px/1 'Manrope'", color:P.mute }}>{t.last30}</span>
                   </div>
+                  <div style={{ font:"500 12px/1.5 'Manrope'", color:P.dim, marginBottom:14 }}>{uptimeScreens.length} {fr?'écrans suivis':'screens tracked'}</div>
+                  {downScreens.length===0 ? (
+                    <div style={{ display:'flex', alignItems:'center', gap:8, padding:'10px 11px', borderRadius:9, background:P.greenSoft }}>
+                      <Icon name="check" size={13} color={P.green} sw={2.6}/>
+                      <span style={{ font:"600 12px/1.4 'Manrope'", color:P.green }}>{t.allOperational}</span>
+                    </div>
+                  ) : (
+                    <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                      {downScreens.map(s=>(
+                        <div key={s.id} style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 10px', borderRadius:8, background:P.redSoft }}>
+                          <span style={{ width:6, height:6, borderRadius:'50%', background:P.red, flex:'none' }}/>
+                          <span style={{ font:"600 12px/1.4 'Manrope'", color:P.red }}>{s.name} — {t.status.offline}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ flex:'1 1 280px', minWidth:0, ...card(18), display:'flex', flexDirection:'column', justifyContent:'center' }}>
