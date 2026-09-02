@@ -647,10 +647,10 @@ function App(){
 
       <div style={{ flex:1, display:'flex', flexWrap:'wrap', alignItems:'flex-start' }}>
 
-        {/* SIDEBAR */}
+                {/* SIDEBAR */}
         <nav className={"sidebarNav" + (navOpen ? " navOpen" : "")} style={{ flex:'1 1 226px', maxWidth:'100%', alignSelf:'stretch', background:'#fff', borderRight:'1px solid '+P.line, borderBottom:'1px solid '+P.line, padding:'16px 12px 20px', flexWrap:'wrap', gap:4, alignContent:'flex-start' }}>
           <button className="btn" onClick={openNewWizard} style={{ flex:'1 1 100%', display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:13, border:'none', borderRadius:9, background:P.blue, color:P.ink, font:"800 13px/1 'Manrope'", marginBottom:8 }}>
-            <Icon name="plus" size={15} color="#fff" sw={2.2}/>{t.newCampaign}
+           <Icon name="plus" size={15} color="#fff" sw={2.2}/>{t.newCampaign}
           </button>
           {navDefs.map((d,i) => {
             if(!d) return <div key={'sep'+i} style={{ flex:'1 1 100%', height:1, background:P.line2, margin:'10px 0' }}/>;
