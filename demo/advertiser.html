@@ -1208,16 +1208,22 @@ function App(){
                 </div>
               )}
 
-              {step<4 && (
+                            {step<4 && (
                 <div className="stepTabsCompact">
-                  <div style={{ display:'flex', alignItems:'baseline', justifyContent:'space-between', marginBottom:8 }}>
+                  <div style={{ display:'flex', alignItems:'baseline', justifyContent:'space-between', marginBottom:10 }}>
                     <span style={{ font:"800 13px/1 'Manrope'", color:P.ink }}>{t.steps[step-1]}</span>
                     <span style={{ font:"600 11px/1 'JetBrains Mono',monospace", color:P.dim }}>{step} / {t.steps.length}</span>
                   </div>
-                  <div style={{ display:'flex', gap:5 }}>
-                    {t.steps.map((s,i)=>(
-                      <div key={i} style={{ flex:1, height:4, borderRadius:2, background:i<step?P.blue:P.line2 }}/>
-                    ))}
+                  <div style={{ display:'flex', alignItems:'center' }}>
+                    {t.steps.map((s,i)=>{
+                      const n = i+1, done = n<step, active = n===step;
+                      return (
+                        <React.Fragment key={i}>
+                          <span style={{ width:22, height:22, flex:'none', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', background:done||active?P.blue:P.line2, color:done||active?P.ink:P.dim, font:"800 10.5px/1 'Manrope'" }}>{done?'✓':n}</span>
+                          {i<t.steps.length-1 && <span style={{ flex:1, height:2, background:done?P.blue:P.line2 }}/>}
+                        </React.Fragment>
+                      );
+                    })}
                   </div>
                 </div>
               )}
