@@ -227,7 +227,7 @@ function StatusPill({ s, t }){
 
 /* ===================== APP ===================== */
 function App(){
-  const [lang, setLang] = useState(()=>loadLS(LS.lang,'en'));
+  const [lang, setLang] = useState(()=>loadLS(LS.lang,'fr'));
   const fr = lang==='fr'; const t = T[lang];
   const DAYPARTS = fr ? DAYPARTS_FR : DAYPARTS_EN;
   const [page, setPage] = useState('overview');
