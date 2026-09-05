@@ -463,7 +463,7 @@ function ScreenList({ lang, selected, onToggle }){
    ROOT APP
 ========================================================= */
 function App(){
-  const [lang, setLangState] = useState(() => loadLS(LS_KEYS.lang, 'en'));
+  const [lang, setLangState] = useState(() => loadLS(LS_KEYS.lang, 'fr'));
   const [page, setPage] = useState('overview');
   const [campaigns, setCampaigns] = useState(() => loadLS(LS_KEYS.campaigns, DEFAULT_CAMPAIGNS));
   const [balance, setBalance] = useState(() => loadLS(LS_KEYS.wallet, 45000));
